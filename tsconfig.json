@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/mtg-collection-manager-frontend-e2e"
+    },
+    {
+      "path": "./apps/mtg-collection-manager-frontend"
+    },
+    {
+      "path": "./apps/mtg-collection-manager-backend-e2e"
+    },
+    {
+      "path": "./apps/mtg-collection-manager-backend"
+    }
+  ]
+}
