@@ -1,34 +1,24 @@
+import { randomUUID } from 'crypto';
 import { mkdir, rmdir } from 'fs';
 import { simpleGit, CleanOptions } from 'simple-git';
-import type { SimpleGit, SimpleGitOptions, DiffResult } from 'simple-git';
-import { TurnPhase } from '../entities/turn';
+import type { SimpleGit, SimpleGitOptions } from 'simple-git';
 
-enum SupportedGames {
-  MTG = 'MTG',
-}
-
-export class GameTracker {
+export abstract class GameTracker {
   name: string;
+  gameId: string;
   dirPath: string;
-  gameType: SupportedGames;
   gitOptions: Partial<SimpleGitOptions>;
   git: SimpleGit;
   players: string[];
   currentPlayer: string;
   turnNumber = 0;
-  stack?: Record<
-    number,
-    Record<string, Record<TurnPhase, Array<Record<string, DiffResult>>>>
-  >;
 
-  constructor(name: string, gameType = SupportedGames.MTG, players: string[]) {
+  constructor(name: string, players: string[], gameId?: string) {
     this.name = name;
-    this.gameType = gameType;
     this.players = players;
+    this.gameId = gameId || (randomUUID as unknown as string);
     this.currentPlayer = players[0];
-    this.dirPath = `${process.cwd()}/.${this.gameType.toLowerCase()}/game/${
-      this.name
-    }`;
+    this.dirPath = `${process.cwd()}/.${this.name}/game/${gameId}`;
 
     this.gitOptions = { baseDir: this.dirPath, binary: 'git' };
     this.git = simpleGit(this.gitOptions).clean(CleanOptions.FORCE);
@@ -42,32 +32,11 @@ export class GameTracker {
     await this.git.init();
   }
 
-  handleStack(turnSegment: TurnPhase, player: string, response: DiffResult) {
-    if (this.stack) {
-      const currentStack = this.stack[this.turnNumber][player][turnSegment];
-      currentStack.push({ [player]: response });
-    } else {
-      this.stack = {
-        0: {
-          [this.players[0]]: {
-            firstMain: [{}],
-            secondMain: [{}],
-            beginning: [{}],
-            combat: [{}],
-            end: [{}],
-          },
-        },
-      };
-    }
-  }
-
-  async commitAction(turnSegment: TurnPhase) {
+  async commitAction() {
     const filesChanged = await this.git.diff(['--name-only']);
     // TODO add confirmation of changes
     await this.git.add(filesChanged);
-    await this.git.commit(
-      `turn${this.turnNumber}_${this.currentPlayer}_${turnSegment}`
-    );
+    await this.git.commit(`turn${this.turnNumber}_${this.currentPlayer}`);
   }
 
   async nextTurn() {
