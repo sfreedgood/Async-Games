@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { CardService } from './service';
+import type { StandardDeckOptions } from '../../entities/card';
 
 @Controller('card')
 export class CardController {
@@ -8,5 +9,10 @@ export class CardController {
   @Get()
   getData() {
     return this.cardService.getData();
+  }
+
+  @Get('deck') // For testing, change to Post
+  buildStandardDeck(options?: StandardDeckOptions) {
+    return this.cardService.buildStandardDeck(options);
   }
 }

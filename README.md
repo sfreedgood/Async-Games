@@ -1,4 +1,14 @@
-# MTG Manager
+# Async Games
+
+## Goal
+The purpose of this project is to provide a platform for playing tabletop games asynchronously, allowing players to enjoy their favorite games at their own pace, without the need for real-time interaction. This project aims to create a user-friendly interface for managing game sessions, tracking player turns, and eventually facilitating communication between players, regardless of were they are, or if they are even online at the same time as their friends.
+
+As a fan of card games, I want to create a platform that allows me to play my favorite games with friends and family, regardless of their location or availability. The long term goal is to support a variety of games; however, during the intial phase, I will be starting with Hearts and Magic the Gathering. Traditional playing cards are a widely recognized and accessible medium, making them an ideal starting point for this project. By focusing on these games, I aim to create a solid foundation for the platform, which can be expanded to include more complex games in the future, and Hearts is one of my personal favorites. Magic the Gathering, is a complex game where players can perform actions during other players turns, making async play especially challenging.
+
+I love playing MTG (Magic the Gathering) with friends, but I recently moved, making timeszones a challenge. Having used tools like Archidekt and TableTop Simulator myself, and as inspiration, my goal is to provide an interactive turn-based approach to games, where timeszones and schedules won't prevent me from getting to play with my friends, anywhere in the world.
+
+---
+This Typescript project consists of a Nest backend and React frontend and is managed using [Nx](https://nx.dev).
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
