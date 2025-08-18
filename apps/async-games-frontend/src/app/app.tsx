@@ -1,15 +1,35 @@
 import { Route, Routes, Link } from 'react-router-dom';
 
+import { Card, CardProps } from '../components/Card';
+import { getData } from './api';
+import { useEffect, useState } from 'react';
+
 export function App() {
+  const [deck, setDeck] = useState<CardProps[]>();
+
+  useEffect(() => {
+    (async () => {
+      const cards = await getData('/card/deck');
+      setDeck(cards);
+    })();
+  }, []);
+
   return (
     <div>
       <h1>Welcome</h1>
       {/* START: routes */}
       {/* These routes and navigation have been generated for you */}
       {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
+      {deck?.map((card) => {
+        return (
+          <Card
+            key={`${card.name}-${card.suit}`}
+            suit={card.suit}
+            name={card.name}
+            primaryValue={card.primaryValue}
+          />
+        );
+      })}
 
       <div role="navigation">
         <ul>
