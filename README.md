@@ -16,19 +16,19 @@
 To run the dev server for your app, use:
 
 ```sh
-npx nx serve mtg-collection-manager
+npx nx serve async-games
 ```
 
 To create a production bundle:
 
 ```sh
-npx nx build mtg-collection-manager
+npx nx build async-games
 ```
 
 To see all available targets to run for a project, run:
 
 ```sh
-npx nx show project mtg-collection-manager
+npx nx show project async-games
 ```
 
 These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.

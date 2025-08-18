@@ -2,10 +2,12 @@ import NxWelcome from './nx-welcome';
 
 import { Route, Routes, Link } from 'react-router-dom';
 
+import { Card } from '../components/Card';
+
 export function App() {
   return (
     <div>
-      <NxWelcome title="@mtg-manager/mtg-collection-manager" />
+      <NxWelcome title="@mtg-manager/async-games" />
 
       {/* START: routes */}
       {/* These routes and navigation have been generated for you */}
@@ -13,6 +15,8 @@ export function App() {
       <br />
       <hr />
       <br />
+      <Card suit={} name={'Joker'} />
+
       <div role="navigation">
         <ul>
           <li>
