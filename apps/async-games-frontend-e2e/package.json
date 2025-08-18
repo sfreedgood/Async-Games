@@ -1,0 +1,10 @@
+{
+  "name": "@mtg-manager/async-games-frontend-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@mtg-manager/async-games-frontend"
+    ]
+  }
+}

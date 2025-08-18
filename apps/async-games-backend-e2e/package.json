@@ -1,10 +1,10 @@
 {
-  "name": "@mtg-manager/mtg-collection-manager-backend-e2e",
+  "name": "@mtg-manager/async-games-backend-e2e",
   "version": "0.0.1",
   "private": true,
   "nx": {
     "implicitDependencies": [
-      "@mtg-manager/mtg-collection-manager-backend"
+      "@mtg-manager/async-games-backend"
     ],
     "targets": {
       "e2e": {
@@ -13,12 +13,12 @@
           "{projectRoot}/test-output/jest/coverage"
         ],
         "options": {
-          "jestConfig": "apps/mtg-collection-manager-backend-e2e/jest.config.ts",
+          "jestConfig": "apps/async-games-backend-e2e/jest.config.ts",
           "passWithNoTests": true
         },
         "dependsOn": [
-          "@mtg-manager/mtg-collection-manager-backend:build",
-          "@mtg-manager/mtg-collection-manager-backend:serve"
+          "@mtg-manager/async-games-backend:build",
+          "@mtg-manager/async-games-backend:serve"
         ]
       }
     }

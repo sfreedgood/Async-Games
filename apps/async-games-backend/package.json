@@ -1,5 +1,5 @@
 {
-  "name": "@mtg-manager/mtg-collection-manager-backend",
+  "name": "@mtg-manager/async-games-backend",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -28,15 +28,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "@mtg-manager/mtg-collection-manager-backend:build",
+          "buildTarget": "@mtg-manager/async-games-backend:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@mtg-manager/mtg-collection-manager-backend:build:development"
+            "buildTarget": "@mtg-manager/async-games-backend:build:development"
           },
           "production": {
-            "buildTarget": "@mtg-manager/mtg-collection-manager-backend:build:production"
+            "buildTarget": "@mtg-manager/async-games-backend:build:production"
           }
         }
       },
