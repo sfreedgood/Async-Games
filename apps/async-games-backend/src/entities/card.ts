@@ -25,7 +25,7 @@ const standardValues = {
 } as const;
 
 const joker = {
-  Joker: 15,
+  joker: 15,
 } as const;
 
 type CardValue = typeof standardValues & typeof joker;
@@ -37,17 +37,21 @@ type CardOptions = {
   valueOverrides?: Partial<CardValue>;
 };
 
+function handleCardOptions(name: CardName, options?: CardOptions): number {
+  let value: number;
+  if (name === 'joker') {
+    value = options?.valueOverrides?.['joker'] || joker.joker;
+  } else {
+    value = options?.aceLow === true && name === 'A' ? 1 : standardValues[name];
+    value = options?.valueOverrides?.[name] ?? value;
+  }
+  return value;
+}
+
 export class StandardPlayingCard extends Card {
   trump?: boolean;
   constructor(name: CardName, type: CardSuit, options?: CardOptions) {
-    let value: number;
-    if (name === 'Joker') {
-      value = options?.valueOverrides?.['Joker'] || joker.Joker;
-    } else {
-      value =
-        options?.aceLow === true && name === 'A' ? 1 : standardValues[name];
-      value = options?.valueOverrides?.[name] ?? value;
-    }
+    const value = handleCardOptions(name, options);
 
     super(name, type, value);
   }
@@ -77,9 +81,19 @@ export class StandardPlayingCard extends Card {
     this.trump = this.type === suit ? true : false;
   }
 
-  get isTrump(): Boolean | null {
-    return this.trump || null;
+  get isTrump(): boolean | undefined {
+    return this.trump || undefined;
   }
+
+  getAsDTO = (): CardDTO => {
+    return {
+      name: this.name,
+      suit: this.type,
+      value: this.primaryValue,
+      isTrump: this.isTrump,
+      color: this.color,
+    };
+  };
 }
 
 export type StandardDeckOptions = {
@@ -93,7 +107,7 @@ function buildStandardDeck(
   function buildSuit(suit: CardSuit): StandardPlayingCard[] {
     return Object.keys(standardValues).map(
       (k) =>
-        new StandardPlayingCard(k as CardName, suit, {
+        new StandardPlayingCard(k as StandardCardName, suit, {
           aceLow: deckOptions?.aceLow,
         })
     );
@@ -104,7 +118,7 @@ function buildStandardDeck(
   if (deckOptions?.jokers) {
     let jokerCount = deckOptions.jokers;
     for (let i = 0; i < jokerCount; i++) {
-      cards.push(new StandardPlayingCard('Joker', 'joker'));
+      cards.push(new StandardPlayingCard('joker', 'joker'));
     }
   }
 
@@ -116,4 +130,28 @@ export class StandardDeck extends Deck<StandardPlayingCard> {
     const cards = buildStandardDeck(deckOptions);
     super(cards);
   }
+
+  getAsDTO = (): CardDTO[] => {
+    return this.cards.map((card) => {
+      return card.getAsDTO();
+    });
+  };
 }
+
+type StandardCardName = keyof typeof standardValues;
+type Joker = keyof typeof joker;
+
+export type CardDTO = {
+  value: number;
+  isTrump?: boolean;
+  color: string | null;
+} & (
+  | {
+      name: StandardCardName;
+      suit: CardSuit;
+    }
+  | {
+      name: Joker;
+      suit: Joker;
+    }
+);

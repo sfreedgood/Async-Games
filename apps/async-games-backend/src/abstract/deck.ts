@@ -1,8 +1,8 @@
 export abstract class Deck<T> {
-  items: T[];
+  cards: T[];
 
-  constructor(items: T[]) {
-    this.items = items;
+  constructor(cards: T[]) {
+    this.cards = cards;
   }
 
   shuffle() {
@@ -10,6 +10,6 @@ export abstract class Deck<T> {
   }
 
   draw(quantity = 1) {
-    return this.items.splice(0, quantity);
+    return this.cards.splice(0, quantity);
   }
 }

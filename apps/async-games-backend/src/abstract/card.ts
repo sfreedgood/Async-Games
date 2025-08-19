@@ -1,9 +1,9 @@
-export class Card {
-  name: string;
-  type: string;
-  primaryValue: number;
+export abstract class Card {
+  name;
+  type;
+  primaryValue;
 
-  constructor(name: string, type: string, primaryValue: number) {
+  constructor(name: any, type: any, primaryValue: number) {
     this.name = name;
     this.type = type;
     this.primaryValue = primaryValue;
