@@ -20,7 +20,7 @@ describe('App', () => {
       </BrowserRouter>
     );
     expect(
-      getAllByText(new RegExp('Welcome @mtg-manager/async-games', 'gi'))
+      getAllByText(new RegExp('Welcome @async-games/async-games', 'gi'))
         .length > 0
     ).toBeTruthy();
   });

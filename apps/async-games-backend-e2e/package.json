@@ -1,10 +1,10 @@
 {
-  "name": "@mtg-manager/async-games-backend-e2e",
+  "name": "@async-games/async-games-backend-e2e",
   "version": "0.0.1",
   "private": true,
   "nx": {
     "implicitDependencies": [
-      "@mtg-manager/async-games-backend"
+      "@async-games/async-games-backend"
     ],
     "targets": {
       "e2e": {
@@ -17,8 +17,8 @@
           "passWithNoTests": true
         },
         "dependsOn": [
-          "@mtg-manager/async-games-backend:build",
-          "@mtg-manager/async-games-backend:serve"
+          "@async-games/async-games-backend:build",
+          "@async-games/async-games-backend:serve"
         ]
       }
     }

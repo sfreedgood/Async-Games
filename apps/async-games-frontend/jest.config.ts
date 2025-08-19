@@ -1,5 +1,5 @@
 export default {
-  displayName: '@mtg-manager/async-games-frontend',
+  displayName: '@async-games/async-games-frontend',
   preset: '../../jest.preset.js',
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',

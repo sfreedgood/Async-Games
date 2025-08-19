@@ -10,7 +10,7 @@ const swcJestConfig = JSON.parse(
 swcJestConfig.swcrc = false;
 
 export default {
-  displayName: '@mtg-manager/async-games-backend',
+  displayName: '@async-games/async-games-backend',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
