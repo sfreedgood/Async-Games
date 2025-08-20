@@ -4,7 +4,7 @@ import {
   StandardDeck,
   StandardDeckOptions,
   StandardPlayingCard,
-} from '../../entities/card';
+} from '../../../entities/card';
 
 @Injectable()
 export class CardService {
