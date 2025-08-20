@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { CardService } from './service';
-import { StandardPlayingCard } from '../../entities/card';
+import { StandardPlayingCard } from '../../../entities/card';
 
 describe('CardService', () => {
   let service: CardService;
