@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { CardService } from './service';
-import type { StandardDeckOptions } from '../../entities/card';
+import type { StandardDeckOptions } from '../../../entities/card';
 
 @Controller('card')
 export class CardController {
