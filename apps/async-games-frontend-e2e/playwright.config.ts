@@ -24,7 +24,7 @@ export default defineConfig({
   },
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npx nx run @async-games/async-games-frontent:preview',
+    command: 'npx nx run @async-games/async-games-frontend:preview',
     url: 'http://localhost:4300',
     reuseExistingServer: true,
     cwd: workspaceRoot,

@@ -1,21 +1,17 @@
-import NxWelcome from './nx-welcome';
+import React from 'react';
 
 import { Route, Routes, Link } from 'react-router-dom';
-
-import { Card } from '../components/Card';
 
 export function App() {
   return (
     <div>
-      <NxWelcome title="@mtg-manager/async-games" />
-
+      <h1>Welcome</h1>
       {/* START: routes */}
       {/* These routes and navigation have been generated for you */}
       {/* Feel free to move and update them to fit your needs */}
       <br />
       <hr />
       <br />
-      <Card suit={} name={'Joker'} />
 
       <div role="navigation">
         <ul>

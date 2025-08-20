@@ -25,9 +25,10 @@ export class Turn extends GameTracker {
       const priorPlayers = new Set<PlayerId>();
       const followingPlayers = new Set<PlayerId>();
 
-      this.players.indexOf(startingPlayer) >= this.players.indexOf(player)
-        ? followingPlayers.add(player.playerId)
-        : priorPlayers.add(player.playerId);
+      if (this.players.indexOf(startingPlayer) >= this.players.indexOf(player))
+        followingPlayers.add(player.playerId);
+      if (this.players.indexOf(startingPlayer) < this.players.indexOf(player))
+        priorPlayers.add(player.playerId);
 
       return [...followingPlayers, ...priorPlayers];
     });
@@ -36,6 +37,4 @@ export class Turn extends GameTracker {
   notifyPlayer() {
     // Notification logic (ex. email, maybe push depending on env)
   }
-
-  getPlayerActions() {}
 }

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -14,14 +16,11 @@ describe('App', () => {
   });
 
   it('should have a greeting as the title', () => {
-    const { getAllByText } = render(
+    const { getByText } = render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
-    expect(
-      getAllByText(new RegExp('Welcome @async-games/async-games', 'gi'))
-        .length > 0
-    ).toBeTruthy();
+    expect(getByText('Welcome')).toBeTruthy();
   });
 });
