@@ -2,18 +2,19 @@ import { randomUUID } from 'crypto';
 import { mkdir, rmdir } from 'fs';
 import { simpleGit, CleanOptions } from 'simple-git';
 import type { SimpleGit, SimpleGitOptions } from 'simple-git';
+import { Player } from './player';
 
-export abstract class GameTracker {
+export class GameTracker {
   name: string;
   gameId: string;
   dirPath: string;
   gitOptions: Partial<SimpleGitOptions>;
   git: SimpleGit;
-  players: string[];
-  currentPlayer: string;
+  players: Player[];
+  currentPlayer: Player;
   turnNumber = 0;
 
-  constructor(name: string, players: string[], gameId?: string) {
+  constructor(name: string, players: Player[], gameId?: string) {
     this.name = name;
     this.players = players;
     this.gameId = gameId || (randomUUID as unknown as string);
@@ -24,7 +25,7 @@ export abstract class GameTracker {
     this.git = simpleGit(this.gitOptions).clean(CleanOptions.FORCE);
   }
 
-  async startGame() {
+  async initializeGame() {
     mkdir(this.dirPath, (err) => {
       if (err) throw err;
     });
@@ -53,6 +54,13 @@ export abstract class GameTracker {
 
     this.currentPlayer = nextPlayer;
   }
+
+  getNextPlayer = (currentPlayer: Player) => {
+    const currentPlayerIndex = this.players.indexOf(currentPlayer);
+    return currentPlayerIndex === this.players.length - 1
+      ? this.players[0]
+      : this.players[currentPlayerIndex + 1];
+  };
 
   async deleteGame() {
     rmdir(this.dirPath, (err) => {

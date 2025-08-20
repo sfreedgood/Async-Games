@@ -28,32 +28,49 @@ const joker = {
   joker: 15,
 } as const;
 
-type CardValue = typeof standardValues & typeof joker;
-type CardName = keyof typeof standardValues | keyof typeof joker;
-type CardSuit = keyof typeof standardSuits | 'joker';
+type CardValueDef = typeof standardValues & typeof joker;
+type CardValue =
+  | (typeof standardValues)[keyof typeof standardValues]
+  | typeof joker.joker;
+type StandardCardName = keyof typeof standardValues;
+type Joker = keyof typeof joker;
+type CardName = StandardCardName | Joker;
+export type CardSuit = keyof typeof standardSuits | 'joker';
+
+type StandardPlayingCardProperties = {
+  name: CardName;
+  type: CardSuit;
+  value: CardValue;
+};
 
 type CardOptions = {
   aceLow?: boolean;
-  valueOverrides?: Partial<CardValue>;
+  valueOverrides?: Partial<CardValueDef>;
 };
 
-function handleCardOptions(name: CardName, options?: CardOptions): number {
-  let value: number;
+function handleCardOptions(name: CardName, options?: CardOptions): CardValue {
+  let value: CardValue;
   if (name === 'joker') {
     value = options?.valueOverrides?.['joker'] || joker.joker;
   } else {
-    value = options?.aceLow === true && name === 'A' ? 1 : standardValues[name];
+    value =
+      options?.aceLow === true && name === 'A'
+        ? (1 as CardValue)
+        : standardValues[name];
     value = options?.valueOverrides?.[name] ?? value;
   }
   return value;
 }
 
-export class StandardPlayingCard extends Card {
+export class StandardPlayingCard extends Card<StandardPlayingCardProperties> {
   trump?: boolean;
+  override name: CardName;
+
   constructor(name: CardName, type: CardSuit, options?: CardOptions) {
     const value = handleCardOptions(name, options);
-
     super(name, type, value);
+    this.type = type;
+    this.name = name;
   }
 
   get color() {
@@ -71,9 +88,9 @@ export class StandardPlayingCard extends Card {
 
   set aceLow(value: boolean) {
     if (this.name === 'A' && value) {
-      this.primaryValue = 1;
+      this.value = 1 as CardValue;
     } else {
-      this.primaryValue = 14;
+      this.value = standardValues['A'];
     }
   }
 
@@ -89,7 +106,7 @@ export class StandardPlayingCard extends Card {
     return {
       name: this.name,
       suit: this.type,
-      value: this.primaryValue,
+      value: this.value,
       isTrump: this.isTrump,
       color: this.color,
     };
@@ -138,20 +155,11 @@ export class StandardDeck extends Deck<StandardPlayingCard> {
   };
 }
 
-type StandardCardName = keyof typeof standardValues;
-type Joker = keyof typeof joker;
-
 export type CardDTO = {
-  value: number;
+  value: CardValue;
   isTrump?: boolean;
   color: string | null;
-} & (
-  | {
-      name: StandardCardName;
-      suit: CardSuit;
-    }
-  | {
-      name: Joker;
-      suit: Joker;
-    }
-);
+} & {
+  name: StandardCardName | Joker;
+  suit: CardSuit | Joker;
+};
