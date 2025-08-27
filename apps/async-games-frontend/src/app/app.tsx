@@ -2,35 +2,20 @@ import NxWelcome from './nx-welcome';
 
 import { Route, Routes, Link } from 'react-router-dom';
 
-import { Card, CardProps } from '../components/Card';
-import { getData } from './api';
-import { useEffect, useState } from 'react';
+import { Card } from '../components/Card';
 
 export function App() {
-  const [deck, setDeck] = useState<CardProps[]>();
-
-  useEffect(() => {
-    (async () => {
-      const cards = await getData('/card/deck');
-      setDeck(cards);
-    })();
-  }, []);
-
   return (
     <div>
+      <NxWelcome title="@mtg-manager/async-games" />
+
       {/* START: routes */}
       {/* These routes and navigation have been generated for you */}
       {/* Feel free to move and update them to fit your needs */}
-      {deck?.map((card) => {
-        return (
-          <Card
-            key={`${card.name}-${card.suit}`}
-            suit={card.suit}
-            name={card.name}
-            primaryValue={card.primaryValue}
-          />
-        );
-      })}
+      <br />
+      <hr />
+      <br />
+      <Card suit={} name={'Joker'} />
 
       <div role="navigation">
         <ul>
@@ -56,7 +41,6 @@ export function App() {
           path="/page-2"
           element={
             <div>
-              <NxWelcome title="@async-games/async-games" />
               <Link to="/">Click here to go back to root page.</Link>
             </div>
           }
