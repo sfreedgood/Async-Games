@@ -9,6 +9,6 @@ export const getData = async (endpoint: string) => {
     const response = await axios.get(`${basePath}${endpoint}`);
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.warn(error);
   }
 };
