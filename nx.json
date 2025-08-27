@@ -72,7 +72,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/mtg-collection-manager-backend-e2e/**/*"]
+      "exclude": ["apps/async-games-backend-e2e/**/*"]
     },
     {
       "plugin": "@nx/webpack/plugin",
