@@ -27,7 +27,9 @@ describe('CardService', () => {
     it('should allow the user to add Jokers to the deck', () => {
       const deck = service.buildStandardDeck({ jokers: 2 });
       expect(deck).toHaveLength(54);
-      expect(deck).toContainEqual(new StandardPlayingCard('joker', 'joker'));
+      expect(deck).toContainEqual(
+        new StandardPlayingCard('joker', 'joker').getAsDTO()
+      );
     });
   });
 });

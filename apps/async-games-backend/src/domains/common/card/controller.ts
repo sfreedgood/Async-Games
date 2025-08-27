@@ -1,14 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
 import { CardService } from './service';
-import type { StandardDeckOptions } from '../../../entities/card';
+import type {
+  CardName,
+  CardSuit,
+  StandardDeckOptions,
+} from '../../../entities/card';
 
 @Controller('card')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Get()
-  getData() {
-    return this.cardService.getData();
+  getCard(name: CardName, suit: CardSuit) {
+    return this.cardService.getCard(name, suit);
   }
 
   @Get('deck') // For testing, change to Post
