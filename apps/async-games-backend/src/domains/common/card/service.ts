@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {
   CardDTO,
+  CardName,
+  CardSuit,
   StandardDeck,
   StandardDeckOptions,
   StandardPlayingCard,
@@ -8,8 +10,8 @@ import {
 
 @Injectable()
 export class CardService {
-  getData(): StandardPlayingCard {
-    return new StandardPlayingCard('3', 'heart');
+  getCard(name: CardName, suit: CardSuit): StandardPlayingCard {
+    return new StandardPlayingCard(name, suit);
   }
 
   buildStandardDeck(options?: StandardDeckOptions): CardDTO[] {

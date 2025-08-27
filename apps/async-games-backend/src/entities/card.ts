@@ -34,7 +34,7 @@ type CardValue =
   | typeof joker.joker;
 type StandardCardName = keyof typeof standardValues;
 type Joker = keyof typeof joker;
-type CardName = StandardCardName | Joker;
+export type CardName = StandardCardName | Joker;
 export type CardSuit = keyof typeof standardSuits | 'joker';
 
 type StandardPlayingCardProperties = {
@@ -45,7 +45,7 @@ type StandardPlayingCardProperties = {
 
 type CardOptions = {
   aceLow?: boolean;
-  valueOverrides?: Partial<CardValueDef>;
+  valueOverrides?: Partial<Record<keyof CardValueDef, CardValue>>;
 };
 
 function handleCardOptions(name: CardName, options?: CardOptions): CardValue {
@@ -63,14 +63,16 @@ function handleCardOptions(name: CardName, options?: CardOptions): CardValue {
 }
 
 export class StandardPlayingCard extends Card<StandardPlayingCardProperties> {
-  trump?: boolean;
   override name: CardName;
+  options?: CardOptions;
+  isTrumpSuit?: boolean;
 
   constructor(name: CardName, type: CardSuit, options?: CardOptions) {
     const value = handleCardOptions(name, options);
     super(name, type, value);
     this.type = type;
     this.name = name;
+    this.options = options;
   }
 
   get color() {
@@ -86,20 +88,22 @@ export class StandardPlayingCard extends Card<StandardPlayingCardProperties> {
     return null;
   }
 
-  set aceLow(value: boolean) {
+  makeAceLow(value: boolean) {
+    if (this.name !== 'A') {
+      console.error('method not applicable to selected card, ignoring'); // placeholder for validations and error handling
+      return;
+    }
     if (this.name === 'A' && value) {
       this.value = 1 as CardValue;
     } else {
-      this.value = standardValues['A'];
+      this.value = this.options?.valueOverrides?.A
+        ? this.options?.valueOverrides?.A
+        : standardValues['A'];
     }
   }
 
-  set trumpSuit(suit: CardSuit) {
-    this.trump = this.type === suit ? true : false;
-  }
-
-  get isTrump(): boolean | undefined {
-    return this.trump || undefined;
+  setTrumpSuit(suit: CardSuit) {
+    this.isTrumpSuit = this.type === suit ? true : false;
   }
 
   getAsDTO = (): CardDTO => {
@@ -107,7 +111,7 @@ export class StandardPlayingCard extends Card<StandardPlayingCardProperties> {
       name: this.name,
       suit: this.type,
       value: this.value,
-      isTrump: this.isTrump,
+      isTrumpSuit: this.isTrumpSuit,
       color: this.color,
     };
   };
@@ -133,7 +137,7 @@ function buildStandardDeck(
   const cards = Object.values(standardSuits).flatMap((suit) => buildSuit(suit));
 
   if (deckOptions?.jokers) {
-    let jokerCount = deckOptions.jokers;
+    const jokerCount = deckOptions.jokers;
     for (let i = 0; i < jokerCount; i++) {
       cards.push(new StandardPlayingCard('joker', 'joker'));
     }
@@ -157,7 +161,7 @@ export class StandardDeck extends Deck<StandardPlayingCard> {
 
 export type CardDTO = {
   value: CardValue;
-  isTrump?: boolean;
+  isTrumpSuit?: boolean;
   color: string | null;
 } & {
   name: StandardCardName | Joker;
