@@ -1,8 +1,17 @@
 import { randomUUID } from 'crypto';
-import { mkdir, rmdir } from 'fs';
-import { simpleGit, CleanOptions } from 'simple-git';
-import type { SimpleGit, SimpleGitOptions } from 'simple-git';
+import { simpleGit } from 'simple-git';
+import type { SimpleGit, SimpleGitOptions, StatusResult } from 'simple-git';
 import { Player } from './player';
+import { mkdirSync, rmSync, writeFileSync } from 'fs';
+import { normalizeStringForPath } from '../utils/string.utils';
+
+export const gameTrackerBaseDir = '/tmp/async_games/active_games/';
+
+export const buildGameDir = (name: string, id: string) => {
+  return `${gameTrackerBaseDir}${name
+    .replaceAll(' ', '-')
+    .toLowerCase()}/${id}`;
+};
 
 export class GameTracker {
   name: string;
@@ -14,30 +23,58 @@ export class GameTracker {
   currentPlayer: Player;
   turnNumber = 0;
 
-  constructor(name: string, players: Player[], gameId?: string) {
+  constructor(name: string, players: Player[]) {
     this.name = name;
     this.players = players;
-    this.gameId = gameId || (randomUUID as unknown as string);
     this.currentPlayer = players[0];
-    this.dirPath = `${process.cwd()}/.${this.name}/game/${gameId}`;
 
+    this.gameId = normalizeStringForPath(name).concat('_', randomUUID());
+    this.dirPath = buildGameDir(this.name, this.gameId);
+
+    mkdirSync(this.dirPath, { recursive: true });
     this.gitOptions = { baseDir: this.dirPath, binary: 'git' };
-    this.git = simpleGit(this.gitOptions).clean(CleanOptions.FORCE);
+    this.git = simpleGit(this.gitOptions);
   }
 
   async initializeGame() {
-    mkdir(this.dirPath, (err) => {
-      if (err) throw err;
-    });
+    try {
+      await this.git.init();
+    } catch (e) {
+      console.error(e);
+    }
 
-    await this.git.init();
+    const gameMetaData = {
+      gameId: this.gameId,
+      gameName: this.name,
+      players: this.players,
+      created: Date.now(),
+    };
+    writeFileSync(
+      `${this.dirPath}/metadata.json`,
+      JSON.stringify(gameMetaData)
+    );
+
+    try {
+      await this.commitAction();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async commitAction() {
-    const filesChanged = await this.git.diff(['--name-only']);
-    // TODO add confirmation of changes
-    await this.git.add(filesChanged);
-    await this.git.commit(`turn${this.turnNumber}_${this.currentPlayer}`);
+    try {
+      const status = await this.git.status();
+      const diffs = this.handleDiff(status);
+      if (diffs === null) return;
+      // TODO add confirmation of changes
+    } catch (e) {
+      console.error(e);
+    }
+
+    await this.git.add('.');
+    await this.git.commit(
+      `turn${this.turnNumber}_${this.currentPlayer.playerId}`
+    );
   }
 
   async nextTurn() {
@@ -49,7 +86,7 @@ export class GameTracker {
       : this.players[currentPlayerIndex + 1];
     const turnNumber = endOfRound ? this.turnNumber + 1 : this.turnNumber;
 
-    const nextTurnId = `turn${turnNumber}_${nextPlayer}`;
+    const nextTurnId = `turn${turnNumber}_${nextPlayer.playerId}`;
     await this.git.checkoutLocalBranch(nextTurnId);
 
     this.currentPlayer = nextPlayer;
@@ -63,8 +100,39 @@ export class GameTracker {
   };
 
   async deleteGame() {
-    rmdir(this.dirPath, (err) => {
-      if (err) throw err;
-    });
+    rmSync(this.dirPath, { recursive: true });
+  }
+
+  // TODO: Handle status states, implement validations.
+  private handleDiff(status: StatusResult): StatusResult | null {
+    const { not_added, conflicted, created, deleted, modified } = status;
+    const fieldsToValidate = [
+      not_added,
+      conflicted,
+      created,
+      deleted,
+      modified,
+    ];
+    const totalChangedFilesCount = fieldsToValidate
+      .map((statusField) => statusField.length)
+      .reduce((prev, curr, i, arr) => {
+        return prev + curr;
+      }, 0);
+
+    if (totalChangedFilesCount === 0) return null;
+
+    if (conflicted.length) {
+      throw new Error(
+        `Unable to commit changes due to conflicts in: ${conflicted.join(', ')}`
+      );
+      // TODO: add way for user to resolve conflicts. Use diff to show user, then let choose which version to use.
+    }
+
+    if (modified.length) {
+      console.log(`Modified Files: ${modified.join(', ')}`);
+      // Optional TODO: Add confirmation (using diff)
+    }
+
+    return status;
   }
 }

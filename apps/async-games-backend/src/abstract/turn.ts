@@ -7,13 +7,8 @@ export class Turn extends GameTracker {
   player: Player;
   playProgression: PlayProgression;
 
-  constructor(
-    gameName: string,
-    player: Player,
-    players: Player[],
-    gameId?: string
-  ) {
-    super(gameName, players, gameId);
+  constructor(gameName: string, player: Player, players: Player[]) {
+    super(gameName, players);
     this.player = player;
     this.playProgression = this.definePlayProgression();
   }
