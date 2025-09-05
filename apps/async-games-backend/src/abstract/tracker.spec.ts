@@ -1,6 +1,6 @@
 import { GameTracker } from './tracker';
 import { Player } from './player';
-import simpleGit, { GitError } from 'simple-git';
+import { GitError } from 'simple-git';
 import fs, { existsSync, writeFileSync } from 'fs';
 
 jest.mocked('fs');
@@ -12,7 +12,7 @@ describe('GameTracker', () => {
 
   const players: Player[] = [
     new Player('player_1', 'Player1'),
-    new Player('player_1', 'Player2'),
+    new Player('player_2', 'Player2'),
   ];
 
   beforeEach(() => {
