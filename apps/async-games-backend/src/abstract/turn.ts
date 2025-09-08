@@ -1,37 +1,26 @@
-import { Player, PlayerId } from './player';
+import { Player } from './player';
 import { GameTracker } from './tracker';
 
-export type PlayProgression = PlayerId[]; // replace with player
+export type PlayProgression = Player[]; // replace with player
 
 export class Turn extends GameTracker {
   player: Player;
   playProgression: PlayProgression;
 
-  constructor(
-    gameName: string,
-    player: Player,
-    players: Player[],
-    gameId?: string
-  ) {
-    super(gameName, players, gameId);
+  constructor(gameName: string, player: Player, players: Player[]) {
+    super(gameName, players);
     this.player = player;
     this.playProgression = this.definePlayProgression();
   }
 
   definePlayProgression = () => {
-    const startingPlayer = this.player;
     // Mimic clockwise table behavior
-    return this.players.flatMap((player) => {
-      const priorPlayers = new Set<PlayerId>();
-      const followingPlayers = new Set<PlayerId>();
+    const playerIndex = this.players.indexOf(this.player);
 
-      if (this.players.indexOf(startingPlayer) >= this.players.indexOf(player))
-        followingPlayers.add(player.playerId);
-      if (this.players.indexOf(startingPlayer) < this.players.indexOf(player))
-        priorPlayers.add(player.playerId);
+    const followingPlayers = this.players.slice(playerIndex);
+    const priorPlayers = this.players.slice(0, playerIndex);
 
-      return [...followingPlayers, ...priorPlayers];
-    });
+    return [...followingPlayers, ...priorPlayers];
   };
 
   notifyPlayer() {
