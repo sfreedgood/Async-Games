@@ -34,6 +34,11 @@ jobs:
       - run: npm ci --legacy-peer-deps
       - run: npx playwright install --with-deps
 
+      # Set up git user
+      - run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
       # When you enable task distribution, run the e2e-ci task instead of e2e
