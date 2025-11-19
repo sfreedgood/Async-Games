@@ -1,18 +1,17 @@
 import { Route, Routes, Link } from 'react-router-dom';
 
-import { Card, CardProps } from '../components/Card';
-import { getData } from './api';
-import { useEffect, useState } from 'react';
+import { Card } from '../components/Card/Card';
+import { useAxiosGet } from './hooks/api';
+import { StandardDeckEntity } from '../entities/deck';
 
 export function App() {
-  const [deck, setDeck] = useState<CardProps[]>();
-
-  useEffect(() => {
-    (async () => {
-      const cards = await getData('/card/deck');
-      setDeck(cards);
-    })();
-  }, []);
+  const {
+    data: deck,
+    loading,
+    status,
+    statusText,
+    error,
+  } = useAxiosGet<StandardDeckEntity>('/cards/deck');
 
   return (
     <div>
@@ -20,7 +19,7 @@ export function App() {
       {/* START: routes */}
       {/* These routes and navigation have been generated for you */}
       {/* Feel free to move and update them to fit your needs */}
-      {deck?.map((card) => {
+      {deck?.cards.map((card) => {
         return (
           <Card
             key={`${card.name}-${card.suit}`}
@@ -39,6 +38,9 @@ export function App() {
           <li>
             <Link to="/page-2">Page 2</Link>
           </li>
+          <li>
+            <Link to="/deck">Cards</Link>
+          </li>
         </ul>
       </div>
       <Routes>
@@ -56,6 +58,14 @@ export function App() {
           element={
             <div>
               <Link to="/">Click here to go back to root page.</Link>
+            </div>
+          }
+        />
+        <Route
+          path="/deck"
+          element={
+            <div>
+              <Link to="deck">View Deck</Link>
             </div>
           }
         />

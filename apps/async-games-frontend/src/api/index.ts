@@ -8,7 +8,7 @@ const PORT = 3000;
 export type HttpStatusMessage = keyof typeof HttpStatus;
 export type HttpStatusCode = ParseInt<`${HttpStatus}`>;
 
-type URLSearchOptions<T> = {
+export type URLSearchOptions<T> = {
   [Property in keyof T]: string;
 };
 

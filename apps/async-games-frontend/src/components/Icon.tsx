@@ -7,7 +7,7 @@ export const iconNames = {
   heart: 'heart',
   diamond: 'diamond',
   club: 'club',
-  joker: 'joker',
+  joker: 'Joker',
 } as const;
 
 const iconSVG = {
