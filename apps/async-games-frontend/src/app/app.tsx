@@ -5,13 +5,7 @@ import { useAxiosGet } from './hooks/api';
 import { ClassicDeckEntity } from './domains/classic-card';
 
 export function App() {
-  const {
-    data: deck,
-    loading,
-    status,
-    statusText,
-    error,
-  } = useAxiosGet<ClassicDeckEntity>('/cards/deck');
+  const { data: deck } = useAxiosGet<ClassicDeckEntity>('/cards/deck');
 
   return (
     <div>

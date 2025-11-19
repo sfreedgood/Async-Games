@@ -3,6 +3,7 @@ import { PlayerAvatar, PlayerEntity } from '../player';
 
 export interface TableProps {
   players: PlayerEntity[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pieces?: any; // cards, board, etc.
 }
 

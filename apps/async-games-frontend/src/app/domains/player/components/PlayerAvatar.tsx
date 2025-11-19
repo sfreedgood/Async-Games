@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { PlayerEntity } from '../entities/player';
 
 export interface PlayerProps {
@@ -33,19 +27,6 @@ export const PlayerAvatar: React.FC<PlayerProps> = ({
     playerRef.current?.clientHeight,
     playerRef.current?.clientWidth,
   ]);
-
-  const rotateWithOffsetStyle = useCallback(
-    (clockwiseDegrees: number) => {
-      const rotationStyle =
-        clockwiseDegrees <= 180
-          ? `rotate-${clockwiseDegrees} transform -translate-x-[${rotationOffset}px]`
-          : `-rotate-${
-              clockwiseDegrees - 180
-            } transform translate-x-[${rotationOffset}px]`;
-      return rotationStyle;
-    },
-    [rotationOffset]
-  );
 
   const playerPosition = useMemo(() => {
     let positionStyle: string;
@@ -83,7 +64,7 @@ export const PlayerAvatar: React.FC<PlayerProps> = ({
       default:
         throw Error('More than 4 players not supported');
     }
-  }, [position, rotationOffset]);
+  }, [position, totalPlayers]);
 
   return (
     <div ref={playerRef} className={playerPosition}>

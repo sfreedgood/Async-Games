@@ -1,10 +1,12 @@
 export const requiredClassicCardFields = ['name', 'suit', 'value'] as const;
-export type requiredClassicCardFields =
+export type RequiredClassicCardFields =
   (typeof requiredClassicCardFields)[number];
 export type ClassicCardFields = Record<
-  requiredClassicCardFields[number],
+  RequiredClassicCardFields,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any
 > & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 };
 

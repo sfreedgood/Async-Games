@@ -29,5 +29,5 @@ export const Icon: React.FC<IconProps> = ({
   height,
   width,
 }: IconProps) => {
-  return <img height={height} width={width} src={iconSVG[icon]} />;
+  return <img height={height} width={width} src={iconSVG[icon]} alt={icon} />;
 };
