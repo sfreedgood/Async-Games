@@ -1,9 +1,9 @@
 import React from 'react';
-import { PlayerAvatar } from './PlayerAvatar';
-import type { Player } from '../entities/player';
+import { PlayerAvatar } from '../Player';
+import type { PlayerEntity } from '../../entities/player';
 
 export interface TableProps {
-  players: Player[];
+  players: PlayerEntity[];
   pieces?: any; // cards, board, etc.
 }
 

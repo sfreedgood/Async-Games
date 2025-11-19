@@ -1,4 +1,4 @@
-export type Player = {
-  name: string;
+export interface PlayerEntity {
   id: string;
-};
+  name: string;
+}

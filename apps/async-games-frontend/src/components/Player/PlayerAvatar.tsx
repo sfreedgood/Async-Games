@@ -5,10 +5,10 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Player } from '../entities/player';
+import { PlayerEntity } from '../../entities/player';
 
 export interface PlayerProps {
-  player: Player;
+  player: PlayerEntity;
   position: number;
   totalPlayers: number;
 }
