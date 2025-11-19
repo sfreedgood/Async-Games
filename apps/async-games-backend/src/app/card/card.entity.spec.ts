@@ -1,11 +1,12 @@
-import { CardSuit, StandardPlayingCard } from './card';
+import { StandardPlayingCard } from './card.entity';
+import { CardSuit } from './card.interface';
 
 describe('StandardPlayingCard', () => {
   describe('constructor', () => {
     it('should create a StandardPlayingCard instance with given properties', () => {
       const card = new StandardPlayingCard('A', 'spade');
       expect(card.name).toBe('A');
-      expect(card.type).toBe('spade');
+      expect(card.suit).toBe('spade');
     });
 
     it('should allow users to override default values', () => {
@@ -13,7 +14,7 @@ describe('StandardPlayingCard', () => {
         valueOverrides: { K: 9 },
       });
       expect(card.name).toBe('K');
-      expect(card.type).toBe('spade');
+      expect(card.suit).toBe('spade');
       expect(card.value).toBe(9);
     });
 
@@ -80,12 +81,12 @@ describe('StandardPlayingCard', () => {
 
       const card = new StandardPlayingCard('10', 'spade');
       expect(card.name).toBe('10');
-      expect(card.type).toBe('spade');
+      expect(card.suit).toBe('spade');
       expect(card.value).toBe(10);
 
       card.makeAceLow(true);
       expect(card.name).toBe('10');
-      expect(card.type).toBe('spade');
+      expect(card.suit).toBe('spade');
       expect(card.value).toBe(10);
 
       //TODO: update for error handling once implemented
@@ -104,27 +105,12 @@ describe('StandardPlayingCard', () => {
 
     it('`isTrumpSuit` should return true if the card is a trump card', () => {
       const card = new StandardPlayingCard('A', 'heart');
-      card.setTrumpSuit('heart');
-      expect(card.isTrumpSuit).toBe(true);
+      expect(card.isTrumpSuit('heart')).toBe(true);
     });
 
     it('`isTrumpSuit` should return false if the card is not a trump card', () => {
       const card = new StandardPlayingCard('A', 'spade');
-      card.setTrumpSuit('heart');
-      expect(card.isTrumpSuit).toBe(false);
-    });
-  });
-
-  describe('getAsDTO', () => {
-    it('should return the correct DTO representation of the card', () => {
-      const card = new StandardPlayingCard('A', 'spade');
-      const dto = card.getAsDTO();
-      expect(dto).toEqual({
-        value: 14, // Assuming A has a value of 14
-        color: 'black', // Assuming spade is black
-        name: 'A',
-        suit: 'spade',
-      });
+      expect(card.isTrumpSuit('heart')).toBe(false);
     });
   });
 });

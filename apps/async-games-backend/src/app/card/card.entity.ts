@@ -1,52 +1,16 @@
-import { Card } from '../abstract/card';
-import { Deck } from '../abstract/deck';
-
-const standardSuits = {
-  spade: 'spade',
-  heart: 'heart',
-  club: 'club',
-  diamond: 'diamond',
-} as const;
-
-const standardValues = {
-  '2': 2,
-  '3': 3,
-  '4': 4,
-  '5': 5,
-  '6': 6,
-  '7': 7,
-  '8': 8,
-  '9': 9,
-  '10': 10,
-  J: 11,
-  Q: 12,
-  K: 13,
-  A: 14,
-} as const;
-
-const joker = {
-  joker: 15,
-} as const;
-
-type CardValueDef = typeof standardValues & typeof joker;
-type CardValue =
-  | (typeof standardValues)[keyof typeof standardValues]
-  | typeof joker.joker;
-type StandardCardName = keyof typeof standardValues;
-type Joker = keyof typeof joker;
-export type CardName = StandardCardName | Joker;
-export type CardSuit = keyof typeof standardSuits | 'joker';
-
-type StandardPlayingCardProperties = {
-  name: CardName;
-  type: CardSuit;
-  value: CardValue;
-};
-
-type CardOptions = {
-  aceLow?: boolean;
-  valueOverrides?: Partial<Record<keyof CardValueDef, CardValue>>;
-};
+import { Card } from '../../abstract/card';
+import { Deck } from '../../abstract/deck';
+import {
+  type CardName,
+  type CardOptions,
+  type CardSuit,
+  type CardValue,
+  type StandardPlayingCardProperties,
+  type StandardCardName,
+  joker,
+  standardValues,
+  standardSuits,
+} from './card.interface';
 
 function handleCardOptions(name: CardName, options?: CardOptions): CardValue {
   let value: CardValue;
@@ -63,25 +27,24 @@ function handleCardOptions(name: CardName, options?: CardOptions): CardValue {
 }
 
 export class StandardPlayingCard extends Card<StandardPlayingCardProperties> {
-  override name: CardName;
   options?: CardOptions;
-  isTrumpSuit?: boolean;
 
-  constructor(name: CardName, type: CardSuit, options?: CardOptions) {
+  constructor(name: CardName, suit: CardSuit, options?: CardOptions) {
     const value = handleCardOptions(name, options);
-    super(name, type, value);
-    this.type = type;
+    super(name, suit, value);
+    this.value = value;
+    this.suit = suit;
     this.name = name;
     this.options = options;
   }
 
   get color() {
-    if (this.type === standardSuits.spade || this.type === standardSuits.club) {
+    if (this.suit === standardSuits.spade || this.suit === standardSuits.club) {
       return 'black';
     }
     if (
-      this.type === standardSuits.heart ||
-      this.type === standardSuits.diamond
+      this.suit === standardSuits.heart ||
+      this.suit === standardSuits.diamond
     ) {
       return 'red';
     }
@@ -102,19 +65,9 @@ export class StandardPlayingCard extends Card<StandardPlayingCardProperties> {
     }
   }
 
-  setTrumpSuit(suit: CardSuit) {
-    this.isTrumpSuit = this.type === suit ? true : false;
+  isTrumpSuit(suit: CardSuit) {
+    return this.suit === suit ? true : false;
   }
-
-  getAsDTO = (): CardDTO => {
-    return {
-      name: this.name,
-      suit: this.type,
-      value: this.value,
-      isTrumpSuit: this.isTrumpSuit,
-      color: this.color,
-    };
-  };
 }
 
 export type StandardDeckOptions = {
@@ -151,19 +104,4 @@ export class StandardDeck extends Deck<StandardPlayingCard> {
     const cards = buildStandardDeck(deckOptions);
     super(cards);
   }
-
-  getAsDTO = (): CardDTO[] => {
-    return this.cards.map((card) => {
-      return card.getAsDTO();
-    });
-  };
 }
-
-export type CardDTO = {
-  value: CardValue;
-  isTrumpSuit?: boolean;
-  color: string | null;
-} & {
-  name: StandardCardName | Joker;
-  suit: CardSuit | Joker;
-};

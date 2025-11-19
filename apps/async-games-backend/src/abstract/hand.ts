@@ -1,21 +1,21 @@
-import { Card, CardFields } from './card';
+import { Card, StandardCardFields } from './card';
 import { Player } from './player';
 
 export class Hand {
   player: Player;
-  cards: Card<CardFields>[];
-  playedCards: Card<CardFields>[] = [];
-  constructor(player: Player, cards: Card<CardFields>[]) {
+  cards: Card<StandardCardFields>[];
+  playedCards: Card<StandardCardFields>[] = [];
+  constructor(player: Player, cards: Card<StandardCardFields>[]) {
     this.player = player;
     this.cards = cards;
   }
 
-  playCard(card: Card<CardFields>) {
+  playCard(card: Card<StandardCardFields>) {
     const playedCard = this.cards.splice(this.cards.indexOf(card), 1)[0];
     this.playedCards.push(playedCard);
   }
 
-  hasCard(searchCard: Card<CardFields>): boolean {
+  hasCard(searchCard: Card<StandardCardFields>): boolean {
     return this.cards.includes(searchCard);
   }
 

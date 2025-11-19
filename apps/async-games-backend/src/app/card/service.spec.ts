@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { CardService } from './service';
-import { StandardPlayingCard } from '../../../entities/card';
+import { StandardPlayingCard } from './card.entity';
 
 describe('CardService', () => {
   let service: CardService;
@@ -19,17 +19,15 @@ describe('CardService', () => {
   //   });
   // });
 
-  describe('buildStandardDeck', () => {
+  describe('getAllCardsInDeck', () => {
     it('should return 52 cards by default', () => {
-      expect(service.buildStandardDeck()).toHaveLength(52);
+      expect(service.getAllCardsInDeck()).toHaveLength(52);
     });
 
     it('should allow the user to add Jokers to the deck', () => {
-      const deck = service.buildStandardDeck({ jokers: 2 });
+      const deck = service.getAllCardsInDeck({ jokers: 2 });
       expect(deck).toHaveLength(54);
-      expect(deck).toContainEqual(
-        new StandardPlayingCard('joker', 'joker').getAsDTO()
-      );
+      expect(deck).toContainEqual(new StandardPlayingCard('joker', 'joker'));
     });
   });
 });
