@@ -1,9 +1,9 @@
 import React from 'react';
-import { PlayerAvatar } from './PlayerAvatar';
-import type { Player } from '../entities/player';
+import { PlayerAvatar, PlayerEntity } from '../player';
 
 export interface TableProps {
-  players: Player[];
+  players: PlayerEntity[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pieces?: any; // cards, board, etc.
 }
 
