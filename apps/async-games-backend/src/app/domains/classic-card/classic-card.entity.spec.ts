@@ -1,5 +1,37 @@
-import { ClassicPlayingCard } from './classic-card.entity';
-import { ClassicCardSuit } from './classic-card.interface';
+import {
+  ClassicDeck,
+  ClassicPlayingCard,
+  handleClassicCardOptions,
+} from './classic-card.entity';
+import {
+  ClassicCardSuit,
+  ClassicCardValue,
+  classicCardSuits,
+} from './classic-card.interface';
+
+describe('handleClassicCardOptions', () => {
+  it('should apply default options when no options are provided', () => {
+    const cardValue = handleClassicCardOptions('10');
+    expect(cardValue).toEqual(10);
+  });
+
+  it('should allow overriding default value with valueOverride option', () => {
+    const cardValueAce = handleClassicCardOptions('A', {
+      valueOverride: { A: 1 as ClassicCardValue },
+    });
+    const cardValueTen = handleClassicCardOptions('10', {
+      valueOverride: { '10': 9 as ClassicCardValue },
+    });
+
+    expect(cardValueAce).toEqual(1);
+    expect(cardValueTen).toEqual(9);
+  });
+
+  it('should return 15 if the card name is "joker"', () => {
+    const cardValueJoker = handleClassicCardOptions('joker');
+    expect(cardValueJoker).toEqual(15);
+  });
+});
 
 describe('ClassicPlayingCard', () => {
   describe('constructor', () => {
@@ -11,7 +43,7 @@ describe('ClassicPlayingCard', () => {
 
     it('should allow users to override default values', () => {
       const card = new ClassicPlayingCard('K', 'spade', {
-        valueOverrides: { K: 9 },
+        valueOverride: { K: 9 },
       });
       expect(card.name).toBe('K');
       expect(card.suit).toBe('spade');
@@ -19,9 +51,18 @@ describe('ClassicPlayingCard', () => {
     });
 
     it('should allow users to override the Ace to be low instead of high', () => {
-      const card = new ClassicPlayingCard('A', 'spade', { aceLow: true });
-      expect(card.name).toBe('A');
-      expect(card.value).toBe(1);
+      const deck = new ClassicDeck({ aceLow: true });
+      const aces = deck.cards.filter((card) => card.name === 'A');
+
+      const expectedAces = Object.values(classicCardSuits).map(
+        (suit) =>
+          new ClassicPlayingCard('A', suit, {
+            valueOverride: { A: 1 as ClassicCardValue },
+          })
+      );
+
+      expect(aces.length).toBe(4);
+      expect(aces).toEqual(expectedAces);
     });
   });
 
@@ -66,7 +107,7 @@ describe('ClassicPlayingCard', () => {
 
     it('should set ace to override value if set and passed false', () => {
       const card = new ClassicPlayingCard('A', 'spade', {
-        valueOverrides: { A: 6 },
+        valueOverride: { A: 6 },
       });
       expect(card.value).toBe(6);
 
@@ -96,23 +137,6 @@ describe('ClassicPlayingCard', () => {
         'method not applicable to selected card, ignoring'
       );
       console.error = originalError;
-    });
-  });
-
-  describe('trumpSuit', () => {
-    it('`isTrumpSuit` should return undefined if the trump suit is not set', () => {
-      const card = new ClassicPlayingCard('A', 'spade');
-      expect(card.isTrumpSuit).toBe(undefined);
-    });
-
-    it('`isTrumpSuit` should return true if the card is a trump card', () => {
-      const card = new ClassicPlayingCard('A', 'heart');
-      expect(card.isTrumpSuit('heart')).toBe(true);
-    });
-
-    it('`isTrumpSuit` should return false if the card is not a trump card', () => {
-      const card = new ClassicPlayingCard('A', 'spade');
-      expect(card.isTrumpSuit('heart')).toBe(false);
     });
   });
 });

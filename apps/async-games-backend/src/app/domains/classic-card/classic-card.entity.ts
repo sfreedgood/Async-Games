@@ -5,30 +5,26 @@ import {
   type ClassicCardOptions,
   type ClassicCardSuit,
   type ClassicCardValue,
-  type ClassicPlayingCardProperties,
+  type ClassicCardProperties,
   joker,
   classicCardValues,
   classicCardSuits,
 } from './classic-card.interface';
 
-function handleClassicCardOptions(
+export function handleClassicCardOptions(
   name: ClassicCardName,
   options?: ClassicCardOptions
 ): ClassicCardValue {
   let value: ClassicCardValue;
   if (name === 'joker') {
-    value = options?.valueOverrides?.['joker'] || joker.joker;
+    value = options?.valueOverride?.['joker'] || joker.joker;
   } else {
-    value =
-      options?.aceLow === true && name === 'A'
-        ? (1 as ClassicCardValue)
-        : classicCardValues[name];
-    value = options?.valueOverrides?.[name] ?? value;
+    value = options?.valueOverride?.[name] ?? classicCardValues[name];
   }
   return value;
 }
 
-export class ClassicPlayingCard extends Card<ClassicPlayingCardProperties> {
+export class ClassicPlayingCard extends Card<ClassicCardProperties> {
   suit: ClassicCardSuit;
   options?: ClassicCardOptions;
 
@@ -67,14 +63,10 @@ export class ClassicPlayingCard extends Card<ClassicPlayingCardProperties> {
     if (this.name === 'A' && value) {
       this.value = 1 as ClassicCardValue;
     } else {
-      this.value = this.options?.valueOverrides?.A
-        ? this.options?.valueOverrides?.A
+      this.value = this.options?.valueOverride?.A
+        ? this.options?.valueOverride?.A
         : classicCardValues['A'];
     }
-  }
-
-  isTrumpSuit(suit: ClassicCardSuit) {
-    return this.suit === suit ? true : false;
   }
 }
 
@@ -87,12 +79,14 @@ function buildClassicDeck(
   deckOptions?: ClassicDeckOptions
 ): ClassicPlayingCard[] {
   function buildSuit(suit: ClassicCardSuit): ClassicPlayingCard[] {
-    return Object.keys(classicCardValues).map(
-      (k) =>
-        new ClassicPlayingCard(k as ClassicCardName, suit, {
-          aceLow: deckOptions?.aceLow,
-        })
-    );
+    return Object.keys(classicCardValues).map((k) => {
+      const cardName = k as ClassicCardName;
+      return deckOptions?.aceLow === true && cardName === 'A'
+        ? new ClassicPlayingCard(k as ClassicCardName, suit, {
+            valueOverride: { A: 1 as ClassicCardValue },
+          })
+        : new ClassicPlayingCard(k as ClassicCardName, suit);
+    });
   }
 
   const cards = Object.values(classicCardSuits).flatMap((suit) =>

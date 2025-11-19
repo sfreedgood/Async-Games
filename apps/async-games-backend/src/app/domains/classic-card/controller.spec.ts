@@ -15,10 +15,10 @@ describe('ClassicCardController', () => {
 
   describe('getData', () => {
     it('should return card matching input value', async () => {
-      const ClassicCardController = card.get<ClassicCardController>(
+      const classicCardController = card.get<ClassicCardController>(
         ClassicCardController
       );
-      const testCard = await ClassicCardController.findOne('3,heart');
+      const testCard = await classicCardController.findOne('3,heart');
       expect(testCard).toBeInstanceOf(ClassicPlayingCard);
       expect(testCard.name).toBe('3');
       expect(testCard.value).toBe(3);

@@ -1,18 +1,16 @@
 import {
+  EntityValidationError,
+  ValidationErrorMessage,
+} from '../../../utils/error.utils';
+
+import {
+  RequiredClassicCardFields,
   ClassicCardName,
   ClassicCardSuit,
   joker,
   classicCardSuits,
   classicCardValues,
 } from './classic-card.interface';
-import {
-  RequiredClassicCardFields,
-  requiredClassicCardFields,
-} from '../../../abstract/card';
-import {
-  EntityValidationError,
-  ValidationErrorMessage,
-} from '../../../utils/error.utils';
 import { ClassicPlayingCard } from './classic-card.entity';
 
 const validClassicCardNames = new Set([
@@ -62,14 +60,19 @@ const isValidClassicCardSuit = (
 ): suit is ClassicCardSuit => validClassicCardSuits.has(suit);
 
 const isMissingRequiredFields = (
-  cardData: object
+  cardData: Record<string, string>
 ): false | Array<RequiredClassicCardFields> => {
-  const assignedProperties = new Set(Object.keys(cardData));
-  const missingFields = requiredClassicCardFields.filter(
-    (requiredField) => !assignedProperties.has(requiredField)
-  );
+  let missingFields: Set<RequiredClassicCardFields> = new Set();
 
-  return missingFields.length ? missingFields : false;
+  if (!cardData.name) missingFields.add('name');
+  if (!cardData.suit) missingFields.add('suit');
+
+  return missingFields.size ? [...missingFields] : false;
 };
 
-export { isValidClassicCardName, isValidClassicCardSuit, validateCard };
+export {
+  isValidClassicCardName,
+  isValidClassicCardSuit,
+  isMissingRequiredFields,
+  validateCard,
+};

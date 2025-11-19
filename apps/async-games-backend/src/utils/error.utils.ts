@@ -9,13 +9,8 @@ export enum ValidationErrorMessage {
 
 export class EntityValidationError extends HttpException {
   constructor(message: ValidationErrorMessage, cause?: string) {
-    super(
-      HttpException.createBody({
-        message,
-        statusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        error: cause,
-      }),
-      HttpStatus.UNPROCESSABLE_ENTITY
-    );
+    super(message, HttpStatus.UNPROCESSABLE_ENTITY, {
+      cause: `${message}: ${cause}`,
+    });
   }
 }

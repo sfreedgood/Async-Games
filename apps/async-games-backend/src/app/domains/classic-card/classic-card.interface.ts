@@ -58,15 +58,14 @@ type Joker = keyof typeof joker;
 type ClassicCardName = BaseClassicCardName | Joker;
 type ClassicCardSuit = keyof typeof classicCardSuits | 'joker';
 
-type ClassicPlayingCardProperties = {
+type ClassicCardProperties = {
   name: ClassicCardName;
   suit: ClassicCardSuit;
   value: ClassicCardValue;
 };
 
 type ClassicCardOptions = {
-  aceLow?: boolean;
-  valueOverrides?: Partial<Record<keyof ClassicCardValueDef, ClassicCardValue>>;
+  valueOverride?: Partial<Record<keyof ClassicCardValueDef, ClassicCardValue>>;
 };
 
 export { classicCardSuits, classicCardValues, joker };
@@ -77,6 +76,6 @@ export type {
   Joker,
   ClassicCardName,
   ClassicCardSuit,
-  ClassicPlayingCardProperties,
+  ClassicCardProperties,
   ClassicCardOptions,
 };

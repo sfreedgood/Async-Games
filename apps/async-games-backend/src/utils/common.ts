@@ -11,3 +11,6 @@ export function numberInRange<Min extends number, Max extends number>(
   }
   throw new Error(`Value ${value} is not in range [${min}, ${max}]`);
 }
+
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  Partial<Pick<T, K>>;
