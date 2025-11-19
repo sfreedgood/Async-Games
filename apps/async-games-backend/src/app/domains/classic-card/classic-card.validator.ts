@@ -62,7 +62,7 @@ const isValidClassicCardSuit = (
 const isMissingRequiredFields = (
   cardData: Record<string, string>
 ): false | Array<RequiredClassicCardFields> => {
-  let missingFields: Set<RequiredClassicCardFields> = new Set();
+  const missingFields: Set<RequiredClassicCardFields> = new Set();
 
   if (!cardData.name) missingFields.add('name');
   if (!cardData.suit) missingFields.add('suit');
