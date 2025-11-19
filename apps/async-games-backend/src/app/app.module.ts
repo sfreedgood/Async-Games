@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CardModule, CardController, CardService } from './card';
+import {
+  ClassicCardModule,
+  ClassicCardController,
+  ClassicCardService,
+} from './domains/classic-card';
 
 @Module({
-  imports: [CardModule],
-  controllers: [AppController, CardController],
-  providers: [AppService, CardService],
+  imports: [ClassicCardModule],
+  controllers: [AppController, ClassicCardController],
+  providers: [AppService, ClassicCardService],
 })
 export class AppModule {}

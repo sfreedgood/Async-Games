@@ -1,8 +1,8 @@
 import { Route, Routes, Link } from 'react-router-dom';
 
-import { Card } from '../components/Card/Card';
+import { ClassicCard } from './domains/classic-card';
 import { useAxiosGet } from './hooks/api';
-import { StandardDeckEntity } from '../entities/deck';
+import { ClassicDeckEntity } from './domains/classic-card';
 
 export function App() {
   const {
@@ -11,7 +11,7 @@ export function App() {
     status,
     statusText,
     error,
-  } = useAxiosGet<StandardDeckEntity>('/cards/deck');
+  } = useAxiosGet<ClassicDeckEntity>('/cards/deck');
 
   return (
     <div>
@@ -21,7 +21,7 @@ export function App() {
       {/* Feel free to move and update them to fit your needs */}
       {deck?.cards.map((card) => {
         return (
-          <Card
+          <ClassicCard
             key={`${card.name}-${card.suit}`}
             suit={card.suit}
             name={card.name}

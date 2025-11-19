@@ -1,21 +1,15 @@
-export const requiredStandardCardFields = ['name', 'suit', 'value'] as const;
-export type RequiredStandardCardFields =
-  (typeof requiredStandardCardFields)[number];
-export type StandardCardFields = Record<
-  RequiredStandardCardFields[number],
-  any
-> & {
+export const requiredCardFields = ['name', 'value'] as const;
+export type RequiredCardFields = (typeof requiredCardFields)[number];
+export type CardFields = Record<RequiredCardFields[number], any> & {
   [key: string]: any;
 };
 
-export class Card<T extends StandardCardFields> {
+export class Card<T extends CardFields> {
   name: T['name'];
-  suit: T['suit'];
   value: T['value'];
 
-  constructor(name: T['name'], suit: T['suit'], value: T['value']) {
+  constructor(name: T['name'], value: T['value']) {
     this.name = name;
-    this.suit = suit;
     this.value = value;
   }
 }
