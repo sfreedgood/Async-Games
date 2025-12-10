@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Icons from '../../../../assets/svgs';
+import * as Icons from '../../../assets/svgs';
 
 export const iconNames = {
   spade: 'spade',

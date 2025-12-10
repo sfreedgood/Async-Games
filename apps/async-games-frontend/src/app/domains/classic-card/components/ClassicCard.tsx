@@ -1,4 +1,4 @@
-import { Icon } from '../../generic/components';
+import { Icon } from '../../../shared/components';
 import { ClassicPlayingCard } from '../entities/card';
 
 export type ClassicCardProps = ClassicPlayingCard;
