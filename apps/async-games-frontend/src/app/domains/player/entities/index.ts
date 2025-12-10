@@ -1,4 +1,4 @@
-import { PlayerEntity } from './player';
+import { PlayerEntity, PlayerSettings } from './player';
 import { HandEntity } from './hand';
 
-export type { PlayerEntity, HandEntity };
+export type { PlayerEntity, PlayerSettings, HandEntity };
