@@ -3,7 +3,7 @@ import { ClassicCard } from './ClassicCard';
 import { classicCardValues, classicCardSuits } from '../entities/card';
 
 export default {
-  title: 'Card',
+  title: 'Domains/Card/ClassicCard',
   component: ClassicCard,
   argTypes: {
     name: {

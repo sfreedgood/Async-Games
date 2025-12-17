@@ -1,8 +1,5 @@
-import { PlayerAvatar, PlayerProps } from './components';
+import { PlayerBadge } from './components';
+import type { PlayerEntity, HandEntity, PlayerSettings } from './entities';
 
-// Types
-import type { PlayerEntity, HandEntity } from './entities';
-export type { PlayerEntity, HandEntity, PlayerProps };
-
-// Components
-export { PlayerAvatar };
+export { PlayerBadge };
+export type { PlayerEntity, PlayerSettings, HandEntity };

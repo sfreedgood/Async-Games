@@ -1,4 +1,4 @@
-import { DeckEntity } from '../../generic/entities/deck';
+import { DeckEntity } from '../../../shared/entities/deck';
 import { ClassicPlayingCard } from './card';
 
 export type ClassicDeckEntity = DeckEntity<ClassicPlayingCard>;

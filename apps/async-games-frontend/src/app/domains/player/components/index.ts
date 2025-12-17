@@ -1,5 +1,3 @@
-import { PlayerAvatar, PlayerProps } from './PlayerAvatar';
+import { PlayerBadge } from './PlayerBadge';
 
-export type { PlayerProps };
-
-export { PlayerAvatar };
+export { PlayerBadge };
