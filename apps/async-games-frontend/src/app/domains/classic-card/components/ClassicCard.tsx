@@ -1,9 +1,9 @@
 import { Icon } from '../../../shared/components';
-import { ClassicPlayingCard } from '../entities/card';
+import { ClassicCardEntity } from '../entities/card';
 
-export type ClassicCardProps = ClassicPlayingCard;
+export type ClassicCardProps = ClassicCardEntity;
 
-export const ClassicCard = ({ name, suit, primaryValue }: ClassicCardProps) => {
+export const ClassicCard = ({ name, suit, value }: ClassicCardProps) => {
   return (
     <div className="w-32 h-48 border border-gray-300 rounded-lg shadow-lg relative">
       <div className="absolute top-2 left-2 text-2xl font-bold">{name}</div>
