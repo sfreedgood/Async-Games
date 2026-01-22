@@ -30,7 +30,7 @@ export class ClassicCardService {
     // Todo: Introduce trump functionality
   }
 
-  shuffle(deckId: string) {
+  shuffle(_deckId: string) {
     return new ClassicDeck().shuffle();
   }
 }

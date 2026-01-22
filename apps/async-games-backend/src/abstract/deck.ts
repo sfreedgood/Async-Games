@@ -6,7 +6,15 @@ export class Deck<T> {
   }
 
   shuffle() {
-    // TODO
+    for (let i = this.cards.length - 1; i > 0; i -= 1) {
+      const swapIndex = Math.floor(Math.random() * (i + 1));
+      [this.cards[i], this.cards[swapIndex]] = [
+        this.cards[swapIndex],
+        this.cards[i],
+      ];
+    }
+
+    return this.cards;
   }
 
   draw(quantity = 1) {

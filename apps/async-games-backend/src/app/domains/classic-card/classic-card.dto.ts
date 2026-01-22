@@ -56,3 +56,8 @@ export class ClassicDeckOptionsDTO {
   @IsBoolean()
   aceLow?: boolean;
 }
+
+export class ShuffleDeckDTO {
+  @IsString()
+  id!: string;
+}
