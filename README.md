@@ -1,92 +1,101 @@
-# Async Games
+# Async-Games  
+Persistent turn-based tabletop gaming across timezones.
 
-## Goal
-The purpose of this project is to provide a platform for playing tabletop games asynchronously, allowing players to enjoy their favorite games at their own pace, without the need for real-time interaction. This project aims to create a user-friendly interface for managing game sessions, tracking player turns, and eventually facilitating communication between players, regardless of were they are, or if they are even online at the same time as their friends.
+Strategy-heavy tabletop games typically require synchronous presence. For distributed friend groups across timezones and busy schedules, this creates coordination friction and reduces play frequency.
 
-As a fan of card games, I want to create a platform that allows me to play my favorite games with friends and family, regardless of their location or availability. The long term goal is to support a variety of games; however, during the intial phase, I will be starting with Hearts and Magic the Gathering. Traditional playing cards are a widely recognized and accessible medium, making them an ideal starting point for this project. By focusing on these games, I aim to create a solid foundation for the platform, which can be expanded to include more complex games in the future, and Hearts is one of my personal favorites. Magic the Gathering, is a complex game where players can perform actions during other players turns, making async play especially challenging.
+Async-Games explores a turn-based model designed for asynchronous play — allowing games to continue cleanly across hours or days without requiring shared time.
 
-I love playing MTG (Magic the Gathering) with friends, but I recently moved, making timeszones a challenge. Having used tools like Archidekt and TableTop Simulator myself, and as inspiration, my goal is to provide an interactive turn-based approach to games, where timeszones and schedules won't prevent me from getting to play with my friends, anywhere in the world.
+[TOC]
 
 ---
-This Typescript project consists of a Nest backend and React frontend and is managed using [Nx](https://nx.dev).
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Status
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+Prototype.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+The current implementation focuses on establishing the core game model and infrastructure. This includes:
 
-## Finish your CI setup
+- Base game state (card and deck entities and core functionalities such as shuffle, draw, etc., turn progression logic)
+- A minimal “table” UI for rendering and interacting with state
+- One or two core API endpoints used to create and render game elements
+- Functional development environment
+- Minimal CI/CD setup and functional test coverage
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/QVywXfd5V7)
+Interactions are still limited and primarily exercised manually in development. The emphasis at this stage is validating clarity of state, turn ownership mechanics, and foundational system structure before expanding feature scope.
 
+The product direction is defined; the implementation will evolve deliberately.
 
-## Run tasks
+---
 
-To run the dev server for your app, use:
+## Current Scope (MVP Foundation)
 
-```sh
-npx nx serve async-games
-```
+- Single-game support: **Hearts**
+- Server-enforced turn ownership
+- Persistent, authoritative game state
+- Deterministic move validation
 
-To create a production bundle:
+Hearts was chosen intentionally:
+- Strictly turn-based (no interrupt stack complexity)
+- Well-defined rules
+- Suitable for validating asynchronous interaction patterns before introducing higher-complexity systems (e.g., MTG stack mechanics)
 
-```sh
-npx nx build async-games
-```
+---
 
-To see all available targets to run for a project, run:
+## Future Exploration (Post-MVP)
 
-```sh
-npx nx show project async-games
-```
+- Support for complex rule systems (e.g., Magic: The Gathering)
+- Player communication & notification loops
+- Multi-game extensibility architecture
+- Structured telemetry for gameplay pacing and retention analysis
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+Future additions will be evaluated based on their impact on clarity, pacing, and long-running engagement.
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Add new projects
+## What This Project Is Not
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+- Not a real-time tabletop simulator
+- Not intended to replace tools like Tabletop Simulator
+- Not a competitive ladder platform
+- Not focused on esports-style rapid gameplay
 
-Use the plugin's generator to create new projects.
+The primary design constraint is asynchronous continuity, not synchronous fidelity.
 
-To generate a new application, use:
+---
 
-```sh
-npx nx g @nx/react:app demo
-```
+## Documentation
 
-To generate a new library, use:
+### Product
 
-```sh
-npx nx g @nx/react:lib mylib
-```
+- [Vision](docs/product/vision.md)
+- [Roadmap](docs/product/roadmap.md)
+- [Competitive Analysis](docs/product/competitive-analysis.md)
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+### Architecture
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- [System Overview](docs/architecture/ARCHITECTURE.md)
+- (Additional technical decision documents to follow)
 
+---
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Getting Started
 
-## Install Nx Console
+See [Getting Started Guide](docs/architecture/getting-started.md) for:
+- Local environment setup
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Development workflow
+- Contribution guidelines
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Useful links
+## Project Intent
 
-Learn more:
+Async-Games began as a personal solution to a real problem and has evolved into a deliberate space for practicing product thinking and system design under real constraints. See the [Vision](docs/product/vision.md) for more context.
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## License
+
+Licensed under the GNU General Public License (GPL-3.0 license).  
+See [LICENSE](LICENSE) for details.
