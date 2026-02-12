@@ -10,10 +10,6 @@ I love playing MTG (Magic the Gathering) with friends, but I recently moved, mak
 ---
 This Typescript project consists of a Nest backend and React frontend and is managed using [Nx](https://nx.dev).
 
-## Architecture
-
-For a comprehensive overview of the system architecture, including layers, components, and interactions, see [ARCHITECTURE.md](./ARCHITECTURE.md).
-
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
 ✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
