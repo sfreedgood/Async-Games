@@ -8,10 +8,10 @@ This document provides a visual representation of the Async Games platform archi
 graph TB
     subgraph Frontend["🎮 async-games-frontend"]
         direction TB
-        UI[Presentation Layer<br/>React Components<br/>- ClassicCard<br/>- PlayerBadge<br/>- Table<br/>- PlayerZone]
-        Router[Routing Layer<br/>React Router v6<br/>- Home /<br/>- Page-2<br/>- Deck /deck]
-        Hooks[State & Hooks Layer<br/>- useAxiosGet<br/>- useState<br/>- useEffect]
-        APIClient[API Client Layer<br/>Axios<br/>Base: localhost:3000/api]
+        UI[Presentation Layer<br/>React Components]
+        Router[Routing Layer<br/>React Router v6]
+        Hooks[State & Hooks Layer<br/>Custom Hooks]
+        APIClient[API Client Layer<br/>Axios]
         
         UI --> Router
         UI --> Hooks
@@ -20,10 +20,10 @@ graph TB
 
     subgraph Backend["⚙️ async-games-backend"]
         direction TB
-        Controllers[API Layer<br/>NestJS Controllers<br/>- AppController /api<br/>- ClassicCardController /api/card]
-        Services[Business Logic Layer<br/>NestJS Services<br/>- AppService<br/>- ClassicCardService]
-        Domain[Domain Models Layer<br/>- ClassicPlayingCard<br/>- ClassicDeck<br/>- Card, Deck base classes]
-        Validation[Validation Layer<br/>- class-validator<br/>- DTOs<br/>- EntityValidationError]
+        Controllers[API Layer<br/>NestJS Controllers]
+        Services[Business Logic Layer<br/>NestJS Services]
+        Domain[Domain Models Layer<br/>Game Entities]
+        Validation[Validation Layer<br/>class-validator]
         
         Controllers --> Services
         Services --> Domain
@@ -33,17 +33,17 @@ graph TB
 
     subgraph FrontendE2E["🧪 async-games-frontend-e2e"]
         direction TB
-        E2EFrontend[E2E Tests<br/>Playwright/Cypress<br/>Frontend Testing]
+        E2EFrontend[E2E Tests<br/>Frontend Testing]
     end
 
     subgraph BackendE2E["🧪 async-games-backend-e2e"]
         direction TB
-        E2EBackend[E2E Tests<br/>Backend API Testing]
+        E2EBackend[E2E Tests<br/>API Testing]
     end
 
     subgraph External["🌐 External Services"]
         direction TB
-        Swagger[Swagger UI<br/>/swagger<br/>API Documentation]
+        Swagger[Swagger UI<br/>API Documentation]
     end
 
     APIClient -->|HTTP/REST| Controllers
@@ -68,109 +68,135 @@ graph TB
 
 #### 1. **Presentation Layer**
 - **Technology**: React 18 with TypeScript
-- **Components**:
-  - `ClassicCard`: Renders playing cards with suits and values
-  - `PlayerBadge`: Displays player information and status
-  - `Table`: Game board layout supporting 1-4 players
-  - `PlayerZone`: Individual player area with cards
-- **Styling**: Tailwind CSS with custom card designs
+- **Components**: Reusable UI components for game elements
+- **Styling**: Tailwind CSS with custom designs
+- **Purpose**: Render user interface and handle user interactions
 
 #### 2. **Routing Layer**
 - **Technology**: React Router v6
-- **Routes**:
-  - `/` - Home page
-  - `/page-2` - Example page
-  - `/deck` - Card deck viewer
 - **Navigation**: BrowserRouter with nested routes
+- **Purpose**: Handle client-side navigation and route management
 
 #### 3. **State & Hooks Layer**
 - **Pattern**: React Hooks (no global state management)
-- **Custom Hooks**:
-  - `useAxiosGet<T>`: Type-safe data fetching with loading/error states
-- **State Management**: Local component state with `useState`
-- **Memoization**: `useMemo` for performance optimization
+- **Custom Hooks**: Type-safe data fetching with loading/error states
+- **State Management**: Local component state
+- **Optimization**: Memoization for performance
 
 #### 4. **API Client Layer**
 - **HTTP Client**: Axios
-- **Base URL**: `http://localhost:3000/api`
 - **Features**:
   - Type-safe URL builder with search params
   - Generic response typing
   - Error handling
+- **Purpose**: Abstract backend communication and manage API requests
 
 ### Backend (async-games-backend)
 
 #### 1. **API Layer**
 - **Framework**: NestJS
-- **Controllers**:
-  - `AppController`: Root endpoint (`/api`)
-  - `ClassicCardController`: Card operations (`/api/card`)
-- **Documentation**: Swagger/OpenAPI at `/swagger`
+- **Controllers**: Handle HTTP requests and responses
+- **Documentation**: Swagger/OpenAPI
 - **Global Prefix**: `/api`
 
 #### 2. **Business Logic Layer**
-- **Services**:
-  - `AppService`: Core application logic
-  - `ClassicCardService`: Card game business rules
-- **Operations**:
-  - Get single card by name and suit
-  - Generate full deck with options
-  - Set trump suit (TODO)
-  - Shuffle deck (TODO)
+- **Services**: Implement game rules, business logic, and orchestration
+- **Pattern**: Service-oriented architecture
+- **Responsibilities**:
+  - Game state management
+  - Business rule validation
+  - Data transformation
 
 #### 3. **Domain Models Layer**
-- **Abstract Base Classes**:
-  - `Card`: Generic card interface
-  - `Deck`: Generic deck operations
-- **Concrete Implementations**:
-  - `ClassicPlayingCard`: Traditional playing card (suit, value, color)
-  - `ClassicDeck`: 52-card deck with shuffle/draw/deal methods
 - **Pattern**: Domain-Driven Design (DDD)
+- **Purpose**: Represent core business entities and game state
+- **Structure**:
+  - Abstract base classes for extensibility
+  - Concrete implementations for specific game types
+  - Encapsulates game logic and rules
 
 #### 4. **Validation Layer**
 - **Technology**: class-validator
 - **Components**:
   - DTOs with validation decorators
-  - Custom validators for card entities
-  - `EntityValidationError` (HTTP 422)
-- **Validation Rules**:
-  - Suit validation (spades, hearts, clubs, diamonds)
-  - Card name validation (2-10, J, Q, K, A, Joker)
-  - Deck options validation
+  - Custom entity validators
+  - Error handling with appropriate HTTP status codes
+- **Purpose**: Ensure data integrity and business rule compliance
 
 ### Testing Applications
 
 #### Frontend E2E (async-games-frontend-e2e)
 - End-to-end testing for frontend UI and user flows
 - Tests user interactions and page rendering
-- Likely using Playwright or Cypress
 
 #### Backend E2E (async-games-backend-e2e)
 - API endpoint testing
 - Integration tests for backend services
-- HTTP request/response validation
 
 ### External Services
 
 #### Swagger Documentation
-- **Endpoint**: `/swagger`
-- **Purpose**: Interactive API documentation
-- **Auto-generated**: From NestJS decorators and DTOs
+- Interactive API documentation
+- Auto-generated from NestJS decorators and DTOs
 
 ## Data Flow
 
 ### Card Fetching Flow
-```
-User Request → Frontend UI → useAxiosGet Hook → 
-Axios HTTP Client → Backend Controller → Service → 
-Domain Model → Response → Frontend State → UI Render
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as Frontend UI
+    participant Hook as useAxiosGet Hook
+    participant Axios as Axios HTTP Client
+    participant Controller as Backend Controller
+    participant Service
+    participant Domain as Domain Model
+    participant State as Frontend State
+    
+    User->>UI: Request
+    UI->>Hook: Trigger data fetch
+    Hook->>Axios: HTTP Request
+    Axios->>Controller: API Call
+    Controller->>Service: Process request
+    Service->>Domain: Access/manipulate data
+    Domain-->>Service: Return data
+    Service-->>Controller: Return result
+    Controller-->>Axios: HTTP Response
+    Axios-->>Hook: Data received
+    Hook-->>State: Update state
+    State-->>UI: Re-render
+    UI-->>User: Display data
 ```
 
 ### Validation Flow
-```
-API Request → Controller → DTO Validation → 
-Service → Entity Validation → Domain Model → 
-Success/Error Response
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant DTO as DTO Validation
+    participant Service
+    participant Entity as Entity Validation
+    participant Domain as Domain Model
+    
+    Client->>Controller: API Request
+    Controller->>DTO: Validate input
+    alt Invalid DTO
+        DTO-->>Controller: Validation error
+        Controller-->>Client: 400 Bad Request
+    else Valid DTO
+        DTO->>Service: Pass validated data
+        Service->>Entity: Validate business rules
+        alt Invalid Entity
+            Entity-->>Service: Validation error
+            Service-->>Controller: Business error
+            Controller-->>Client: 422 Unprocessable Entity
+        else Valid Entity
+            Entity->>Domain: Process
+            Domain-->>Service: Success
+            Service-->>Controller: Result
+            Controller-->>Client: 200 Success/Error Response
+        end
+    end
 ```
 
 ## Technology Stack
