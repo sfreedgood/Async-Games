@@ -194,7 +194,7 @@ sequenceDiagram
             Entity->>Domain: Process
             Domain-->>Service: Success
             Service-->>Controller: Result
-            Controller-->>Client: 200 Success/Error Response
+            Controller-->>Client: 200 Success Response
         end
     end
 ```
