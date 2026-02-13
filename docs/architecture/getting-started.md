@@ -77,9 +77,10 @@ nx run async-games-[backend]:test
 Unit tests cover domain services, validation logic, and supporting utilities. Replace the project name to run other suites.
 
 ### End-to-End Tests (Playwright)
-**Not yet implemented** 
-Will cover critical user journeys and API interactions and prevent regressions.
-Once implemented, you can run E2E tests with:**
+
+Playwright-based E2E tests are available and cover critical user journeys and API interactions, helping to prevent regressions.
+
+You can run E2E tests with:
 
 - Backend API flows:
 

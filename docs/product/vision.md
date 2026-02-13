@@ -26,7 +26,7 @@ It serves as a space to:
 - Hone technical skills, system design, and architectural decision-making
 - Examine how gameplay mechanics and technology shape player behavior and social connection
 
-If the project grows into a broader open-source platform or something more, that would be welcome. If it does not, the learning iteself remains the primary outcome.
+If the project grows into a broader open-source platform or something more, that would be welcome. If it does not, the learning itself remains the primary outcome.
 
 ---
 

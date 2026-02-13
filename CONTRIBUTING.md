@@ -1,4 +1,4 @@
-# Contributing to Async_Gaming [DRAFT]
+# Contributing to Async_Games [DRAFT]
 
 **This document is only a draft and subject to change.** It will be finalized once the initial MVP is complete and the project structure is more stable. The goal is to provide clear guidelines for contributors while allowing flexibility as the project evolves.
 

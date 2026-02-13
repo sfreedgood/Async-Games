@@ -4,7 +4,7 @@ Async-Games operates in a space adjacent to several established tools. Rather th
 
 The core differentiator is simple:
 
-Most existing platforms are optimized for synchronous interaction and those with support asynchronous play treat it as a secondary mode or are limited in scope.
+Most existing platforms are optimized for synchronous interaction, and those that support asynchronous play treat it as a secondary mode or are limited in scope.
 Async-Games treats asynchronous continuity as the primary design constraint rather than an optional mode.
 
 ---
