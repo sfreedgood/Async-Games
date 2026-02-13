@@ -69,9 +69,9 @@ This supports development of UI components without needing to run the full appli
 ### Unit & Domain Tests (Jest)
 
 ```bash
-npx nx test async-games-[backend]
+npx nx test async-games-backend
 # OR if you have Nx globally installed:
-nx run async-games-[backend]:test
+nx run async-games-backend:test
 ```
 
 Unit tests cover domain services, validation logic, and supporting utilities. Replace the project name to run other suites.
