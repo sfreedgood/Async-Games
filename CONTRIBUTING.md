@@ -5,16 +5,9 @@
 Thanks for your interest! This document describes standards and workflows for local setup, branching, PRs, testing, and proposing new games.
 
 ## Local setup
-- Fork the repo and clone your fork:
-  - git clone git@github.com:<you>/Async_Gaming.git
-- Add upstream remote:
-  - git remote add upstream git@github.com:Async_Gaming/Async_Gaming.git
-- Install dependencies:
-  - Use the language/package manager in the repo (e.g. npm install, pip install -r requirements.txt, or bundle install).
-- Start dev server / run locally:
-  - Provide project-specific commands in README (e.g., npm run dev, ./manage.py runserver).
+See [Getting Started Guide](docs/architecture/getting-started.md) for detailed instructions on setting up the development environment, running the backend and frontend locally, and using Storybook for UI component development.
 
-## Environment configuration
+## Environment configuration [Not Implemented Yet]
 - Use a .env file for secrets and local overrides; do NOT commit .env or secrets.
 - Provide a .env.example with non-sensitive keys and defaults.
 - Document required environment variables in README or docs.
@@ -28,7 +21,7 @@ Thanks for your interest! This document describes standards and workflows for lo
   - chore/* — maintenance, tooling
   - hotfix/* — urgent fixes against main
 - Branch from main; open PRs into main.
-- Rebase or squash before merging to keep history tidy (team preference documented).
+- MR's will be "squash and merge" to keep history clean.
 
 ## Commit messages & conventions
 - Use Conventional Commits: feat:, fix:, docs:, refactor:, chore:, test:.
@@ -55,9 +48,9 @@ Thanks for your interest! This document describes standards and workflows for lo
 
 ## Testing expectations
 - Unit tests for new logic; integration tests for cross-component behavior.
-- Aim for meaningful test coverage; do not add superficial tests to inflate metrics.
 - Run tests locally before PR; CI should run the full test suite and linters.
-- Document how to run tests (single file, watch mode, headless browser, etc.).
+- Tests should be deterministic and not rely on external services or timing.
+- Unit tests should be added alongside the file they test; integration and end-to-end tests should be organized in the respective `e2e` directory.
 
 ## CI/CD
 - Use GitHub Actions (or existing CI) to run linting, tests, and builds on PRs.
@@ -93,5 +86,11 @@ Thanks for your interest! This document describes standards and workflows for lo
 - Respect the Code of Conduct.
 - Add yourself to AUTHORS if making ongoing, substantial contributions.
 - For questions or assistance, open an issue and tag @maintainers.
+
+## License and Contributor Agreement
+
+By submitting a contribution, you agree that your work will be licensed under the GNU Affero General Public License version 3 (or any later version) as described in [LICENSE](LICENSE). This means that your contributions will be freely available under the same license, ensuring that the project remains open-source and that improvements are shared with the community.
+
+If you have questions about commercial or dual-licensing arrangements, please start a discussion before submitting substantial changes.
 
 Thanks for contributing!

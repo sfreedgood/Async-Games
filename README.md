@@ -97,5 +97,7 @@ Async-Games began as a personal solution to a real problem and has evolved into 
 
 ## License
 
-Licensed under the GNU General Public License (GPL-3.0 license).  
-See [LICENSE](LICENSE) for details.
+Async-Games is distributed under the GNU Affero General Public License, version 3 (or any later version). This ensures that anyone who modifies and runs the software for others over a network must share their changes, protecting the open-source community while allowing technical users to self-host.  
+See [LICENSE](LICENSE) for full terms.  
+
+For commercial or dual-licensing discussions, please reach out via the repository issues or contact information listed in project docs.
