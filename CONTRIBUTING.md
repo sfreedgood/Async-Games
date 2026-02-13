@@ -21,7 +21,7 @@ See [Getting Started Guide](docs/architecture/getting-started.md) for detailed i
   - chore/* — maintenance, tooling
   - hotfix/* — urgent fixes against main
 - Branch from main; open PRs into main.
-- MR's will be "squash and merge" to keep history clean.
+- PRs will be "squash and merge" to keep history clean.
 
 ## Commit messages & conventions
 - Use Conventional Commits: feat:, fix:, docs:, refactor:, chore:, test:.
