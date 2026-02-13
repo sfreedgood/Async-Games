@@ -1,6 +1,22 @@
 # Async Games - Architecture Diagram
 
-This document provides a visual representation of the Async Games platform architecture, showing the different applications, their layers, and how they interact.
+This document provides a visual representation of the Async Games platform architecture, showing the different applications, their layers, and how they interact. Async-Games follows a client–server architecture in which the backend is the authoritative source of truth for all game state while the frontend focuses on rendering and interaction.
+
+## System Overview & Principles
+
+- See the [System Architecture Diagram](diagrams/system-architecture.md) for another visualization of the component boundaries.
+- See the [System Sequence Diagram](diagrams/system-sequence.md) for a complementary view of request and response lifecycles.
+
+### Core Architectural Principles
+
+1. The backend owns all game state and authoritative transitions.
+2. Every game-state mutation is validated on the server before it is persisted or broadcast.
+3. Game state is persisted so it can be replayed and audited historically.
+4. The frontend renders state but never enforces game rules independently.
+
+### High-Level Interaction Flow
+
+Clients submit actions to the backend, which validates the request, applies domain rules, persists state transitions, and returns the updated view model for rendering. Automated end-to-end tests cover the same high-level sequence to ensure regressions are caught early.
 
 ## Architecture Overview
 
@@ -138,6 +154,62 @@ graph TB
 #### Swagger Documentation
 - Interactive API documentation
 - Auto-generated from NestJS decorators and DTOs
+
+## Monorepo & Tooling
+
+Async-Games lives in an Nx-powered monorepo to keep frontend, backend, and testing projects aligned. Nx enforces dependency boundaries, provides a shared task runner, and surfaces a dependency graph so contributors can reason about impact quickly. The setup intentionally favors shared type safety, reproducible builds, and CI-friendly caching through Nx Cloud.
+
+## Frontend Platform
+
+### React + Vite
+
+- React (with TypeScript) powers the presentation, routing, and hooks layers for predictable UI composition.
+- Vite delivers fast local development cycles and a thin configuration surface—ideal for rapidly iterating on state-driven UIs.
+- Tailwind CSS keeps styling composable and consistent across components. The focus remains on deterministic rendering of state rather than elaborate visuals.
+
+### Storybook
+
+Storybook supports isolated UI development and documentation. Building components in Storybook encourages clear separation of rendering and data concerns, makes state exploration easier, and offers a lightweight space for visual regression checks outside the main apps.
+
+## Backend Platform
+
+### NestJS Application Core
+
+- Emphasizes clear modules, dependency injection, and TypeScript-first patterns suited for complex rule engines.
+- Provides structured routing, validation, and testing primitives ideal for maintaining an authoritative game server.
+- Backend responsibilities include owning game state, enforcing turn order, and guaranteeing deterministic validation of every move.
+
+### API Documentation & Contracts
+
+OpenAPI/Swagger definitions are generated directly from NestJS controllers and DTOs. This keeps frontend and potential third parties aligned on request/response contracts, highlights state transition endpoints, and makes manual testing straightforward.
+
+## Testing Strategy & Tooling
+
+### Unit & Domain Tests (Jest)
+
+Jest covers domain logic, rule enforcement, and turn validation. The goal is to catch mistakes where game rules live—inside services and entities—before they reach integration environments.
+
+### End-to-End & Integration (Playwright)
+
+Playwright-based projects (`async-games-frontend-e2e` and `async-games-backend-e2e`) validate cross-layer flows, exercise HTTP boundaries, and guard asynchronous interactions. They complement the Jest suite by simulating real user or API traffic.
+
+## CI/CD
+
+GitHub Actions, coupled with Nx Cloud caching, runs linting, unit tests, E2E tests, and build verification. The pipeline is intentionally lean but gives fast feedback on core interaction patterns and enforces consistent tooling across contributors.
+
+## Current Scope
+
+- Card and deck entities
+- Turn progression logic
+- Minimal table rendering
+- Limited endpoints for core state interactions, primarily exercised in development environments
+
+## Future Architectural Considerations
+
+- Game-state history replay and auditing
+- Interrupt-driven action modeling
+- Game-engine abstractions to support multiple games
+- Notification systems tied to state transitions
 
 ## Data Flow
 

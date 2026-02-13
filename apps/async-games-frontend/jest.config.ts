@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   displayName: '@async-games/async-games-frontend',
   preset: '../../jest.preset.js',
   transform: {
