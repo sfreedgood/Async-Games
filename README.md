@@ -5,8 +5,16 @@ Strategy-heavy tabletop games typically require synchronous presence. For distri
 
 Async-Games explores a turn-based model designed for asynchronous play — allowing games to continue cleanly across hours or days without requiring shared time.
 
-[TOC]
+## Table of contents
 
+- [Status](#status)
+- [Current Scope (MVP Foundation)](#current-scope-mvp-foundation)
+- [Future Exploration (Post-MVP)](#future-exploration-post-mvp)
+- [What This Project Is Not](#what-this-project-is-not)
+- [Documentation](#documentation)
+- [Getting Started](#getting-started)
+- [Project Intent](#project-intent)
+- [License](#license)
 ---
 
 ## Status
