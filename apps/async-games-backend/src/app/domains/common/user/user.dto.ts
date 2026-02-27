@@ -6,11 +6,17 @@ import {
   IsString,
   IsUUID,
   IsObject,
+  MinLength,
+  MaxLength,
+  Matches,
 } from 'class-validator';
 
 /** DTO used when creating a new user (client -> server) */
 export class CreateUserDTO {
   @IsString()
+  @MinLength(3)
+  @MaxLength(32)
+  @Matches(/^[a-zA-Z0-9_]+$/)
   @ApiProperty({ example: 'alice', description: 'Unique username' })
   username!: string;
 
