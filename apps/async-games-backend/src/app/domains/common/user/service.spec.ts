@@ -4,13 +4,15 @@ jest.mock('../../../database/repositories/user.repository', () => ({
   UserRepository: jest.fn().mockImplementation(() => ({
     findAll: jest.fn(),
     findById: jest.fn(),
+    findByUsername: jest.fn(),
+    findByEmail: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
     remove: jest.fn(),
   })),
 }));
 
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { UserRepository } from '../../../database/repositories/user.repository';
 import { UserService } from './service';
@@ -39,6 +41,8 @@ const mockRepo = (): jest.Mocked<UserRepository> => {
   const repo = {
     findAll: jest.fn(),
     findById: jest.fn(),
+    findByUsername: jest.fn(),
+    findByEmail: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
     remove: jest.fn(),
@@ -90,6 +94,8 @@ describe('UserService', () => {
   describe('createUser', () => {
     it('hashes the password and saves via repository', async () => {
       const entity = makeEntity();
+      repo.findByUsername.mockResolvedValue(null);
+      repo.findByEmail.mockResolvedValue(null);
       repo.create.mockResolvedValue(entity);
       const result = await service.createUser({
         username: 'alice',
@@ -111,11 +117,28 @@ describe('UserService', () => {
         service.createUser({ username: 'alice' })
       ).rejects.toThrow();
     });
+
+    it('throws ConflictException when username already exists', async () => {
+      repo.findByUsername.mockResolvedValue(makeEntity());
+      repo.findByEmail.mockResolvedValue(null);
+      await expect(
+        service.createUser({ username: 'alice', email: 'alice@example.com', password: 'secret' })
+      ).rejects.toThrow(ConflictException);
+    });
+
+    it('throws ConflictException when email already exists', async () => {
+      repo.findByUsername.mockResolvedValue(null);
+      repo.findByEmail.mockResolvedValue(makeEntity());
+      await expect(
+        service.createUser({ username: 'alice', email: 'alice@example.com', password: 'secret' })
+      ).rejects.toThrow(ConflictException);
+    });
   });
 
   describe('updateUser', () => {
     it('updates the user and returns the updated domain object', async () => {
       const entity = makeEntity({ username: 'bob' });
+      repo.findByUsername.mockResolvedValue(null);
       repo.update.mockResolvedValue(entity);
       const result = await service.updateUser('uuid-1', { username: 'bob' });
       expect(repo.update).toHaveBeenCalledWith(
@@ -139,6 +162,29 @@ describe('UserService', () => {
       await expect(
         service.updateUser('bad-id', { username: 'x' })
       ).rejects.toThrow(NotFoundException);
+    });
+
+    it('throws ConflictException when updating to an existing username', async () => {
+      repo.findByUsername.mockResolvedValue(makeEntity({ id: 'uuid-other' }));
+      await expect(
+        service.updateUser('uuid-1', { username: 'alice' })
+      ).rejects.toThrow(ConflictException);
+    });
+
+    it('throws ConflictException when updating to an existing email', async () => {
+      repo.findByEmail.mockResolvedValue(makeEntity({ id: 'uuid-other' }));
+      await expect(
+        service.updateUser('uuid-1', { email: 'alice@example.com' })
+      ).rejects.toThrow(ConflictException);
+    });
+
+    it('allows updating username to the same value (own record)', async () => {
+      const entity = makeEntity({ id: 'uuid-1', username: 'alice' });
+      repo.findByUsername.mockResolvedValue(entity);
+      repo.update.mockResolvedValue(entity);
+      await expect(
+        service.updateUser('uuid-1', { username: 'alice' })
+      ).resolves.toBeInstanceOf(User);
     });
   });
 

@@ -34,6 +34,11 @@ export class UserRepository {
     return repo.findOne({ where: { email } });
   }
 
+  findByUsername(username: string, manager?: EntityManager) {
+    const repo = this.getRepo(manager);
+    return repo.findOne({ where: { username } });
+  }
+
   async update(
     id: string,
     updateInput: QueryDeepPartialEntity<UserEntity>,
