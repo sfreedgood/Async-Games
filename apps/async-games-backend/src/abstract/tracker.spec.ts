@@ -1,6 +1,6 @@
 import { GameTracker } from './tracker';
 import { Player } from './player';
-import fs, { existsSync, writeFileSync } from 'fs';
+import fs, { existsSync } from 'fs';
 
 jest.mock('simple-git', () => ({
   simpleGit: jest.fn().mockImplementation(() => ({
@@ -27,6 +27,7 @@ describe('GameTracker', () => {
     new Player('player_2', 'Player2'),
   ];
   beforeEach(() => {
+    jest.clearAllMocks();
     gameTracker = new GameTracker(gameName, players);
   });
   describe('constructor', () => {
@@ -47,11 +48,9 @@ describe('GameTracker', () => {
     });
   });
   describe('commitAction', () => {
-    let testFile: string;
     let addSpy: jest.SpyInstance;
     let commitSpy: jest.SpyInstance;
     beforeEach(async () => {
-      testFile = `${gameTracker.dirPath}/testFile.txt`;
       await gameTracker.initializeGame();
       addSpy = jest.spyOn(gameTracker.git, 'add');
       commitSpy = jest.spyOn(gameTracker.git, 'commit');
@@ -62,8 +61,6 @@ describe('GameTracker', () => {
       expect(addSpy).not.toHaveBeenCalled();
     });
     it('should commit changes to the git repository', async () => {
-      writeFileSync(testFile, 'hello world');
-      expect(existsSync(`${gameTracker.dirPath}/testFile.txt`)).toBeTruthy();
       (gameTracker.git.status as jest.Mock).mockResolvedValueOnce({
         not_added: [],
         conflicted: [],
