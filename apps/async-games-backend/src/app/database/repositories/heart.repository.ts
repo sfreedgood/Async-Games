@@ -28,12 +28,4 @@ export class HeartRepository {
       order: { createdAt: 'DESC' },
     });
   }
-
-  findAll(manager?: EntityManager) {
-    return this.getRepo(manager).find();
-  }
-
-  count(manager?: EntityManager) {
-    return this.getRepo(manager).count();
-  }
 }

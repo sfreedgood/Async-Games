@@ -18,10 +18,6 @@ export class UserRepository {
     return this.getRepo(manager).find();
   }
 
-  count(manager?: EntityManager) {
-    return this.getRepo(manager).count();
-  }
-
   create(createInput: DeepPartial<UserEntity>, manager?: EntityManager) {
     const repo = this.getRepo(manager);
     const user = repo.create(createInput);

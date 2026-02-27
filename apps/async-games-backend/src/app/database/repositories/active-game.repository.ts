@@ -29,12 +29,4 @@ export class ActiveGameRepository {
     const repo = this.getRepo(manager);
     return repo.find({ order: { createdAt: 'DESC' } });
   }
-
-  findAll(manager?: EntityManager) {
-    return this.getRepo(manager).find();
-  }
-
-  count(manager?: EntityManager) {
-    return this.getRepo(manager).count();
-  }
 }
