@@ -51,11 +51,6 @@ export class CreateUserDTO {
 /** DTO used when updating an existing user (partial) */
 export class UpdateUserDTO {
   @IsOptional()
-  @IsUUID()
-  @ApiPropertyOptional({ example: '3fa85f64-5717-4562-b3fc-2c963f66afa6', description: 'User id (inferred from URL param)' })
-  id?: string;
-
-  @IsOptional()
   @IsString()
   @ApiPropertyOptional({ example: 'alice', description: 'Unique username' })
   username?: string;
