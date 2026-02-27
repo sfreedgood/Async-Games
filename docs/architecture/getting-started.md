@@ -7,6 +7,7 @@ This guide explains how to install dependencies, run each app, and exercise the 
 - Node.js (LTS recommended)
 - npm
 - Nx CLI (optional global install)
+- Docker Desktop (for local PostgreSQL instance)
 
 To install Nx globally:
 
@@ -27,6 +28,29 @@ From the repository root:
 ```bash
 npm install
 ```
+
+## Database (PostgreSQL)
+**Docker is required for the local PostgreSQL instance. Ensure [Docker Desktop](#docker-desktop) is installed and running before proceeding.**
+
+1. Copy the sample environment file and adjust credentials if needed:
+   ```bash
+   cp .env.example .env
+   ```
+2. Start the local PostgreSQL instance via Docker:
+   ```bash
+   docker compose -f docker-compose.db.yml up -d
+   ```
+3. To seed the database with dummy data, run:
+   ```bash
+   bash apps/async-games-backend/scripts/seed-db.sh
+   ```
+   or see [SEEDING.md](apps/async-games-backend/SEEDING.md) for more details.
+
+Suggestion: If you want a GUI to work with the DB, I use [pgAdmin](https://www.pgadmin.org/)
+
+The Nest backend reads `DB_*` variables from `.env` and initializes a TypeORM
+DataSource with repository + QueryRunner support. Update the env values if you
+already have a PostgreSQL instance running elsewhere.
 
 ## Run the Applications
 
@@ -120,3 +144,13 @@ nx reset
 ```
 
 With these workflows you can spin up the stack end-to-end, iterate on components, and validate critical tests quickly.
+
+## Installing Prerequisites
+- Node.js (LTS recommended)
+- npm
+- Nx CLI (optional global install)
+
+### Docker Desktop
+1. Download and install Docker Desktop from https://www.docker.com/products/docker-desktop/
+2. Follow the installation instructions for your operating system.
+3. Once installed, ensure Docker is running before proceeding with the database setup.
