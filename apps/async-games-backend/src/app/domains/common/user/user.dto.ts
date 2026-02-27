@@ -6,6 +6,8 @@ import {
   IsString,
   IsUUID,
   IsObject,
+  Matches,
+  MinLength,
 } from 'class-validator';
 
 /** DTO used when creating a new user (client -> server) */
@@ -18,8 +20,14 @@ export class CreateUserDTO {
   @ApiProperty({ example: 'alice@example.com', description: 'User email' })
   email!: string;
 
+  // TODO: Review password security requirements in more detail (e.g., breached-password checks,
+  // configurable complexity rules, rate-limiting on auth endpoints).
   @IsString()
-  @ApiProperty({ example: 's3cr3t', description: 'Plain-text password' })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/, {
+    message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+  })
+  @ApiProperty({ example: 'S3cr3tPass', description: 'Plain-text password' })
   password!: string;
 
   @IsOptional()
@@ -62,7 +70,11 @@ export class UpdateUserDTO {
 
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional({ example: 's3cr3t', description: 'Plain-text password (will be hashed)' })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/, {
+    message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+  })
+  @ApiPropertyOptional({ example: 'S3cr3tPass', description: 'Plain-text password (will be hashed)' })
   password?: string;
 
   @IsOptional()
