@@ -9,10 +9,10 @@ import {
   ClassicCardController,
   ClassicCardService,
 } from './domains/classic-card';
+import { UserModule } from './domains/common/user/module';
+import { UserController, UserService } from './domains/common/user';
 
 @Module({
-  controllers: [AppController, ClassicCardController],
-  providers: [AppService, ClassicCardService],
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
@@ -24,5 +24,7 @@ import {
     ClassicCardModule,
     UserModule,
   ],
+  controllers: [AppController, ClassicCardController, UserController],
+  providers: [AppService, ClassicCardService, UserService],
 })
 export class AppModule {}
