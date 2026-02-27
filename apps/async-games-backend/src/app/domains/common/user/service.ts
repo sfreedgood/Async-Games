@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { UserRepository } from '../../../database/repositories/user.repository';
 import { User } from './user.entity';
@@ -27,6 +27,18 @@ export class UserService {
 
   async createUser(input: Partial<CreateUserInput>): Promise<User> {
     const validated = validateCreateUser(input);
+
+    const [existingUsername, existingEmail] = await Promise.all([
+      this.userRepository.findByUsername(validated.username),
+      this.userRepository.findByEmail(validated.email),
+    ]);
+    if (existingUsername) {
+      throw new ConflictException(`Username '${validated.username}' is already taken`);
+    }
+    if (existingEmail) {
+      throw new ConflictException(`Email '${validated.email}' is already registered`);
+    }
+
     const entity = await this.userRepository.create({
       username: validated.username,
       email: validated.email,
@@ -45,6 +57,22 @@ export class UserService {
     input: Partial<UpdateUserInput>
   ): Promise<User> {
     validateUpdateUser(input);
+
+    const [existingUsername, existingEmail] = await Promise.all([
+      input.username !== undefined
+        ? this.userRepository.findByUsername(input.username)
+        : Promise.resolve(null),
+      input.email !== undefined
+        ? this.userRepository.findByEmail(input.email)
+        : Promise.resolve(null),
+    ]);
+    if (existingUsername && existingUsername.id !== id) {
+      throw new ConflictException(`Username '${input.username}' is already taken`);
+    }
+    if (existingEmail && existingEmail.id !== id) {
+      throw new ConflictException(`Email '${input.email}' is already registered`);
+    }
+
     const { password, ...rest } = input;
     const updateData: Record<string, unknown> = { ...rest };
     if (password) {
