@@ -6,11 +6,17 @@ import {
   IsString,
   IsUUID,
   IsObject,
+  Matches,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 /** DTO used when creating a new user (client -> server) */
 export class CreateUserDTO {
   @IsString()
+  @MinLength(3)
+  @MaxLength(32)
+  @Matches(/^[a-zA-Z0-9_]+$/)
   @ApiProperty({ example: 'alice', description: 'Unique username' })
   username!: string;
 
@@ -18,8 +24,15 @@ export class CreateUserDTO {
   @ApiProperty({ example: 'alice@example.com', description: 'User email' })
   email!: string;
 
+  // TODO: Review password security requirements in more detail (e.g., breached-password checks,
+  // configurable complexity rules, rate-limiting on auth endpoints).
   @IsString()
-  @ApiProperty({ example: 's3cr3t', description: 'Plain-text password' })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/, {
+    message:
+      'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+  })
+  @ApiProperty({ example: 'S3cr3tPass', description: 'Plain-text password' })
   password!: string;
 
   @IsOptional()
@@ -39,12 +52,18 @@ export class CreateUserDTO {
 
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional({ example: 'America/Los_Angeles', description: 'Timezone' })
+  @ApiPropertyOptional({
+    example: 'America/Los_Angeles',
+    description: 'Timezone',
+  })
   timezone?: string;
 
   @IsOptional()
   @IsObject()
-  @ApiPropertyOptional({ example: {}, description: 'Arbitrary metadata/preferences' })
+  @ApiPropertyOptional({
+    example: {},
+    description: 'Arbitrary metadata/preferences',
+  })
   meta?: Record<string, unknown>;
 }
 
@@ -57,12 +76,23 @@ export class UpdateUserDTO {
 
   @IsOptional()
   @IsEmail()
-  @ApiPropertyOptional({ example: 'alice@example.com', description: 'User email' })
+  @ApiPropertyOptional({
+    example: 'alice@example.com',
+    description: 'User email',
+  })
   email?: string;
 
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional({ example: 's3cr3t', description: 'Plain-text password (will be hashed)' })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/, {
+    message:
+      'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+  })
+  @ApiPropertyOptional({
+    example: 'S3cr3tPass',
+    description: 'Plain-text password (will be hashed)',
+  })
   password?: string;
 
   @IsOptional()
@@ -92,17 +122,26 @@ export class UpdateUserDTO {
 
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional({ example: 'America/Los_Angeles', description: 'Timezone' })
+  @ApiPropertyOptional({
+    example: 'America/Los_Angeles',
+    description: 'Timezone',
+  })
   timezone?: string;
 
   @IsOptional()
   @IsBoolean()
-  @ApiPropertyOptional({ example: false, description: 'Disabled / soft-delete flag' })
+  @ApiPropertyOptional({
+    example: false,
+    description: 'Disabled / soft-delete flag',
+  })
   disabled?: boolean;
 
   @IsOptional()
   @IsObject()
-  @ApiPropertyOptional({ example: {}, description: 'Arbitrary metadata/preferences' })
+  @ApiPropertyOptional({
+    example: {},
+    description: 'Arbitrary metadata/preferences',
+  })
   meta?: Record<string, unknown>;
 }
 
@@ -157,6 +196,9 @@ export class UserResponseDTO {
   disabled!: boolean;
 
   @IsObject()
-  @ApiPropertyOptional({ example: {}, description: 'Arbitrary metadata/preferences' })
+  @ApiPropertyOptional({
+    example: {},
+    description: 'Arbitrary metadata/preferences',
+  })
   meta!: Record<string, unknown>;
 }
