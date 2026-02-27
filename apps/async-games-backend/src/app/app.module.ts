@@ -12,18 +12,25 @@ import {
 import { UserModule } from './domains/common/user/module';
 import { UserController, UserService } from './domains/common/user';
 
+// Conditionally include DatabaseModule based on environment
+const imports = [
+  ConfigModule.forRoot({
+    isGlobal: true,
+    cache: true,
+    envFilePath: ['.env.local', '.env'],
+    load: [databaseConfig],
+  }),
+  ClassicCardModule,
+  UserModule,
+];
+
+// Only import DatabaseModule if DB_SKIP is not set to 'true'
+if (process.env.DB_SKIP !== 'true') {
+  imports.splice(1, 0, DatabaseModule);
+}
+
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      cache: true,
-      envFilePath: ['.env.local', '.env'],
-      load: [databaseConfig],
-    }),
-    DatabaseModule,
-    ClassicCardModule,
-    UserModule,
-  ],
+  imports,
   controllers: [AppController, ClassicCardController, UserController],
   providers: [AppService, ClassicCardService, UserService],
 })
