@@ -13,6 +13,32 @@ permissions:
 jobs:
   main:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: async_games
+          POSTGRES_PASSWORD: async_games
+          POSTGRES_DB: async_games
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USERNAME: async_games
+      DB_PASSWORD: async_games
+      DB_NAME: async_games
+      DB_SYNCHRONIZE: true   # TODO: replace with migrations once they are introduced
+      DB_LOGGING: false
+      DB_SSL: false
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,8 +70,19 @@ jobs:
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
+
+      # Run lint, unit tests, and build with DB_SKIP=true so NestJS unit tests
+      # never attempt a real Postgres connection (DB is mocked at the module level).
+      - run: npx nx run-many -t lint test build
+        env:
+          DB_SKIP: 'true'
+
+      # Run E2E tests with the Postgres service available.
+      # NestJS backend will connect to the CI Postgres container via the DB_* env vars
+      # set at the job level. DB_SYNCHRONIZE=true auto-creates the schema on first run.
       # When you enable task distribution, run the e2e-ci task instead of e2e
-      - run: npx nx run-many -t lint test build e2e
+      - run: npx nx run-many -t e2e
+
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: npx nx fix-ci
         if: always()

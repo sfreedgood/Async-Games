@@ -1,9 +1,24 @@
 import { GameTracker } from './tracker';
 import { Player } from './player';
-import { GitError } from 'simple-git';
-import fs, { existsSync, writeFileSync } from 'fs';
-jest.mocked('fs');
-jest.mocked('simple-git');
+import fs, { existsSync } from 'fs';
+
+jest.mock('simple-git', () => ({
+  simpleGit: jest.fn().mockImplementation(() => ({
+    init: jest.fn().mockResolvedValue({}),
+    status: jest.fn().mockResolvedValue({
+      not_added: [],
+      conflicted: [],
+      created: [],
+      deleted: [],
+      modified: [],
+    }),
+    add: jest.fn().mockResolvedValue({}),
+    commit: jest.fn().mockResolvedValue({ commit: 'abc123' }),
+    log: jest.fn().mockResolvedValue({ latest: null }),
+    checkoutLocalBranch: jest.fn().mockResolvedValue({}),
+  })),
+}));
+
 describe('GameTracker', () => {
   let gameTracker: GameTracker;
   const gameName = `Test Game`;
@@ -12,6 +27,7 @@ describe('GameTracker', () => {
     new Player('player_2', 'Player2'),
   ];
   beforeEach(() => {
+    jest.clearAllMocks();
     gameTracker = new GameTracker(gameName, players);
   });
   describe('constructor', () => {
@@ -23,20 +39,18 @@ describe('GameTracker', () => {
   });
   describe('initializeGame', () => {
     const mkdirSpy = jest.spyOn(fs, 'mkdirSync');
-    it('should create a directory for the game', async () => {
+    it('should create a directory for the game and initialize git', async () => {
       await gameTracker.initializeGame();
       expect(mkdirSpy).toHaveBeenCalledWith(gameTracker.dirPath, {
         recursive: true,
       });
-      expect(existsSync(`${gameTracker.dirPath}/.git`)).toBeTruthy();
+      expect(gameTracker.git.init).toHaveBeenCalled();
     });
   });
   describe('commitAction', () => {
-    let testFile: string;
     let addSpy: jest.SpyInstance;
     let commitSpy: jest.SpyInstance;
     beforeEach(async () => {
-      testFile = `${gameTracker.dirPath}/testFile.txt`;
       await gameTracker.initializeGame();
       addSpy = jest.spyOn(gameTracker.git, 'add');
       commitSpy = jest.spyOn(gameTracker.git, 'commit');
@@ -45,23 +59,18 @@ describe('GameTracker', () => {
       await gameTracker.commitAction();
       expect(commitSpy).not.toHaveBeenCalled();
       expect(addSpy).not.toHaveBeenCalled();
-      try {
-        await gameTracker.git.log({ file: testFile });
-      } catch (e) {
-        const error = e as GitError;
-        expect(error.message).toMatch(
-          "fatal: your current branch 'main' does not have any commits yet"
-        );
-      }
     });
     it('should commit changes to the git repository', async () => {
-      writeFileSync(testFile, 'hello world');
-      expect(existsSync(`${gameTracker.dirPath}/testFile.txt`)).toBeTruthy();
+      (gameTracker.git.status as jest.Mock).mockResolvedValueOnce({
+        not_added: [],
+        conflicted: [],
+        created: ['testFile.txt'],
+        deleted: [],
+        modified: [],
+      });
       await gameTracker.commitAction();
       expect(addSpy).toHaveBeenCalled();
-      expect(commitSpy).toHaveBeenCalled();
-      const testFileGitLog = await gameTracker.git.log({ file: testFile });
-      expect(testFileGitLog.latest?.message).toBe(
+      expect(commitSpy).toHaveBeenCalledWith(
         `turn${gameTracker.turnNumber}_${gameTracker.currentPlayer.playerId}`
       );
     });
