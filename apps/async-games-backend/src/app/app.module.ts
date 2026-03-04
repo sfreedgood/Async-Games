@@ -17,7 +17,7 @@ const imports = [
   ConfigModule.forRoot({
     isGlobal: true,
     cache: true,
-    envFilePath: ['.env.local', '.env'],
+    envFilePath: ['.env.development', '.env'],
     load: [databaseConfig],
   }),
   ClassicCardModule,

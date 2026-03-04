@@ -3,9 +3,19 @@
 # Database configuration from environment or defaults
 DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-5432}"
-DB_USERNAME="${DB_USERNAME:-async_games}"
-DB_PASSWORD="${DB_PASSWORD:-async_games}"
-DB_NAME="${DB_NAME:-async_games}"
+DB_USERNAME="${DB_USERNAME}"
+DB_PASSWORD="${DB_PASSWORD}"
+DB_NAME="${DB_NAME}"
+
+# Validate required environment variables
+if [ -z "$DB_USERNAME" ] || [ -z "$DB_PASSWORD" ] || [ -z "$DB_NAME" ]; then
+  echo -e "${ORANGE}Error: Missing required environment variables${NC}"
+  echo "Please ensure the following variables are set in .env.development:"
+  echo "  DB_USERNAME"
+  echo "  DB_PASSWORD"
+  echo "  DB_NAME"
+  exit 1
+fi
 
 # Export password for psql
 export PGPASSWORD="$DB_PASSWORD"
@@ -34,7 +44,8 @@ if command -v docker >/dev/null 2>&1; then
   else
     # Container doesn't exist, user needs to create it
     echo -e "${YELLOW}Docker container: $CONTAINER_NAME does not exist, please run the following then try again:${NC}"
-    echo -e "  docker compose -f docker-compose.db.yml up -d"
+    echo -e "  docker compose -f docker-compose.db.yml up -d --build"
+    echo -e "  # or set DB_ENV_FILE=.env for the production profile"
     exit 1
   fi
   

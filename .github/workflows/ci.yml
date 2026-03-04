@@ -18,9 +18,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: async_games
-          POSTGRES_PASSWORD: async_games
-          POSTGRES_DB: async_games
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
         ports:
           - 5432:5432
         options: >-
@@ -32,9 +32,9 @@ jobs:
     env:
       DB_HOST: localhost
       DB_PORT: 5432
-      DB_USERNAME: async_games
-      DB_PASSWORD: async_games
-      DB_NAME: async_games
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
       DB_SYNCHRONIZE: true   # TODO: replace with migrations once they are introduced
       DB_LOGGING: false
       DB_SSL: false
@@ -76,12 +76,22 @@ jobs:
       - run: npx nx run-many -t lint test build
         env:
           DB_SKIP: 'true'
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+
 
       # Run E2E tests with the Postgres service available.
       # NestJS backend will connect to the CI Postgres container via the DB_* env vars
       # set at the job level. DB_SYNCHRONIZE=true auto-creates the schema on first run.
       # When you enable task distribution, run the e2e-ci task instead of e2e
       - run: npx nx run-many -t e2e
+        env:    
+          DB_SKIP: 'true'
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+
 
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: npx nx fix-ci

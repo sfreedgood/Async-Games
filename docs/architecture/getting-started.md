@@ -29,18 +29,65 @@ From the repository root:
 npm install
 ```
 
-## Database (PostgreSQL)
+## Database & Backend Initialization
 **Docker is required for the local PostgreSQL instance. Ensure [Docker Desktop](#docker-desktop) is installed and running before proceeding.**
 
-1. Copy the sample environment file and adjust credentials if needed:
+1. Create a `.env.development` file in the repo root (if it doesn't exist yet) and define the `DB_*` variables required by the Nest backend and Docker Compose. Example:
    ```bash
-   cp .env.example .env
+   cat <<'EOF' > .env.development
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USERNAME=async_games_dev
+   DB_PASSWORD=change_me
+   DB_NAME=async_games
+   DB_LOGGING=false
+   DB_SSL=false
+   DB_SYNCHRONIZE=true
+   EOF
    ```
-2. Start the local PostgreSQL instance via Docker:
+   Replace the values as needed for your setup.
+
+2. **Development Workflow (Recommended):** Start only the PostgreSQL database in Docker and run the backend separately with live-reload:
    ```bash
-   docker compose -f docker-compose.db.yml up -d
+   docker compose --env-file .env.development up postgres --build
    ```
-3. To seed the database with dummy data, run:
+   Then run the backend in another terminal:
+   ```bash
+   npx nx serve async-games-backend
+   # OR if you have Nx globally installed:
+   nx run async-games-backend:serve
+   ```
+   This allows hot-module reloading and faster iteration during development.
+
+3. **Full Docker Stack (CI/Production):** To build and start both the PostgreSQL database and NestJS backend via Docker:
+   ```bash
+   docker compose --env-file .env up -d --build
+   # or in development (attached / foreground session):
+   docker compose --env-file .env.development up --build
+   ```
+   Or use the provided helper script (useful for CI pipelines):
+   ```bash
+   bash scripts/docker-stack-build-start.sh .env
+   # or for development:
+   bash scripts/docker-stack-build-start.sh .env.development
+   ```
+   By default, the helper script runs:
+   - `.env.development` in attached mode (foreground)
+   - `.env` in detached mode (background)
+  
+   You can override the mode explicitly:
+   ```bash
+   bash scripts/docker-stack-build-start.sh .env.development detached
+   bash scripts/docker-stack-build-start.sh .env attached
+   ```
+
+   The helper script will:
+   - Build the backend distributable via Nx
+   - Start both services with Docker Compose
+   - Wait for the backend to become healthy (detached mode)
+   - Display Swagger endpoint when ready
+
+4. To seed the database with dummy data, run:
    ```bash
    bash apps/async-games-backend/scripts/seed-db.sh
    ```
@@ -48,9 +95,21 @@ npm install
 
 Suggestion: If you want a GUI to work with the DB, I use [pgAdmin](https://www.pgadmin.org/)
 
-The Nest backend reads `DB_*` variables from `.env` and initializes a TypeORM
-DataSource with repository + QueryRunner support. Update the env values if you
-already have a PostgreSQL instance running elsewhere.
+## CI/CD Pipeline
+
+For automated CI environments (GitHub Actions, GitLab CI, etc.), use the provided helper script:
+
+```bash
+bash scripts/docker-stack-build-start.sh .env
+```
+
+Alternatively, see [`.github/workflows/ci-docker-stack.yml`](.github/workflows/ci-docker-stack.yml) for a complete GitHub Actions workflow example that:
+- Builds backend artifacts
+- Runs unit and lint tests
+- Builds Docker images
+- Runs E2E tests
+
+The workflow demonstrates the full build → test → containerize → test cycle for reproducible CI deployments.
 
 ## Run the Applications
 
@@ -64,6 +123,8 @@ nx run async-games-backend:serve
 
 The NestJS server listens on http://localhost:3000 and hosts the Swagger UI for API exploration.
 Swagger UI: http://localhost:3000/api
+
+> `nx serve async-games-backend` automatically loads `.env.development`. Switch to production settings with `nx run async-games-backend:serve:production`, which pulls variables from `.env`.
 
 ### Frontend Client
 
