@@ -26,6 +26,11 @@ services:
         DB_ENV_FILE: ${DB_ENV_FILE:-.env.development}
         POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
         POSTGRES_PASSWORD: ${POSTGRES_SUPERPASS:-postgres}
+        DB_NAME: ${DB_NAME:-async_games}
+        DB_USERNAME: ${DB_USERNAME:-async_games_dev}
+        DB_PASSWORD: ${DB_PASSWORD:-change_me}
+        DB_HOST: ${DB_HOST:-localhost}
+        DB_PORT: ${DB_PORT:-5432}
     image: async-games/postgres:local
     container_name: async_games
     restart: unless-stopped

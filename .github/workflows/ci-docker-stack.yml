@@ -41,9 +41,9 @@ jobs:
           cat <<EOF > .env
           DB_HOST=localhost
           DB_PORT=5432
-          DB_USERNAME=${{ secrets.DB_USERNAME }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          DB_NAME=${{ secrets.DB_NAME }}
+          DB_USERNAME=${{ secrets.DB_USERNAME || 'async_games_dev' }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD || 'change_me' }}
+          DB_NAME=${{ secrets.DB_NAME || 'async_games' }}
           DB_LOGGING=false
           DB_SSL=false
           DB_SYNCHRONIZE=true
@@ -60,9 +60,23 @@ jobs:
         run: npx nx lint async-games-backend
 
       - name: Build Docker images
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME || 'async_games_dev' }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD || 'change_me' }}
+          DB_NAME: ${{ secrets.DB_NAME || 'async_games' }}
+          DB_HOST: localhost
+          DB_PORT: 5432
+          # Don't use a file, rely on build args from secrets
+          DB_ENV_FILE: .env.nonexistent
         run: |
           docker build -t async-games-backend:latest -f Dockerfile .
-          docker build -t async-games-db:latest -f docker/db/Dockerfile .
+          docker build -t async-games-db:latest -f docker/db/Dockerfile \
+            --build-arg DB_USERNAME="$DB_USERNAME" \
+            --build-arg DB_PASSWORD="$DB_PASSWORD" \
+            --build-arg DB_NAME="$DB_NAME" \
+            --build-arg DB_HOST="$DB_HOST" \
+            --build-arg DB_PORT="$DB_PORT" \
+            .
 
       - name: Run E2E tests
         run: npx nx e2e async-games-backend-e2e

@@ -106,10 +106,25 @@ bash scripts/docker-stack-build-start.sh .env
 Alternatively, see [`.github/workflows/ci-docker-stack.yml`](.github/workflows/ci-docker-stack.yml) for a complete GitHub Actions workflow example that:
 - Builds backend artifacts
 - Runs unit and lint tests
-- Builds Docker images
+- Builds Docker images using secrets (no env file required)
 - Runs E2E tests
 
 The workflow demonstrates the full build → test → containerize → test cycle for reproducible CI deployments.
+
+### Building with Secrets Instead of Env Files
+
+The Docker images support building without env files by passing database credentials as build arguments. This is useful in CI/CD where secrets are managed by the platform:
+
+```bash
+docker build -t async-games-db:latest -f docker/db/Dockerfile \
+  --build-arg DB_USERNAME="$DB_USERNAME" \
+  --build-arg DB_PASSWORD="$DB_PASSWORD" \
+  --build-arg DB_NAME="$DB_NAME" \
+  --build-arg DB_ENV_FILE=.env.nonexistent \
+  .
+```
+
+The database Dockerfile will automatically generate the required env file from build args when no source file exists.
 
 ## Run the Applications
 
