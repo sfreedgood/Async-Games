@@ -97,21 +97,23 @@ Suggestion: If you want a GUI to work with the DB, I use [pgAdmin](https://www.p
 
 ## CI/CD Pipeline
 
-For automated CI environments (GitHub Actions, GitLab CI, etc.), use the provided helper script:
+The project uses GitHub Actions for automated testing and builds. See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for the complete workflow that:
+- Runs linting and unit tests with `DB_SKIP=true` (mocked database)
+- Builds the backend with production configuration
+- Runs E2E tests against a live Postgres service
+- Integrates with Nx Cloud for caching and task distribution
+
+### Local Docker Stack Development
+
+For local development with Docker Compose, use the provided helper script:
 
 ```bash
-bash scripts/docker-stack-build-start.sh .env
+bash scripts/docker-stack-build-start.sh .env.development
+# Or with detached mode:
+bash scripts/docker-stack-build-start.sh .env detached
 ```
 
-Alternatively, see [`.github/workflows/ci-docker-stack.yml`](.github/workflows/ci-docker-stack.yml) for a complete GitHub Actions workflow example that:
-- Builds backend artifacts
-- Runs unit and lint tests
-- Builds Docker images using secrets (no env file required)
-- Runs E2E tests
-
-The workflow demonstrates the full build → test → containerize → test cycle for reproducible CI deployments.
-
-### Building with Secrets Instead of Env Files
+### Building Docker Images with Secrets
 
 The Docker images support building without env files by passing database credentials as build arguments. This is useful in CI/CD where secrets are managed by the platform:
 
