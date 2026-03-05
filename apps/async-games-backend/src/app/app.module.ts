@@ -12,12 +12,15 @@ import {
 import { UserModule } from './domains/common/user/module';
 import { UserController, UserService } from './domains/common/user';
 
-// Conditionally include DatabaseModule based on environment
+// Choose env file based on NODE_ENV: production uses .env, development uses .env.development with .env fallback
+const isProduction = process.env.NODE_ENV === 'production';
+const envFilePath = isProduction ? '.env' : ['.env.development', '.env'];
+
 const imports = [
   ConfigModule.forRoot({
     isGlobal: true,
     cache: true,
-    envFilePath: ['.env.development', '.env'],
+    envFilePath,
     load: [databaseConfig],
   }),
   ClassicCardModule,

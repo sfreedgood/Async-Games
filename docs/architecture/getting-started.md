@@ -139,7 +139,10 @@ nx run async-games-backend:serve
 The NestJS server listens on http://localhost:3000 and hosts the Swagger UI for API exploration.
 Swagger UI: http://localhost:3000/api
 
-> `nx serve async-games-backend` automatically loads `.env.development`. Switch to production settings with `nx run async-games-backend:serve:production`, which pulls variables from `.env`.
+> Environment file selection:
+> - **Development** (`nx serve async-games-backend`): Uses `.env.development` (falls back to `.env` if missing)
+> - **Production** (`nx run async-games-backend:serve:production`): Uses `.env` only (set `NODE_ENV=production`)
+> - **CI**: Always uses `.env` with `NODE_ENV=production`
 
 ### Frontend Client
 

@@ -30,6 +30,7 @@ jobs:
           --health-retries 5
 
     env:
+      NODE_ENV: production
       DB_HOST: localhost
       DB_PORT: 5432
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -71,26 +72,35 @@ jobs:
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
 
+      # Create .env file for CI with production configuration
+      - name: Create production .env file
+        run: |
+          cat <<EOF > .env
+          NODE_ENV=production
+          DB_HOST=localhost
+          DB_PORT=5432
+          DB_USERNAME=${{ secrets.DB_USERNAME || 'async_games_dev' }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD || 'test_password' }}
+          DB_NAME=${{ secrets.DB_NAME || 'async_games' }}
+          DB_LOGGING=false
+          DB_SSL=false
+          DB_SYNCHRONIZE=true
+          EOF
+
       # Run lint, unit tests, and build with DB_SKIP=true so NestJS unit tests
       # never attempt a real Postgres connection (DB is mocked at the module level).
-      - run: npx nx run-many -t lint test build
+      - run: npx nx run-many -t lint test build --configuration=production
         env:
           DB_SKIP: 'true'
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_NAME }}
 
 
       # Run E2E tests with the Postgres service available.
-      # NestJS backend will connect to the CI Postgres container via the DB_* env vars
-      # set at the job level. DB_SYNCHRONIZE=true auto-creates the schema on first run.
-      # When you enable task distribution, run the e2e-ci task instead of e2e
-      - run: npx nx run-many -t e2e
+      # NestJS backend will connect to the CI Postgres container via .env file.
+      # DB_SYNCHRONIZE=true auto-creates the schema on first run.
+      # Use e2e-ci target which depends on serve:production
+      - run: npx nx run @async-games/async-games-backend-e2e:e2e-ci
         env:    
           DB_SKIP: 'false'
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_NAME }}
 
 
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
