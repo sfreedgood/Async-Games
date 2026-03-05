@@ -173,6 +173,8 @@ This supports development of UI components without needing to run the full appli
 
 ### Unit & Domain Tests (Jest)
 
+Jest tests use the `.spec.ts` file naming convention.
+
 ```bash
 npx nx test async-games-backend
 # OR if you have Nx globally installed:
@@ -183,7 +185,7 @@ Unit tests cover domain services, validation logic, and supporting utilities. Re
 
 ### End-to-End Tests (Playwright)
 
-Playwright-based E2E tests are available and cover critical user journeys and API interactions, helping to prevent regressions.
+Playwright-based E2E tests use the `.test.ts` file naming convention and cover critical user journeys and API interactions, helping to prevent regressions.
 
 You can run E2E tests with:
 

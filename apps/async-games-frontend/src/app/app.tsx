@@ -1,8 +1,7 @@
 import { Route, Routes, Link } from 'react-router-dom';
 
-import { ClassicCard } from './domains/classic-card';
+import { ClassicCard, type ClassicDeckEntity } from './domains/classic-card';
 import { useAxiosGet } from './hooks/api';
-import { ClassicDeckEntity } from './domains/classic-card';
 
 export function App() {
   const { data: deck } = useAxiosGet<ClassicDeckEntity>('/cards/deck');
