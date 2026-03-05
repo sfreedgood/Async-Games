@@ -33,17 +33,14 @@
         "defaultConfiguration": "development",
         "options": {
           "command": "nx run @async-games/async-games-backend:serve-node:development",
-          "envFile": ".env.development",
           "forwardAllArgs": true
         },
         "configurations": {
           "development": {
-            "command": "nx run @async-games/async-games-backend:serve-node:development",
-            "envFile": ".env.development"
+            "command": "nx run @async-games/async-games-backend:serve-node:development"
           },
           "production": {
-            "command": "nx run @async-games/async-games-backend:serve-node:production",
-            "envFile": ".env"
+            "command": "nx run @async-games/async-games-backend:serve-node:production"
           }
         }
       },
