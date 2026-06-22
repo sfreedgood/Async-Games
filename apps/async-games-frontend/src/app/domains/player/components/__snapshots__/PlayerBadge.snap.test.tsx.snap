@@ -1,0 +1,94 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PlayerBadge snapshots > renders another player 1`] = `
+<DocumentFragment>
+  <div
+    class="flex h-full min-w-[180px] items-center gap-3 rounded-lg border border-emerald-500/40 bg-emerald-950/70 px-3 py-2 shadow-inner"
+  >
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-700/60 text-emerald-100"
+    >
+      <svg
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="fill-emerald-200/90"
+          d="M12 12c2.209 0 4-1.791 4-4s-1.791-4-4-4-4 1.791-4 4 1.791 4 4 4Z"
+        />
+        <path
+          class="fill-emerald-200/70"
+          d="M5 19.25c0-2.761 3.134-5 7-5s7 2.239 7 5V20H5v-.75Z"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex flex-col"
+    >
+      <span
+        class="text-sm font-semibold text-emerald-50"
+      >
+        Player 2
+      </span>
+      <span
+        class="text-xs text-emerald-100/70"
+      >
+        Opponent
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`PlayerBadge snapshots > renders the local (primary) player 1`] = `
+<DocumentFragment>
+  <div
+    class="flex h-full min-w-[180px] items-center gap-3 rounded-lg border border-emerald-500/40 bg-emerald-950/70 px-3 py-2 shadow-inner"
+  >
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-700/60 text-emerald-100"
+    >
+      <svg
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="fill-emerald-200/90"
+          d="M12 12c2.209 0 4-1.791 4-4s-1.791-4-4-4-4 1.791-4 4 1.791 4 4 4Z"
+        />
+        <path
+          class="fill-emerald-200/70"
+          d="M5 19.25c0-2.761 3.134-5 7-5s7 2.239 7 5V20H5v-.75Z"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex flex-col"
+    >
+      <span
+        class="text-sm font-semibold text-emerald-50"
+      >
+        Player 1
+      </span>
+      <div
+        class="flex flex-wrap gap-1 text-xs text-emerald-100/80"
+      >
+        <span
+          class="rounded-full bg-emerald-700/60 px-2 py-0.5"
+        >
+          Dealer
+        </span>
+        <span
+          class="rounded-full bg-emerald-700/60 px-2 py-0.5"
+        >
+          Hints
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

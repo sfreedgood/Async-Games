@@ -1,0 +1,12 @@
+name: Setup
+description: Check out Node and install workspace dependencies
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+    - run: npm ci --legacy-peer-deps
+      shell: bash

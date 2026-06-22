@@ -7,4 +7,7 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: 'test-output/jest/coverage',
+  // Snapshot specs (*.snap.test.tsx) import Storybook ESM and run under the
+  // Vitest `component-test` target, not Jest.
+  testPathIgnorePatterns: ['/node_modules/', '\\.snap\\.test\\.[jt]sx?$'],
 };
