@@ -3,14 +3,26 @@ import { simpleGit } from 'simple-git';
 import type { SimpleGit, SimpleGitOptions, StatusResult } from 'simple-git';
 import { Player } from './player';
 import { mkdirSync, rmSync, writeFileSync } from 'fs';
+import { resolve, sep } from 'path';
 import { normalizeStringForPath } from '../utils/string.utils';
 
 export const gameTrackerBaseDir = '/tmp/async_games/active_games/';
 
+// Reduce a user-supplied value to a safe single path segment: lowercase,
+// spaces to dashes, and strip anything outside [a-z0-9-] so that '..', '/',
+// and null bytes cannot be used to escape the base directory.
+const safePathSegment = (value: string) =>
+  value.replaceAll(' ', '-').toLowerCase().replace(/[^a-z0-9-]/g, '');
+
 export const buildGameDir = (name: string, id: string) => {
-  return `${gameTrackerBaseDir}${name
-    .replaceAll(' ', '-')
-    .toLowerCase()}/${id}`;
+  const dir = resolve(gameTrackerBaseDir, safePathSegment(name), safePathSegment(id));
+  const base = resolve(gameTrackerBaseDir);
+  // Defense in depth: ensure the resolved path stays within the base dir
+  // before it is ever passed to mkdirSync / rmSync.
+  if (dir !== base && !dir.startsWith(base + sep)) {
+    throw new Error('Invalid game path');
+  }
+  return dir;
 };
 
 export class GameTracker {
