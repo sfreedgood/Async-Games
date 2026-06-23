@@ -198,15 +198,19 @@ seed_users() {
 
   if [ "$USER_COUNT" -eq 0 ]; then
     echo "Inserting dummy user..."
-    psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d "$DB_NAME" << EOF
+    # Quoted heredoc ('EOF') so the bcrypt hash's '$' segments are passed
+    # through verbatim rather than expanded by the shell.
+    # password_hash below is bcrypt('password', 12) — matches hashPassword() in
+    # the User service, so the demo login stays valid after the bcrypt switch.
+    psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d "$DB_NAME" << 'EOF'
 INSERT INTO users (
-  id, username, email, password_hash, full_name, email_verified, 
+  id, username, email, password_hash, full_name, email_verified,
   locale, language, timezone, disabled, meta, created_at, updated_at
 ) VALUES (
   '550e8400-e29b-41d4-a716-446655440000',
   'demo',
   'demo@example.com',
-  '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+  '$2b$12$O6LWX5PClKFTFGBTskI1w.kqTa7YqtStiAaiKoTlxfj/Rw.miNqlu',
   'Demo User',
   false,
   'en-US',

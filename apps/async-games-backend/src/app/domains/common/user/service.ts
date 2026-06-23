@@ -1,14 +1,33 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { createHash } from 'crypto';
+import * as bcrypt from 'bcryptjs';
 import { UserRepository } from '../../../database/repositories/user.repository';
 import { User } from './user.entity';
 import { validateCreateUser, validateUpdateUser } from './user.validator';
 import type { CreateUserInput, UpdateUserInput } from './user.interface';
 
-// TODO: replace with bcrypt once installed
-function hashPassword(plain: string): string {
-  return createHash('sha256').update(plain).digest('hex');
+// Work factor for bcrypt. 12 balances hashing cost against resistance to
+// offline brute-force; raise as hardware improves.
+const BCRYPT_ROUNDS = 12;
+
+// Salted, work-factored hash suitable for password storage. Returns a promise
+// so the bcrypt cost is computed off the main synchronous path.
+function hashPassword(plain: string): Promise<string> {
+  return bcrypt.hash(plain, BCRYPT_ROUNDS);
 }
+
+// Fields a client is allowed to change via updateUser. Privileged columns
+// (emailVerified, disabled) are deliberately excluded so they cannot be set
+// through the public update endpoint (no mass-assignment).
+const UPDATABLE_FIELDS = [
+  'username',
+  'email',
+  'fullName',
+  'avatarUrl',
+  'locale',
+  'language',
+  'timezone',
+  'meta',
+] as const;
 
 @Injectable()
 export class UserService {
@@ -42,7 +61,7 @@ export class UserService {
     const entity = await this.userRepository.create({
       username: validated.username,
       email: validated.email,
-      passwordHash: hashPassword(validated.password),
+      passwordHash: await hashPassword(validated.password),
       fullName: validated.fullName,
       locale: validated.locale,
       language: validated.language,
@@ -73,10 +92,15 @@ export class UserService {
       throw new ConflictException(`Email '${input.email}' is already registered`);
     }
 
-    const { password, ...rest } = input;
-    const updateData: Record<string, unknown> = { ...rest };
-    if (password) {
-      updateData['passwordHash'] = hashPassword(password);
+    // Copy only explicitly allowed fields; never trust the raw input shape.
+    const updateData: Record<string, unknown> = {};
+    for (const field of UPDATABLE_FIELDS) {
+      if (input[field] !== undefined) {
+        updateData[field] = input[field];
+      }
+    }
+    if (input.password) {
+      updateData['passwordHash'] = await hashPassword(input.password);
     }
     const entity = await this.userRepository.update(id, updateData);
     if (!entity) throw new NotFoundException(`User '${id}' not found`);

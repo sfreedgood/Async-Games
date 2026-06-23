@@ -29,7 +29,15 @@ import {
           password: dbConfig.password,
           database: dbConfig.database,
           logging: dbConfig.logging,
-          ssl: dbConfig.ssl ? { rejectUnauthorized: false } : false,
+          // When SSL is enabled, verify the server certificate by default.
+          // Supply a CA bundle via DB_SSL_CA, or disable verification
+          // explicitly with DB_SSL_REJECT_UNAUTHORIZED=false.
+          ssl: dbConfig.ssl
+            ? {
+                rejectUnauthorized: dbConfig.sslRejectUnauthorized,
+                ...(dbConfig.sslCa ? { ca: dbConfig.sslCa } : {}),
+              }
+            : false,
           synchronize: dbConfig.synchronize,
           entities: [UserEntity, ActiveGameEntity, HeartEntity],
         };

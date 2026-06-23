@@ -28,18 +28,22 @@ export type CreateUserInput = {
   meta?: Record<string, unknown>;
 };
 
-/** All fields are optional for partial updates. */
+/**
+ * All fields are optional for partial updates.
+ *
+ * Note: emailVerified and disabled are intentionally absent — they are
+ * privileged, server-controlled fields and must not be settable through the
+ * public update path (mass-assignment protection).
+ */
 export type UpdateUserInput = {
   username?: string;
   email?: string;
   /** Plain-text password – will be hashed before persistence. */
   password?: string;
   fullName?: string;
-  emailVerified?: boolean;
   avatarUrl?: string;
   locale?: string;
   language?: string;
   timezone?: string;
-  disabled?: boolean;
   meta?: Record<string, unknown>;
 };

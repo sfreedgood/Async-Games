@@ -8,6 +8,14 @@ export interface DatabaseConfig {
   database: string;
   logging: boolean;
   ssl: boolean;
+  /**
+   * Whether to verify the server's TLS certificate when ssl is enabled.
+   * Defaults to true — disabling it removes MITM protection and should only be
+   * done knowingly (e.g. a local proxy). Prefer supplying sslCa instead.
+   */
+  sslRejectUnauthorized: boolean;
+  /** Optional PEM CA certificate (or bundle) used to verify the server cert. */
+  sslCa?: string;
   synchronize: boolean;
 }
 
@@ -39,6 +47,13 @@ export default registerAs(
       database,
       logging: toBoolean(process.env.DB_LOGGING, false),
       ssl: toBoolean(process.env.DB_SSL, false),
+      // Secure by default: verify the server certificate unless explicitly
+      // turned off via DB_SSL_REJECT_UNAUTHORIZED=false.
+      sslRejectUnauthorized: toBoolean(
+        process.env.DB_SSL_REJECT_UNAUTHORIZED,
+        true
+      ),
+      sslCa: process.env.DB_SSL_CA,
       synchronize: toBoolean(process.env.DB_SYNCHRONIZE, false),
     };
   },

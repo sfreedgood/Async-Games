@@ -100,10 +100,11 @@ export class UpdateUserDTO {
   @ApiPropertyOptional({ example: 'Alice Doe', description: 'Full name' })
   fullName?: string;
 
-  @IsOptional()
-  @IsBoolean()
-  @ApiPropertyOptional({ example: false, description: 'Email verified flag' })
-  emailVerified?: boolean;
+  // NOTE: emailVerified and disabled are intentionally NOT accepted here. They
+  // are privileged, server-controlled fields; exposing them on the update DTO
+  // would let any caller self-verify their email or re-enable a disabled
+  // account via PUT /user/:id (mass-assignment). With the global ValidationPipe
+  // (forbidNonWhitelisted), sending them now yields a 400.
 
   @IsOptional()
   @IsString()
@@ -127,14 +128,6 @@ export class UpdateUserDTO {
     description: 'Timezone',
   })
   timezone?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  @ApiPropertyOptional({
-    example: false,
-    description: 'Disabled / soft-delete flag',
-  })
-  disabled?: boolean;
 
   @IsOptional()
   @IsObject()
