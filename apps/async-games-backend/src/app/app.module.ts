@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import databaseConfig from './config/database.config';
 import { DatabaseModule } from './database/database.module';
 import { ClassicCardModule } from './domains/classic-card';
+import { HeartsModule } from './domains/hearts';
 import { UserModule } from './domains/user/module';
 
 // Choose env file based on NODE_ENV: production uses .env, development uses
@@ -18,7 +19,8 @@ const envFilePath = isProduction ? '.env' : ['.env.development', '.env'];
 // persistence). When skipped, load neither the database config (which requires
 // DB_* env vars and would throw) nor any DB-backed module. DatabaseModule and
 // every module that depends on it (UserModule) are gated together below, so this
-// flag is the single source of truth for "DB enabled".
+// flag is the single source of truth for "DB enabled". Hearts is in-memory, so
+// it stays enabled regardless of the DB.
 const databaseEnabled = process.env.DB_SKIP !== 'true';
 
 @Module({
@@ -33,15 +35,13 @@ const databaseEnabled = process.env.DB_SKIP !== 'true';
     // brute-force and request-flood denial of service on unauthenticated routes.
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
     ClassicCardModule,
+    HeartsModule,
     ...(databaseEnabled ? [DatabaseModule, UserModule] : []),
   ],
-  // ClassicCardController/Service and UserController/Service are registered by
-  // their own modules (imported above); re-declaring them here would create
-  // duplicate instances, so AppModule only owns its own controller/service.
+  // Domain controllers/services are registered by their own modules (imported
+  // above); re-declaring them here would create duplicate instances, so
+  // AppModule only owns its own controller/service.
   controllers: [AppController],
-  providers: [
-    AppService,
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
-  ],
+  providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}
