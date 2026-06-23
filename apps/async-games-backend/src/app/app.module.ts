@@ -6,10 +6,16 @@ import {
   ClassicCardController,
   ClassicCardService,
 } from './domains/classic-card';
+import {
+  HeartsModule,
+  HeartsController,
+  HeartsService,
+  HeartsStore,
+} from './domains/hearts';
 
 @Module({
-  imports: [ClassicCardModule],
-  controllers: [AppController, ClassicCardController],
-  providers: [AppService, ClassicCardService],
+  imports: [ClassicCardModule, HeartsModule],
+  controllers: [AppController, ClassicCardController, HeartsController],
+  providers: [AppService, ClassicCardService, HeartsService, HeartsStore],
 })
 export class AppModule {}

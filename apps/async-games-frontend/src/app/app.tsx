@@ -3,69 +3,56 @@ import { Route, Routes, Link } from 'react-router-dom';
 import { ClassicCard } from './domains/classic-card';
 import { useAxiosGet } from './hooks/api';
 import { ClassicDeckEntity } from './domains/classic-card';
+import { HeartsGamePage } from './domains/hearts';
 
-export function App() {
+function DeckDemo() {
   const { data: deck } = useAxiosGet<ClassicDeckEntity>('/cards/deck');
-
   return (
-    <div>
-      <h1>Welcome</h1>
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      {deck?.cards.map((card) => {
-        return (
-          <ClassicCard
-            key={`${card.name}-${card.suit}`}
-            suit={card.suit}
-            name={card.name}
-            primaryValue={card.primaryValue}
-          />
-        );
-      })}
+    <div className="flex flex-wrap gap-2 p-4">
+      {deck?.cards.map((card) => (
+        <ClassicCard
+          key={`${card.name}-${card.suit}`}
+          suit={card.suit}
+          name={card.name}
+          primaryValue={card.primaryValue}
+        />
+      ))}
+    </div>
+  );
+}
 
-      <div role="navigation">
-        <ul>
+function Home() {
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold">Welcome to Async-Games</h1>
+      <p className="mt-2 text-gray-600">
+        Persistent, turn-based tabletop gaming.
+      </p>
+      <nav className="mt-4" role="navigation">
+        <ul className="list-disc pl-6">
           <li>
-            <Link to="/">Home</Link>
+            <Link className="text-emerald-700 underline" to="/hearts">
+              Play Hearts
+            </Link>
           </li>
           <li>
-            <Link to="/page-2">Page 2</Link>
-          </li>
-          <li>
-            <Link to="/deck">Cards</Link>
+            <Link className="text-emerald-700 underline" to="/deck">
+              View the deck
+            </Link>
           </li>
         </ul>
-      </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              This is the generated root route.{' '}
-              <Link to="/page-2">Click here for page 2.</Link>
-            </div>
-          }
-        />
-        <Route
-          path="/page-2"
-          element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
-            </div>
-          }
-        />
-        <Route
-          path="/deck"
-          element={
-            <div>
-              <Link to="deck">View Deck</Link>
-            </div>
-          }
-        />
-      </Routes>
-      {/* END: routes */}
+      </nav>
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/hearts" element={<HeartsGamePage />} />
+      <Route path="/deck" element={<DeckDemo />} />
+    </Routes>
   );
 }
 
