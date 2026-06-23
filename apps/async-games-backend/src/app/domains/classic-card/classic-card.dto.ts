@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsInt, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { classicCardSuits } from './classic-card.interface';
 
 export class ClassicPlayingCardDTO {
@@ -50,9 +50,15 @@ export class ClassicPlayingCardDTO {
 }
 
 export class ClassicDeckOptionsDTO {
+  // Bound jokers to prevent unbounded allocation / DoS: a request such as
+  // { jokers: 1e9 } would otherwise loop a billion times building cards.
+  @IsOptional()
   @IsInt()
+  @Min(0)
+  @Max(8)
   jokers?: number;
 
+  @IsOptional()
   @IsBoolean()
   aceLow?: boolean;
 }
