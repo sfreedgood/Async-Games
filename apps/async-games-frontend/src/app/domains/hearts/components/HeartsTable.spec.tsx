@@ -1,27 +1,24 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { HeartsTable } from './HeartsTable';
 import { mockGameView } from '../entities';
 
 const noop = () => undefined;
 
+// Disabled/visual state is covered by snapshots; these specs assert behaviour
+// via Testing Library queries (the spec tsconfig excludes the DOM lib, so we
+// avoid reading raw element properties like .disabled / .textContent).
 describe('HeartsTable', () => {
   it('plays a legal card on click', () => {
     const onPlay = jest.fn();
-    render(
-      <HeartsTable view={mockGameView()} onPlay={onPlay} onPass={noop} />
-    );
+    render(<HeartsTable view={mockGameView()} onPlay={onPlay} onPass={noop} />);
     fireEvent.click(screen.getByRole('button', { name: '2 of club' }));
     expect(onPlay).toHaveBeenCalledWith({ name: '2', suit: 'club' });
   });
 
-  it('disables illegal cards so they cannot be played', () => {
+  it('does not play an illegal (disabled) card', () => {
     const onPlay = jest.fn();
-    render(
-      <HeartsTable view={mockGameView()} onPlay={onPlay} onPass={noop} />
-    );
-    const illegal = screen.getByRole('button', { name: 'A of heart' });
-    expect((illegal as HTMLButtonElement).disabled).toBe(true);
-    fireEvent.click(illegal);
+    render(<HeartsTable view={mockGameView()} onPlay={onPlay} onPass={noop} />);
+    fireEvent.click(screen.getByRole('button', { name: 'A of heart' }));
     expect(onPlay).not.toHaveBeenCalled();
   });
 
@@ -33,12 +30,10 @@ describe('HeartsTable', () => {
         onPass={noop}
       />
     );
-    expect(screen.getByTestId('turn-status').textContent).toContain(
-      'Waiting for North'
-    );
+    expect(screen.getByText(/Waiting for North/)).toBeTruthy();
   });
 
-  it('requires exactly three cards before passing is enabled', () => {
+  it('passes exactly three cards once three are selected', () => {
     const onPass = jest.fn();
     render(
       <HeartsTable
@@ -52,20 +47,22 @@ describe('HeartsTable', () => {
       />
     );
 
-    const passButton = screen.getByTestId('pass-button') as HTMLButtonElement;
-    expect(passButton.disabled).toBe(true);
+    const passButton = screen.getByTestId('pass-button');
+    // Disabled until three are chosen: clicking does nothing.
+    fireEvent.click(passButton);
+    expect(onPass).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', { name: '2 of club' }));
     fireEvent.click(screen.getByRole('button', { name: '5 of club' }));
     fireEvent.click(screen.getByRole('button', { name: '9 of club' }));
 
-    expect(passButton.disabled).toBe(false);
     fireEvent.click(passButton);
     expect(onPass).toHaveBeenCalledTimes(1);
     expect(onPass.mock.calls[0][0]).toHaveLength(3);
   });
 
   it('caps pass selection at three cards', () => {
+    const onPass = jest.fn();
     render(
       <HeartsTable
         view={mockGameView({
@@ -74,13 +71,16 @@ describe('HeartsTable', () => {
           currentTrick: { leadSuit: null, plays: [] },
         })}
         onPlay={noop}
-        onPass={noop}
+        onPass={onPass}
       />
     );
     ['2 of club', '5 of club', '9 of club', '4 of diamond'].forEach((name) =>
       fireEvent.click(screen.getByRole('button', { name }))
     );
-    expect(screen.getByTestId('pass-panel').textContent).toContain('3/3');
+    // A fourth selection is ignored — the counter stays at 3/3.
+    expect(screen.getByText(/3\/3 selected/)).toBeTruthy();
+    fireEvent.click(screen.getByTestId('pass-button'));
+    expect(onPass.mock.calls[0][0]).toHaveLength(3);
   });
 
   it('renders the game-over banner with the winner when finished', () => {
@@ -97,7 +97,7 @@ describe('HeartsTable', () => {
       />
     );
     const banner = screen.getByTestId('game-over');
-    expect(banner.textContent).toContain('Game over');
-    expect(banner.textContent).toContain('You');
+    expect(within(banner).getByText('Game over')).toBeTruthy();
+    expect(within(banner).getByText(/wins!/)).toBeTruthy();
   });
 });

@@ -4,7 +4,6 @@ import { PlayingCardFace } from './PlayingCardFace';
 export default {
   title: 'Domains/Card/PlayingCardFace',
   component: PlayingCardFace,
-  parameters: { backgrounds: { default: 'felt' } },
 } satisfies Meta<typeof PlayingCardFace>;
 
 type Story = StoryObj<typeof PlayingCardFace>;

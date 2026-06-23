@@ -9,7 +9,6 @@ const view = mockGameView();
 
 export default {
   title: 'Domains/Hearts/Components',
-  parameters: { backgrounds: { default: 'dark' } },
 } satisfies Meta;
 
 export const Trick: StoryObj = {
