@@ -94,10 +94,9 @@ describe('UserController', () => {
       const updated = makeUser({ username: 'bob' });
       mockUserService.updateUser.mockResolvedValue(updated);
       const result = await mockUserController.updateUser('uuid-1', {
-        id: 'uuid-1',
         username: 'bob',
       });
-      expect(mockUserService.updateUser).toHaveBeenCalledWith('uuid-1', { id: 'uuid-1', username: 'bob' });
+      expect(mockUserService.updateUser).toHaveBeenCalledWith('uuid-1', { username: 'bob' });
       expect(result.username).toBe('bob');
     });
   });

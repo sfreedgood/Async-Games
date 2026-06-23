@@ -1,5 +1,21 @@
 {
   "name": "@async-games/async-games-frontend",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@storybook/addon-vitest": "^10.2.8"
+  },
+  "nx": {
+    "targets": {
+      "component-test": {
+        "executor": "nx:run-commands",
+        "cache": true,
+        "inputs": ["default", "^production"],
+        "options": {
+          "cwd": "apps/async-games-frontend",
+          "command": "vitest run --config vitest.storybook.config.ts"
+        }
+      }
+    }
+  }
 }

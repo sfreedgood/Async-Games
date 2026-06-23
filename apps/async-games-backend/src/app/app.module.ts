@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import databaseConfig from './config/database.config';
@@ -23,6 +25,9 @@ const imports = [
     envFilePath,
     load: [databaseConfig],
   }),
+  // Global rate limiting: 60 requests per minute per client. Mitigates
+  // brute-force and request-flood denial of service on unauthenticated routes.
+  ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
   ClassicCardModule,
   UserModule,
 ];
@@ -35,6 +40,11 @@ if (process.env.DB_SKIP !== 'true') {
 @Module({
   imports,
   controllers: [AppController, ClassicCardController, UserController],
-  providers: [AppService, ClassicCardService, UserService],
+  providers: [
+    AppService,
+    ClassicCardService,
+    UserService,
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+  ],
 })
 export class AppModule {}

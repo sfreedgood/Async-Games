@@ -6,21 +6,91 @@ on:
       - main
   pull_request:
 
+# Cancel superseded runs on the same branch/PR.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   actions: read
   contents: read
 
+env:
+  # Authenticate the CI environment with Nx Cloud for distributed caching.
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_GITHUB_ASYNC_GAMES }}
+
 jobs:
-  main:
+  lint:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - run: npx nx run-many -t lint typecheck
+
+  backend-unit:
+    name: Backend unit tests
+    runs-on: ubuntu-latest
+    # Unit tests mock the database at the module level, so skip the real
+    # Postgres connection (DatabaseModule is not imported when DB_SKIP=true).
+    env:
+      DB_SKIP: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - run: npx nx test async-games-backend
+
+  frontend-unit:
+    name: Frontend unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - run: npx nx test async-games-frontend
+
+  frontend-component:
+    name: Frontend component & snapshot tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      # Storybook component tests run in real Chromium via the Vitest browser provider.
+      - run: npx playwright install --with-deps chromium
+      - run: npx nx component-test async-games-frontend
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      DB_SKIP: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - run: npx nx run-many -t build
+
+  e2e:
+    name: E2E tests
     runs-on: ubuntu-latest
 
+    # The backend e2e suite boots the real NestJS app, which connects to
+    # Postgres. DB_SYNCHRONIZE auto-creates the schema on first run.
     services:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
+          POSTGRES_USER: ${{ secrets.DB_USERNAME || 'async_games_dev' }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD || 'test_password' }}
+          POSTGRES_DB: ${{ secrets.DB_NAME || 'async_games' }}
         ports:
           - 5432:5432
         options: >-
@@ -31,48 +101,24 @@ jobs:
 
     env:
       NODE_ENV: production
+      DB_SKIP: 'false'
       DB_HOST: localhost
       DB_PORT: 5432
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      DB_SYNCHRONIZE: true   # TODO: replace with migrations once they are introduced
+      DB_USERNAME: ${{ secrets.DB_USERNAME || 'async_games_dev' }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD || 'test_password' }}
+      DB_NAME: ${{ secrets.DB_NAME || 'async_games' }}
+      DB_SYNCHRONIZE: true # TODO: replace with migrations once they are introduced
       DB_LOGGING: false
       DB_SSL: false
 
     steps:
       - uses: actions/checkout@v4
         with:
-          filter: tree:0
           fetch-depth: 0
-
-      # This enables task distribution via Nx Cloud
-      # Run this command as early as possible, before dependencies are installed
-      # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
-      # Uncomment this line to enable task distribution
-      # - run: npx nx start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
-
-      # Cache node_modules
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - run: npm ci
+      - uses: ./.github/actions/setup
       - run: npx playwright install --with-deps
 
-      # Set up git user
-      - run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-
-      # Ensures that the CI environment is authenticated with Nx Cloud.
-      - run: echo "NX_CLOUD_ACCESS_TOKEN=${{ secrets.NX_CLOUD_ACCESS_TOKEN_GITHUB_ASYNC_GAMES }}" >> $GITHUB_ENV
-
-      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
-      # - run: npx nx-cloud record -- echo Hello World
-
-      # Create .env file for CI with production configuration
+      # serve:production reads connection settings from .env.
       - name: Create production .env file
         run: |
           cat <<EOF > .env
@@ -87,22 +133,4 @@ jobs:
           DB_SYNCHRONIZE=true
           EOF
 
-      # Run lint, unit tests, and build with DB_SKIP=true so NestJS unit tests
-      # never attempt a real Postgres connection (DB is mocked at the module level).
-      - run: npx nx run-many -t lint test build --configuration=production
-        env:
-          DB_SKIP: 'true'
-
-
-      # Run E2E tests with the Postgres service available.
-      # NestJS backend will connect to the CI Postgres container via .env file.
-      # DB_SYNCHRONIZE=true auto-creates the schema on first run.
-      # Use e2e-ci target which depends on serve:production
-      - run: npx nx run @async-games/async-games-backend-e2e:e2e-ci
-        env:    
-          DB_SKIP: 'false'
-
-
-      # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
-      - run: npx nx fix-ci
-        if: always()
+      - run: npx nx run-many -t e2e

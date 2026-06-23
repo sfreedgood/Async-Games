@@ -29,6 +29,7 @@ node_modules
 /connect.lock
 /coverage
 /libpeerconnection.log
+*.log
 npm-debug.log
 yarn-error.log
 testem.log
@@ -53,3 +54,5 @@ test-output
 
 
 storybook-static
+# TypeScript incremental build info
+*.tsbuildinfo
