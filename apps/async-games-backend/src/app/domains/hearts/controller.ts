@@ -7,23 +7,18 @@ import {
   Param,
   Post,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { HeartsService } from './service';
 import { CreateGameDTO, PassCardsDTO, PlayCardDTO } from './hearts.dto';
 import type { CardRef, SeatIndex } from './hearts.interface';
 
-// DTO card refs are validated as plain strings at the HTTP boundary; the engine
-// validator re-checks them against the hand, so we narrow to CardRef here.
+// DTO card refs are validated as plain strings at the HTTP boundary by the
+// global ValidationPipe; the engine validator re-checks them against the hand,
+// so we narrow to CardRef here.
 const toCardRef = (dto: { name: string; suit: string }): CardRef =>
   dto as CardRef;
 
-// Scoped to Hearts (not global) so request-shape validation (-> 400) applies
-// here without changing the existing classic-card endpoints' behaviour.
-// `transform` instantiates nested DTOs (CardRefDTO) for @ValidateNested.
 @Controller('hearts')
-@UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
 export class HeartsController {
   constructor(private readonly heartsService: HeartsService) {}
 

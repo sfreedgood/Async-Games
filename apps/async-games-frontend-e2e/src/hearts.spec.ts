@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page, type Route } from '@playwright/test';
 
 type Card = { name: string; suit: string };
 
@@ -9,8 +9,7 @@ const players = () => [
   { seat: 3, name: 'East', isBot: true, handCount: 13, totalScore: 0, roundScore: 0 },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const view = (overrides: Record<string, any> = {}) => ({
+const view = (overrides: Partial<Record<string, unknown>> = {}) => ({
   gameId: 'e2e-game',
   phase: 'playing',
   roundNumber: 0,
@@ -29,8 +28,7 @@ const view = (overrides: Record<string, any> = {}) => ({
   ...overrides,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const fulfill = (route: any, body: unknown) =>
+const fulfill = (route: Route, body: unknown) =>
   route.fulfill({ contentType: 'application/json', body: JSON.stringify(body) });
 
 test.describe('Hearts UI', () => {

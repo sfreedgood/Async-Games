@@ -77,7 +77,10 @@ describe('full round integrity', () => {
     const game = newGame(2024);
     playRoundWithBots(game);
     expect(game.tricksPlayed).toBe(13);
-    const total = SEATS.reduce((sum, seat) => sum + game.roundScores[seat], 0);
+    const total = SEATS.reduce<number>(
+      (sum, seat) => sum + game.roundScores[seat],
+      0
+    );
     // 26 normally; shoot-the-moon makes it 78 (three seats at 26).
     expect([SHOOT_THE_MOON_POINTS, SHOOT_THE_MOON_POINTS * 3]).toContain(total);
   });
