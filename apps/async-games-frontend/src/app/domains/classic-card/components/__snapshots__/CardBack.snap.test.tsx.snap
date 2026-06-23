@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CardBack snapshots > renders Default 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="face-down card"
+    class="h-48 w-32 rounded-lg border border-emerald-300/40 shadow-lg "
+    style="background-color: rgb(6, 95, 70);"
+  >
+    <div
+      class="m-2 h-[calc(100%-1rem)] rounded-md border border-emerald-200/30"
+    />
+  </div>
+</DocumentFragment>
+`;

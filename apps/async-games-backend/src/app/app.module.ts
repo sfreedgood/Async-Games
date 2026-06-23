@@ -8,6 +8,12 @@ import {
   ClassicCardController,
   ClassicCardService,
 } from './domains/classic-card';
+import {
+  HeartsModule,
+  HeartsController,
+  HeartsService,
+  HeartsStore,
+} from './domains/hearts';
 
 @Module({
   imports: [
@@ -15,11 +21,14 @@ import {
     // brute-force and request-flood denial of service on unauthenticated routes.
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
     ClassicCardModule,
+    HeartsModule,
   ],
-  controllers: [AppController, ClassicCardController],
+  controllers: [AppController, ClassicCardController, HeartsController],
   providers: [
     AppService,
     ClassicCardService,
+    HeartsService,
+    HeartsStore,
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })
