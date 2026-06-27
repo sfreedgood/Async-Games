@@ -39,9 +39,18 @@ export default registerAs(
       );
     }
 
+    // Fail fast on a malformed port rather than letting NaN reach the driver
+    // and surface as an opaque connection error at startup.
+    const portNumber = Number(port);
+    if (!Number.isInteger(portNumber) || portNumber <= 0 || portNumber > 65535) {
+      throw new Error(
+        `Invalid DB_PORT '${port}': must be an integer between 1 and 65535`
+      );
+    }
+
     return {
       host,
-      port: Number(port),
+      port: portNumber,
       username,
       password,
       database,

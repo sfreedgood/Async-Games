@@ -108,6 +108,9 @@ jobs:
       DB_PASSWORD: ${{ secrets.DB_PASSWORD || 'test_password' }}
       DB_NAME: ${{ secrets.DB_NAME || 'async_games' }}
       DB_SYNCHRONIZE: true # TODO: replace with migrations once they are introduced
+      # Opt in to synchronize against this ephemeral CI database; the app
+      # otherwise refuses to auto-sync schema when NODE_ENV=production.
+      DB_ALLOW_SYNCHRONIZE_IN_PRODUCTION: true
       DB_LOGGING: false
       DB_SSL: false
 

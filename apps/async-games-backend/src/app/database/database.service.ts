@@ -32,16 +32,19 @@ export class DatabaseService {
   }
 
   async checkConnection(): Promise<boolean> {
+    const runner = this.dataSource.createQueryRunner();
     try {
-      const runner = this.dataSource.createQueryRunner();
       await runner.connect();
       await runner.query('SELECT 1');
-      await runner.release();
       return true;
     } catch (error) {
       const err = error as Error;
       this.logger.error('Database connectivity check failed', err.stack);
       return false;
+    } finally {
+      // Always return the runner to the pool — including on the failure path,
+      // which is exactly when this check runs. Leaking here exhausts the pool.
+      await runner.release();
     }
   }
 }
