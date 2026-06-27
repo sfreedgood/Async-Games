@@ -99,8 +99,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+    # NOTE: NODE_ENV is intentionally NOT set at the job level — it would make
+    # the setup action's `npm ci` skip devDependencies (nx, playwright, vitest),
+    # breaking every subsequent step. It is applied only to the e2e run step
+    # below, so the served backend runs in production mode.
     env:
-      NODE_ENV: production
       DB_SKIP: 'false'
       DB_HOST: localhost
       DB_PORT: 5432
@@ -136,4 +139,8 @@ jobs:
           DB_SYNCHRONIZE=true
           EOF
 
+      # NODE_ENV=production only here, so the served backend runs in production
+      # mode while npm ci (above) still installed devDependencies.
       - run: npx nx run-many -t e2e
+        env:
+          NODE_ENV: production
