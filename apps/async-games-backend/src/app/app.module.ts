@@ -12,38 +12,37 @@ import {
   ClassicCardService,
 } from './domains/classic-card';
 import { UserModule } from './domains/common/user/module';
-import { UserController, UserService } from './domains/common/user';
 
-// Choose env file based on NODE_ENV: production uses .env, development uses .env.development with .env fallback
+// Choose env file based on NODE_ENV: production uses .env, development uses
+// .env.development with .env fallback.
 const isProduction = process.env.NODE_ENV === 'production';
 const envFilePath = isProduction ? '.env' : ['.env.development', '.env'];
 
-const imports = [
-  ConfigModule.forRoot({
-    isGlobal: true,
-    cache: true,
-    envFilePath,
-    load: [databaseConfig],
-  }),
-  // Global rate limiting: 60 requests per minute per client. Mitigates
-  // brute-force and request-flood denial of service on unauthenticated routes.
-  ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
-  ClassicCardModule,
-  UserModule,
-];
-
-// Only import DatabaseModule if DB_SKIP is not set to 'true'
-if (process.env.DB_SKIP !== 'true') {
-  imports.splice(1, 0, DatabaseModule);
-}
+// DB_SKIP=true runs the app without Postgres (e.g. test setups that don't touch
+// persistence). When skipped, load neither the database config (which requires
+// DB_* env vars and would throw) nor any module that depends on it. UserModule
+// owns the only DatabaseModule import, so omitting both fully detaches the DB —
+// gating them together here is the single source of truth for "DB enabled".
+const databaseEnabled = process.env.DB_SKIP !== 'true';
 
 @Module({
-  imports,
-  controllers: [AppController, ClassicCardController, UserController],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      envFilePath,
+      load: databaseEnabled ? [databaseConfig] : [],
+    }),
+    // Global rate limiting: 60 requests per minute per client. Mitigates
+    // brute-force and request-flood denial of service on unauthenticated routes.
+    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
+    ClassicCardModule,
+    ...(databaseEnabled ? [DatabaseModule, UserModule] : []),
+  ],
+  controllers: [AppController, ClassicCardController],
   providers: [
     AppService,
     ClassicCardService,
-    UserService,
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })
