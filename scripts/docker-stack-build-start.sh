@@ -36,6 +36,13 @@ fi
 echo "=== Building backend distributable ==="
 npx nx build async-games-backend --configuration=production
 
+# webpack's generatePackageJson emits dist/package.json but no lock file, so the
+# committed dist/package-lock.json goes stale whenever backend deps change and the
+# Dockerfile's `npm ci` then fails. Regenerate the lock from the freshly generated
+# package.json so it always matches.
+echo "=== Syncing dist package-lock.json with generated package.json ==="
+( cd apps/async-games-backend/dist && npm install --package-lock-only --omit=dev --legacy-peer-deps )
+
 echo ""
 echo "=== Starting Docker Compose stack with $ENV_FILE ($EFFECTIVE_MODE mode) ==="
 

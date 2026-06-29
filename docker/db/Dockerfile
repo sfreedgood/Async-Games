@@ -41,4 +41,11 @@ ENV DB_ENV_PATH=/docker-entrypoint-initdb.d/.db_env
 COPY --from=envfile /db_env ${DB_ENV_PATH}
 COPY docker/db/init-db.sh /docker-entrypoint-initdb.d/10-init-app-db.sh
 
-RUN chmod 600 ${DB_ENV_PATH} /docker-entrypoint-initdb.d/10-init-app-db.sh
+# initdb.d runs as the postgres user. COPY leaves these root-owned, so a bare
+# `chmod 600` makes the env file unreadable AND the script non-executable for
+# postgres — initdb silently sources nothing and the app role/db are never
+# created. Hand ownership to postgres: keep the secret env file at 600 (still
+# readable by its owner) and make the script executable.
+RUN chown postgres:postgres ${DB_ENV_PATH} /docker-entrypoint-initdb.d/10-init-app-db.sh \
+ && chmod 600 ${DB_ENV_PATH} \
+ && chmod 755 /docker-entrypoint-initdb.d/10-init-app-db.sh

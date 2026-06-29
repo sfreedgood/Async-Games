@@ -30,6 +30,7 @@
       },
       "serve": {
         "executor": "nx:run-commands",
+        "continuous": true,
         "defaultConfiguration": "development",
         "options": {
           "command": "nx run @async-games/async-games-backend:serve-node:development",
