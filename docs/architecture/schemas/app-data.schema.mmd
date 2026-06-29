@@ -1,0 +1,20 @@
+erDiagram
+	USERS {
+		uuid id PK "Primary key (UUID)"
+		string username "Unique, display handle"
+		string email "Unique, verified contact"
+		string password_hash "Stored password hash"
+		string full_name "Optional full name"
+		boolean email_verified "Email verification flag"
+		string avatar_url "Optional avatar image URL"
+		string locale "User locale (e.g. en-US)"
+		string language "User language (locale by default)"
+		string timezone "User timezone identifier"
+		timestamp created_at "Account creation timestamp"
+		timestamp updated_at "Last profile update timestamp"
+		boolean disabled "Account disabled/soft-deleted flag"
+		json meta "Free-form metadata (preferences, settings)"
+	}
+
+	%% Example relationships (uncomment and adapt as needed)
+	%% USER ||--o{ GAME : plays

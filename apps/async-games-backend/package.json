@@ -29,6 +29,23 @@
         }
       },
       "serve": {
+        "executor": "nx:run-commands",
+        "continuous": true,
+        "defaultConfiguration": "development",
+        "options": {
+          "command": "nx run @async-games/async-games-backend:serve-node:development",
+          "forwardAllArgs": true
+        },
+        "configurations": {
+          "development": {
+            "command": "nx run @async-games/async-games-backend:serve-node:development"
+          },
+          "production": {
+            "command": "nx run @async-games/async-games-backend:serve-node:production"
+          }
+        }
+      },
+      "serve-node": {
         "continuous": true,
         "executor": "@nx/js:node",
         "defaultConfiguration": "development",
@@ -56,6 +73,12 @@
     }
   },
   "dependencies": {
-    "class-validator": "^0.14.2"
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/swagger": "^11.2.6",
+    "@nestjs/typeorm": "^11.0.0",
+    "bcryptjs": "^3.0.2",
+    "class-validator": "^0.14.2",
+    "pg": "^8.13.1",
+    "typeorm": "^0.3.20"
   }
 }

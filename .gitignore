@@ -35,6 +35,10 @@ yarn-error.log
 testem.log
 /typings
 
+# environment files
+.env
+!.env.placeholder
+
 # System Files
 .DS_Store
 Thumbs.db
@@ -50,3 +54,5 @@ test-output
 
 
 storybook-static
+# TypeScript incremental build info
+*.tsbuildinfo

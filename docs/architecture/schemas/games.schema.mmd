@@ -1,0 +1,23 @@
+erDiagram
+		%% Tables
+		ACTIVE_GAMES {
+			uuid id PK "Primary key (UUID)"
+			string name 
+			string type
+		}
+
+		HEARTS {
+			uuid id PK "Primary key (UUID)"
+      string game_id FK "ACTIVE_GAMES.id"
+			string player FK "USERS.id"
+			int hand_number
+			list player_hand
+			int trick
+			bool initiative
+			string card_suit
+			string card_name
+			int points_taken
+		}
+
+		%% Relationships
+		ACTIVE_GAMES ||--o{ HEARTS : has

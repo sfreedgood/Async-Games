@@ -33,6 +33,10 @@ jobs:
   backend-unit:
     name: Backend unit tests
     runs-on: ubuntu-latest
+    # Unit tests mock the database at the module level, so skip the real
+    # Postgres connection (DatabaseModule is not imported when DB_SKIP=true).
+    env:
+      DB_SKIP: 'true'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,6 +69,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      DB_SKIP: 'true'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -75,10 +81,66 @@ jobs:
   e2e:
     name: E2E tests
     runs-on: ubuntu-latest
+
+    # The backend e2e suite boots the real NestJS app, which connects to
+    # Postgres. DB_SYNCHRONIZE auto-creates the schema on first run.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ${{ secrets.DB_USERNAME || 'async_games_dev' }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD || 'test_password' }}
+          POSTGRES_DB: ${{ secrets.DB_NAME || 'async_games' }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    # NOTE: NODE_ENV is intentionally NOT set at the job level — it would make
+    # the setup action's `npm ci` skip devDependencies (nx, playwright, vitest),
+    # breaking every subsequent step. It is applied only to the e2e run step
+    # below, so the served backend runs in production mode.
+    env:
+      DB_SKIP: 'false'
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USERNAME: ${{ secrets.DB_USERNAME || 'async_games_dev' }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD || 'test_password' }}
+      DB_NAME: ${{ secrets.DB_NAME || 'async_games' }}
+      DB_SYNCHRONIZE: true # TODO: replace with migrations once they are introduced
+      # Opt in to synchronize against this ephemeral CI database; the app
+      # otherwise refuses to auto-sync schema when NODE_ENV=production.
+      DB_ALLOW_SYNCHRONIZE_IN_PRODUCTION: true
+      DB_LOGGING: false
+      DB_SSL: false
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup
       - run: npx playwright install --with-deps
+
+      # serve:production reads connection settings from .env.
+      - name: Create production .env file
+        run: |
+          cat <<EOF > .env
+          NODE_ENV=production
+          DB_HOST=localhost
+          DB_PORT=5432
+          DB_USERNAME=${{ secrets.DB_USERNAME || 'async_games_dev' }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD || 'test_password' }}
+          DB_NAME=${{ secrets.DB_NAME || 'async_games' }}
+          DB_LOGGING=false
+          DB_SSL=false
+          DB_SYNCHRONIZE=true
+          EOF
+
+      # NODE_ENV=production only here, so the served backend runs in production
+      # mode while npm ci (above) still installed devDependencies.
       - run: npx nx run-many -t e2e
+        env:
+          NODE_ENV: production

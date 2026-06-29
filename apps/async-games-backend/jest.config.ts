@@ -12,6 +12,7 @@ module.exports = {
   displayName: '@async-games/async-games-backend',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
+  testMatch: ['<rootDir>/**/*.spec.ts', '<rootDir>/**/*.spec.js'],
   transform: {
     '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
   },

@@ -20,6 +20,20 @@
           "@async-games/async-games-backend:build",
           "@async-games/async-games-backend:serve"
         ]
+      },
+      "e2e-ci": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/async-games-backend-e2e/jest.config.js",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@async-games/async-games-backend:build:production",
+          "@async-games/async-games-backend:serve:production"
+        ]
       }
     }
   }
