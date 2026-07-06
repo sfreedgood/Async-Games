@@ -138,8 +138,9 @@ npx nx serve async-games-backend
 nx run async-games-backend:serve
 ```
 
-The NestJS server listens on http://localhost:3000 and hosts the Swagger UI for API exploration.
-Swagger UI: http://localhost:3000/api
+The NestJS server listens on http://localhost:3000, with the API under the `/api` prefix.
+In non-production mode it also hosts the Swagger UI for API exploration at
+http://localhost:3000/swagger (Swagger is disabled when `NODE_ENV=production`).
 
 > Environment file selection:
 > - **Development** (`nx serve async-games-backend`): Uses `.env.development` (falls back to `.env` if missing)

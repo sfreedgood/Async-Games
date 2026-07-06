@@ -62,7 +62,10 @@ echo ""
 echo "=== Waiting for backend to be ready ==="
 max_retries=30
 retry_count=0
-while ! curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/swagger | grep -q "200"; do
+# Poll the API root, not /swagger: the image runs NODE_ENV=production where
+# Swagger is disabled, so /swagger would 404 forever and this loop would never
+# succeed even with a healthy backend.
+while ! curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api | grep -q "200"; do
   retry_count=$((retry_count + 1))
   if [ $retry_count -ge $max_retries ]; then
     echo "Error: Backend failed to become healthy after $max_retries attempts."
@@ -76,6 +79,7 @@ while ! curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/swagger | g
 done
 
 echo "✓ Backend is healthy and responding on http://localhost:3000/api"
-echo "✓ Swagger UI available at http://localhost:3000/swagger"
+# Swagger is only served when NODE_ENV!=production; the Docker image runs in
+# production, so it is intentionally not exposed here.
 echo ""
 echo "Stack is ready!"

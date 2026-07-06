@@ -29,8 +29,11 @@ NC='\033[0m' # No Color
 echo -e "${YELLOW}🌱 Seeding database: $DB_NAME${NC}"
 echo -e "   Host: $DB_HOST, Port: $DB_PORT, User: $DB_USERNAME"
 
-# Container management
-CONTAINER_NAME=$DB_NAME
+# Container management. The Postgres container is named `async_games` in
+# docker-compose.yml (container_name), which is independent of DB_NAME. Default
+# to that stable name and allow an override via DB_CONTAINER_NAME rather than
+# assuming the container is named after the database.
+CONTAINER_NAME="${DB_CONTAINER_NAME:-async_games}"
 
 # Start Docker container if available
 if command -v docker >/dev/null 2>&1; then
@@ -103,8 +106,10 @@ if command -v docker >/dev/null 2>&1; then
   # Check if our container is running
   if docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
     echo -e "${YELLOW}Using Docker container: $CONTAINER_NAME${NC}"
+    # Wrapper only routes psql through `docker exec`; the call sites already pass
+    # -h/-p/-U/-d, so don't duplicate the connection flags here.
     psql() {
-      docker exec -i "$CONTAINER_NAME" env PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d "$DB_NAME" "$@"
+      docker exec -i "$CONTAINER_NAME" env PGPASSWORD="$DB_PASSWORD" psql "$@"
     }
   else
     echo -e "${YELLOW}Docker container not running. Using local psql with TCP.${NC}"

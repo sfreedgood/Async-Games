@@ -7,6 +7,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './controller';
 import { UserService } from './service';
 import { User } from './user.entity';
+import { UserResponseDTO } from './user.dto';
 
 const makeUser = (overrides: Partial<User> = {}): User =>
   Object.assign(new User(), {
@@ -84,7 +85,10 @@ describe('UserController', () => {
       expect(mockUserService.createUser).toHaveBeenCalledWith(
         expect.objectContaining({ username: 'alice' })
       );
-      expect(result).toBe(user);
+      // Controller maps the domain User to a UserResponseDTO instance, so it is
+      // structurally equal to (but not the same reference as) the service result.
+      expect(result).toBeInstanceOf(UserResponseDTO);
+      expect(result).toEqual(user);
     });
   });
 
