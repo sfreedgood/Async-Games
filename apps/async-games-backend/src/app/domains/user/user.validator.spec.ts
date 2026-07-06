@@ -39,17 +39,8 @@ describe('validateCreateUser', () => {
     });
   });
 
-  describe('email format', () => {
-    it('throws for an invalid email address', () => {
-      expect(() =>
-        validateCreateUser({ ...valid, email: 'not-an-email' })
-      ).toThrow(EntityValidationError);
-    });
-
-    it('accepts a valid email address', () => {
-      expect(() => validateCreateUser(valid)).not.toThrow();
-    });
-  });
+  // Email format is enforced by the DTO's @IsEmail decorator (Layer 1), not by
+  // this entity validator, so there are no email-shape cases here.
 
   describe('defaults', () => {
     it('applies default locale, language, timezone and meta', () => {
@@ -80,18 +71,6 @@ describe('validateUpdateUser', () => {
   it('passes through valid partial data unchanged', () => {
     const input = { username: 'bob' };
     expect(validateUpdateUser(input)).toEqual(input);
-  });
-
-  it('throws for an invalid email address', () => {
-    expect(() =>
-      validateUpdateUser({ email: 'bad-email' })
-    ).toThrow(EntityValidationError);
-  });
-
-  it('accepts a valid email address', () => {
-    expect(() =>
-      validateUpdateUser({ email: 'new@example.com' })
-    ).not.toThrow();
   });
 
   it('does not require any fields', () => {

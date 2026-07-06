@@ -228,12 +228,11 @@ nx reset
 
 With these workflows you can spin up the stack end-to-end, iterate on components, and validate critical tests quickly.
 
-## Installing Prerequisites
-- Node.js (LTS recommended)
-- npm
-- Nx CLI (optional global install)
+## Installing Docker Desktop
 
-### Docker Desktop
+The [Prerequisites](#prerequisites) are listed at the top of this guide; Docker
+Desktop needs a few extra steps:
+
 1. Download and install Docker Desktop from https://www.docker.com/products/docker-desktop/
 2. Follow the installation instructions for your operating system.
 3. Once installed, ensure Docker is running before proceeding with the database setup.

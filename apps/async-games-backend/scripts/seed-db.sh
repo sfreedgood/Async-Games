@@ -113,73 +113,36 @@ else
   echo -e "${YELLOW}Docker not found. Using local psql with TCP.${NC}"
 fi
 
-init_tables() {
-  echo -e "${YELLOW}Initializing database tables...${NC}"
-  
-  # Create users table
-  psql << EOF
-CREATE TABLE IF NOT EXISTS users (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  username VARCHAR UNIQUE NOT NULL,
-  email VARCHAR UNIQUE NOT NULL,
-  password_hash VARCHAR NOT NULL,
-  full_name VARCHAR,
-  email_verified BOOLEAN DEFAULT false,
-  avatar_url VARCHAR,
-  locale VARCHAR NOT NULL,
-  language VARCHAR NOT NULL,
-  timezone VARCHAR NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  disabled BOOLEAN DEFAULT false,
-  meta JSONB DEFAULT '{}'::jsonb
-);
-EOF
-  if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ Users table initialized${NC}"
-  else
-    echo -e "${ORANGE}✗ Failed to create users table${NC}"
-    return 1
-  fi
+# The TypeORM entities (src/app/database/entities) are the single source of
+# truth for the schema; DB_SYNCHRONIZE (or, later, migrations) creates the
+# tables when the backend boots. This script only SEEDS data, so instead of
+# re-declaring CREATE TABLE DDL here (which drifts from the entities), it just
+# verifies the expected tables already exist and tells the user how to create
+# them if they don't.
+verify_schema() {
+  echo -e "${YELLOW}Verifying database schema...${NC}"
 
-  # Create active_games table
-  psql << EOF
-CREATE TABLE IF NOT EXISTS active_games (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name VARCHAR NOT NULL,
-  type VARCHAR NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-EOF
-  if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ Active games table initialized${NC}"
-  else
-    echo -e "${ORANGE}✗ Failed to create active_games table${NC}"
-    return 1
-  fi
+  local missing=0
+  for table in users active_games hearts; do
+    local exists
+    exists=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d "$DB_NAME" \
+      -t -A -c "SELECT to_regclass('public.${table}');" 2>&1)
+    if [ $? -ne 0 ]; then
+      echo -e "${ORANGE}✗ Failed to check '${table}' table: ${exists}${NC}"
+      return 1
+    fi
+    if [ -z "$exists" ] || [ "$exists" = "null" ]; then
+      echo -e "${ORANGE}✗ Table '${table}' does not exist${NC}"
+      missing=1
+    else
+      echo -e "${GREEN}✓ Table '${table}' found${NC}"
+    fi
+  done
 
-  # Create hearts table
-  psql << EOF
-CREATE TABLE IF NOT EXISTS hearts (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  game_id UUID NOT NULL REFERENCES active_games(id) ON DELETE CASCADE,
-  player UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  hand_number INTEGER NOT NULL,
-  player_hand JSONB DEFAULT '[]'::jsonb,
-  trick INTEGER NOT NULL,
-  initiative BOOLEAN DEFAULT false,
-  card_suit VARCHAR,
-  card_name VARCHAR,
-  points_taken INTEGER DEFAULT 0,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-EOF
-  if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ Hearts table initialized${NC}"
-  else
-    echo -e "${ORANGE}✗ Failed to create hearts table${NC}"
+  if [ "$missing" -ne 0 ]; then
+    echo -e "${ORANGE}Schema is missing tables. Create it first by starting the"
+    echo -e "backend with DB_SYNCHRONIZE=true (nx serve async-games-backend) or"
+    echo -e "by running the TypeORM migrations, then re-run this seed script.${NC}"
     return 1
   fi
 }
@@ -314,7 +277,7 @@ EOF
 
 # Connect to async_gaming db running in Docker Desktop
 echo ""
-init_tables || { echo -e "${ORANGE}Table initialization aborted${NC}"; exit 1; }
+verify_schema || { echo -e "${ORANGE}Schema verification aborted${NC}"; exit 1; }
 echo ""
 seed_users || { echo -e "${ORANGE}Seeding aborted${NC}"; exit 1; }
 seed_active_games || { echo -e "${ORANGE}Seeding aborted${NC}"; exit 1; }

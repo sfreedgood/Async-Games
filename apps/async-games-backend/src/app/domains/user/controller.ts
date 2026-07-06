@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -24,9 +25,13 @@ export class UserController {
     return this.userService.getAllUsers();
   }
 
+  // `id` is the users table primary key (uuid); reject non-UUID path params at
+  // the boundary with a 400 rather than passing them to the repository layer.
   @Get(':id')
   @ApiOperation({ summary: 'Get a user by id' })
-  getUserById(@Param('id') id: string): Promise<UserResponseDTO> {
+  getUserById(
+    @Param('id', ParseUUIDPipe) id: string
+  ): Promise<UserResponseDTO> {
     return this.userService.getUserById(id);
   }
 
@@ -39,7 +44,7 @@ export class UserController {
   @Put(':id')
   @ApiOperation({ summary: 'Update a user by id' })
   updateUser(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateUserDTO
   ): Promise<UserResponseDTO> {
     return this.userService.updateUser(id, body);
@@ -48,7 +53,7 @@ export class UserController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a user by id' })
-  deleteUser(@Param('id') id: string): Promise<void> {
+  deleteUser(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.userService.deleteUser(id);
   }
 }

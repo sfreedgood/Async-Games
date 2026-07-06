@@ -1,5 +1,5 @@
-// Factory mock prevents user.repository.ts from loading and triggering the
-// user.entity <-> heart.entity circular dep in Jest's module resolver.
+// Mock the repository so this stays a pure unit test of UserService (no entity
+// metadata / DB wiring loaded).
 jest.mock('../../database/repositories/user.repository', () => ({
   UserRepository: jest.fn().mockImplementation(() => ({
     findAll: jest.fn(),

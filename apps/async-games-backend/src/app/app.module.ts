@@ -6,11 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import databaseConfig from './config/database.config';
 import { DatabaseModule } from './database/database.module';
-import {
-  ClassicCardModule,
-  ClassicCardController,
-  ClassicCardService,
-} from './domains/classic-card';
+import { ClassicCardModule } from './domains/classic-card';
 import { UserModule } from './domains/user/module';
 
 // Choose env file based on NODE_ENV: production uses .env, development uses
@@ -39,10 +35,12 @@ const databaseEnabled = process.env.DB_SKIP !== 'true';
     ClassicCardModule,
     ...(databaseEnabled ? [DatabaseModule, UserModule] : []),
   ],
-  controllers: [AppController, ClassicCardController],
+  // ClassicCardController/Service and UserController/Service are registered by
+  // their own modules (imported above); re-declaring them here would create
+  // duplicate instances, so AppModule only owns its own controller/service.
+  controllers: [AppController],
   providers: [
     AppService,
-    ClassicCardService,
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })

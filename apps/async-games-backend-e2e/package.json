@@ -31,8 +31,7 @@
           "passWithNoTests": true
         },
         "dependsOn": [
-          "@async-games/async-games-backend:build:production",
-          "@async-games/async-games-backend:serve:production"
+          "@async-games/async-games-backend:serve-production"
         ]
       }
     }

@@ -70,6 +70,14 @@
           }
         }
       },
+      "serve-production": {
+        "continuous": true,
+        "executor": "@nx/js:node",
+        "options": {
+          "buildTarget": "@async-games/async-games-backend:build:production",
+          "runBuildTargetDependencies": false
+        }
+      },
       "test": {
         "options": {
           "passWithNoTests": true

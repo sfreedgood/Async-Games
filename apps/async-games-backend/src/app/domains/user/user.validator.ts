@@ -4,13 +4,15 @@ import {
 } from '../../../utils/error.utils';
 import type { CreateUserInput, UpdateUserInput } from './user.interface';
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 const REQUIRED_CREATE_FIELDS: Array<keyof CreateUserInput> = [
   'username',
   'email',
   'password',
 ];
+
+// Email FORMAT is validated at the controller boundary by the DTO's @IsEmail
+// decorator (Layer 1 -> 400). This entity validator (Layer 2) only enforces
+// business rules the DTO can't express, so it does not re-check email shape.
 
 /**
  * Validates input for creating a new user.
@@ -26,13 +28,6 @@ export const validateCreateUser = (
     throw new EntityValidationError(
       ValidationErrorMessage.MISSING_REQUIRED_FIELD,
       missing.join(', ')
-    );
-  }
-
-  if (!EMAIL_REGEX.test(input.email!)) {
-    throw new EntityValidationError(
-      ValidationErrorMessage.INVALID_REFERENCE,
-      `'email' must be a valid email address`
     );
   }
 
@@ -55,12 +50,5 @@ export const validateCreateUser = (
 export const validateUpdateUser = (
   input: Partial<UpdateUserInput>
 ): Partial<UpdateUserInput> => {
-  if (input.email !== undefined && !EMAIL_REGEX.test(input.email)) {
-    throw new EntityValidationError(
-      ValidationErrorMessage.INVALID_REFERENCE,
-      `'email' must be a valid email address`
-    );
-  }
-
   return input;
 };
