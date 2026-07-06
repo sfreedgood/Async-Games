@@ -11,10 +11,14 @@ export class DatabaseService {
     handler: (context: { queryRunner: QueryRunner; manager: EntityManager }) => Promise<T>
   ): Promise<T> {
     const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
 
     try {
+      // connect()/startTransaction() are inside the try so that a failure here
+      // still hits the finally below and releases the runner — leaking it would
+      // exhaust the pool exactly when the DB is already struggling.
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+
       const result = await handler({
         queryRunner,
         manager: queryRunner.manager,
@@ -22,7 +26,11 @@ export class DatabaseService {
       await queryRunner.commitTransaction();
       return result;
     } catch (error) {
-      await queryRunner.rollbackTransaction();
+      // Only roll back if a transaction actually started; if connect() or
+      // startTransaction() threw, there is nothing to roll back.
+      if (queryRunner.isTransactionActive) {
+        await queryRunner.rollbackTransaction();
+      }
       const err = error as Error;
       this.logger.error('Transaction failed, rolling back', err.stack);
       throw err;

@@ -139,8 +139,12 @@ jobs:
           DB_SYNCHRONIZE=true
           EOF
 
+      # Backend API e2e against the PRODUCTION build/serve (build:production →
+      # serve:production), so the production boot path is actually validated.
       # NODE_ENV=production only here, so the served backend runs in production
       # mode while npm ci (above) still installed devDependencies.
-      - run: npx nx run-many -t e2e
+      - run: npx nx run @async-games/async-games-backend-e2e:e2e-ci
         env:
           NODE_ENV: production
+      # Frontend UI e2e runs against the frontend dev server (no production DB).
+      - run: npx nx run @async-games/async-games-frontend-e2e:e2e

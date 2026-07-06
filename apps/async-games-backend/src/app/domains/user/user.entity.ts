@@ -1,4 +1,4 @@
-import { UserEntity } from '../../../database/entities/user.entity';
+import { UserEntity } from '../../database/entities/user.entity';
 import type { User as IUser } from './user.interface';
 
 /**

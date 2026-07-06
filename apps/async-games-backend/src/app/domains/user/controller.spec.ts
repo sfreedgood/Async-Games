@@ -1,6 +1,6 @@
 // Factory mock prevents user.repository.ts from loading, breaking the
 // user.entity <-> heart.entity circular dep that Jest encounters.
-jest.mock('../../../database/repositories/user.repository', () => ({
+jest.mock('../../database/repositories/user.repository', () => ({
   UserRepository: jest.fn(),
 }));
 import { NotFoundException } from '@nestjs/common';

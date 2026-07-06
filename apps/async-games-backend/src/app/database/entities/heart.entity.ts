@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -10,6 +11,12 @@ import {
 import { ActiveGameEntity } from './active-game.entity';
 import { UserEntity } from './user.entity';
 
+// Backs the hot game-state lookup (HeartRepository.findLatestByGame), which
+// filters by game and takes the most recent row: WHERE game_id = $1 ORDER BY
+// created_at DESC. Without this composite index the query is a sequential scan
+// + sort over a table that grows one row per card played.
+// TODO: re-express as a migration once synchronize is replaced (database.module.ts).
+@Index(['game', 'createdAt'])
 @Entity({ name: 'hearts' })
 export class HeartEntity {
   @PrimaryGeneratedColumn('uuid')

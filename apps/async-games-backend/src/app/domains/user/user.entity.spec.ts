@@ -1,4 +1,4 @@
-import { UserEntity } from '../../../database/entities';
+import { UserEntity } from '../../database/entities';
 import { User } from './user.entity';
 
 const makeEntity = (overrides: Partial<UserEntity> = {}): UserEntity =>

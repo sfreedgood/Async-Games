@@ -1,42 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, EntityManager, Repository, QueryDeepPartialEntity } from 'typeorm';
+import { EntityManager, QueryDeepPartialEntity, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
+import { BaseRepository } from './base.repository';
 
 @Injectable()
-export class UserRepository {
+export class UserRepository extends BaseRepository<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly repository: Repository<UserEntity>
-  ) {}
-
-  private getRepo(manager?: EntityManager) {
-    return manager?.getRepository(UserEntity) ?? this.repository;
-  }
-
-  findAll(manager?: EntityManager) {
-    return this.getRepo(manager).find();
-  }
-
-  create(createInput: DeepPartial<UserEntity>, manager?: EntityManager) {
-    const repo = this.getRepo(manager);
-    const user = repo.create(createInput);
-    return repo.save(user);
-  }
-
-  findById(id: string, manager?: EntityManager) {
-    const repo = this.getRepo(manager);
-    return repo.findOne({ where: { id } });
+    repository: Repository<UserEntity>
+  ) {
+    super(repository);
   }
 
   findByEmail(email: string, manager?: EntityManager) {
-    const repo = this.getRepo(manager);
-    return repo.findOne({ where: { email } });
+    return this.getRepo(manager).findOne({ where: { email } });
   }
 
   findByUsername(username: string, manager?: EntityManager) {
-    const repo = this.getRepo(manager);
-    return repo.findOne({ where: { username } });
+    return this.getRepo(manager).findOne({ where: { username } });
   }
 
   async update(
@@ -47,10 +29,6 @@ export class UserRepository {
     const repo = this.getRepo(manager);
     await repo.update(id, updateInput);
     return repo.findOne({ where: { id } });
-  }
-
-  remove(id: string, manager?: EntityManager) {
-    return this.getRepo(manager).delete(id);
   }
 
   async disableUser(id: string, manager?: EntityManager) {

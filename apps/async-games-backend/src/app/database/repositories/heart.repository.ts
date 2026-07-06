@@ -2,27 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, EntityManager, Repository } from 'typeorm';
 import { HeartEntity } from '../entities';
+import { BaseRepository } from './base.repository';
 
 @Injectable()
-export class HeartRepository {
+export class HeartRepository extends BaseRepository<HeartEntity> {
   constructor(
     @InjectRepository(HeartEntity)
-    private readonly repository: Repository<HeartEntity>
-  ) {}
-
-  private getRepo(manager?: EntityManager) {
-    return manager?.getRepository(HeartEntity) ?? this.repository;
+    repository: Repository<HeartEntity>
+  ) {
+    super(repository);
   }
 
   record(entry: DeepPartial<HeartEntity>, manager?: EntityManager) {
-    const repo = this.getRepo(manager);
-    const heartEntry = repo.create(entry);
-    return repo.save(heartEntry);
+    return this.create(entry, manager);
   }
 
   findLatestByGame(gameId: string, manager?: EntityManager) {
-    const repo = this.getRepo(manager);
-    return repo.findOne({
+    return this.getRepo(manager).findOne({
       where: { game: { id: gameId } },
       relations: { player: true, game: true },
       order: { createdAt: 'DESC' },

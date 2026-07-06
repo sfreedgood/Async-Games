@@ -1,4 +1,4 @@
-import { EntityValidationError } from '../../../../utils/error.utils';
+import { EntityValidationError } from '../../../utils/error.utils';
 import { validateCreateUser, validateUpdateUser } from './user.validator';
 
 describe('validateCreateUser', () => {

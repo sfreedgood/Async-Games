@@ -1,6 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { UserRepository } from '../../../database/repositories/user.repository';
+import { UserRepository } from '../../database/repositories/user.repository';
+import { isUniqueViolation } from '../../../utils/error.utils';
 import { User } from './user.entity';
 import { validateCreateUser, validateUpdateUser } from './user.validator';
 import type { CreateUserInput, UpdateUserInput } from './user.interface';
@@ -58,17 +59,27 @@ export class UserService {
       throw new ConflictException(`Email '${validated.email}' is already registered`);
     }
 
-    const entity = await this.userRepository.create({
-      username: validated.username,
-      email: validated.email,
-      passwordHash: await hashPassword(validated.password),
-      fullName: validated.fullName,
-      locale: validated.locale,
-      language: validated.language,
-      timezone: validated.timezone,
-      meta: validated.meta,
-    });
-    return User.fromEntity(entity);
+    try {
+      const entity = await this.userRepository.create({
+        username: validated.username,
+        email: validated.email,
+        passwordHash: await hashPassword(validated.password),
+        fullName: validated.fullName,
+        locale: validated.locale,
+        language: validated.language,
+        timezone: validated.timezone,
+        meta: validated.meta,
+      });
+      return User.fromEntity(entity);
+    } catch (error) {
+      // The pre-checks above are best-effort; the DB unique constraints are the
+      // authoritative guard. Two concurrent requests can both pass the checks
+      // and race to insert — map that 23505 to a 409 instead of leaking a 500.
+      if (isUniqueViolation(error)) {
+        throw new ConflictException('Username or email is already in use');
+      }
+      throw error;
+    }
   }
 
   async updateUser(
@@ -102,15 +113,25 @@ export class UserService {
     if (input.password) {
       updateData['passwordHash'] = await hashPassword(input.password);
     }
-    const entity = await this.userRepository.update(id, updateData);
-    if (!entity) throw new NotFoundException(`User '${id}' not found`);
-    return User.fromEntity(entity);
+    try {
+      const entity = await this.userRepository.update(id, updateData);
+      if (!entity) throw new NotFoundException(`User '${id}' not found`);
+      return User.fromEntity(entity);
+    } catch (error) {
+      // As in createUser, the unique constraint is the authoritative guard for
+      // a concurrent username/email collision.
+      if (isUniqueViolation(error)) {
+        throw new ConflictException('Username or email is already in use');
+      }
+      throw error;
+    }
   }
 
+  // Soft delete: flag the user as disabled rather than removing the row, so the
+  // user's hearts history (FK ON DELETE CASCADE) is preserved. Reads are left
+  // unfiltered — a disabled user is still fetchable by id.
   async deleteUser(id: string): Promise<void> {
-    const result = await this.userRepository.remove(id);
-    if (!result || (typeof (result as any).affected === 'number' && (result as any).affected === 0)) {
-      throw new NotFoundException(`User '${id}' not found`);
-    }
+    const entity = await this.userRepository.disableUser(id);
+    if (!entity) throw new NotFoundException(`User '${id}' not found`);
   }
 }

@@ -63,4 +63,21 @@ describe('databaseConfig', () => {
     setEnv();
     expect(databaseConfig().synchronize).toBe(false);
   });
+
+  it('applies retry/timeout defaults when unset', () => {
+    setEnv();
+    const config = databaseConfig();
+    expect(config.retryAttempts).toBe(5);
+    expect(config.retryDelay).toBe(2000);
+    expect(config.connectTimeoutMs).toBe(10000);
+    expect(config.allowSynchronizeInProduction).toBe(false);
+  });
+
+  it.each(['abc', '-1', '5.5'])(
+    'throws on a malformed integer knob %p',
+    (value) => {
+      setEnv({ DB_RETRY_ATTEMPTS: value });
+      expect(() => databaseConfig()).toThrow(/Invalid DB_RETRY_ATTEMPTS/);
+    }
+  );
 });

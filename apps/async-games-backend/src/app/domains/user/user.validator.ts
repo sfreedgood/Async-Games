@@ -1,7 +1,7 @@
 import {
   EntityValidationError,
   ValidationErrorMessage,
-} from '../../../../utils/error.utils';
+} from '../../../utils/error.utils';
 import type { CreateUserInput, UpdateUserInput } from './user.interface';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

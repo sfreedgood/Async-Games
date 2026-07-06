@@ -2,16 +2,27 @@ import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 import { DatabaseService } from './database.service';
 
-const makeQueryRunner = (overrides: Record<string, unknown> = {}) => ({
-  connect: jest.fn().mockResolvedValue(undefined),
-  startTransaction: jest.fn().mockResolvedValue(undefined),
-  commitTransaction: jest.fn().mockResolvedValue(undefined),
-  rollbackTransaction: jest.fn().mockResolvedValue(undefined),
-  release: jest.fn().mockResolvedValue(undefined),
-  query: jest.fn().mockResolvedValue(undefined),
-  manager: {},
-  ...overrides,
-});
+const makeQueryRunner = (overrides: Record<string, unknown> = {}) => {
+  const runner = {
+    isTransactionActive: false,
+    connect: jest.fn().mockResolvedValue(undefined),
+    startTransaction: jest.fn().mockResolvedValue(undefined),
+    commitTransaction: jest.fn().mockResolvedValue(undefined),
+    rollbackTransaction: jest.fn().mockResolvedValue(undefined),
+    release: jest.fn().mockResolvedValue(undefined),
+    query: jest.fn().mockResolvedValue(undefined),
+    manager: {},
+    ...overrides,
+  };
+  // startTransaction flips isTransactionActive like the real QueryRunner, so the
+  // rollback guard (only roll back when a transaction actually started) is
+  // exercised faithfully — including the failure path where connect() throws
+  // before a transaction ever starts.
+  runner.startTransaction.mockImplementation(async () => {
+    runner.isTransactionActive = true;
+  });
+  return runner;
+};
 
 const makeDataSource = (queryRunner: ReturnType<typeof makeQueryRunner>) =>
   ({
@@ -61,6 +72,20 @@ describe('DatabaseService', () => {
 
       expect(queryRunner.rollbackTransaction).toHaveBeenCalled();
       expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
+    it('releases the runner (no leak) and skips rollback when connect fails', async () => {
+      queryRunner.connect.mockRejectedValue(new Error('connection refused'));
+      const handler = jest.fn();
+
+      await expect(service.runInTransaction(handler)).rejects.toThrow('connection refused');
+
+      // No transaction started, so nothing to roll back...
+      expect(queryRunner.startTransaction).not.toHaveBeenCalled();
+      expect(queryRunner.rollbackTransaction).not.toHaveBeenCalled();
+      expect(handler).not.toHaveBeenCalled();
+      // ...but the runner must still be returned to the pool.
       expect(queryRunner.release).toHaveBeenCalled();
     });
   });

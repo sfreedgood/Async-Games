@@ -1,32 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, EntityManager, Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { ActiveGameEntity } from '../entities';
+import { BaseRepository } from './base.repository';
 
 @Injectable()
-export class ActiveGameRepository {
+export class ActiveGameRepository extends BaseRepository<ActiveGameEntity> {
   constructor(
     @InjectRepository(ActiveGameEntity)
-    private readonly repository: Repository<ActiveGameEntity>
-  ) {}
-
-  private getRepo(manager?: EntityManager) {
-    return manager?.getRepository(ActiveGameEntity) ?? this.repository;
+    repository: Repository<ActiveGameEntity>
+  ) {
+    super(repository);
   }
 
-  create(createInput: DeepPartial<ActiveGameEntity>, manager?: EntityManager) {
-    const repo = this.getRepo(manager);
-    const game = repo.create(createInput);
-    return repo.save(game);
-  }
-
-  findById(id: string, manager?: EntityManager) {
-    const repo = this.getRepo(manager);
-    return repo.findOne({ where: { id }, relations: { hearts: true } });
+  // Eager-load the hearts history when fetching a single game.
+  override findById(id: string, manager?: EntityManager) {
+    return this.getRepo(manager).findOne({
+      where: { id },
+      relations: { hearts: true },
+    });
   }
 
   list(manager?: EntityManager) {
-    const repo = this.getRepo(manager);
-    return repo.find({ order: { createdAt: 'DESC' } });
+    return this.getRepo(manager).find({ order: { createdAt: 'DESC' } });
   }
 }

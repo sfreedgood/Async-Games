@@ -17,11 +17,28 @@ export interface DatabaseConfig {
   /** Optional PEM CA certificate (or bundle) used to verify the server cert. */
   sslCa?: string;
   synchronize: boolean;
+  /** Allow synchronize to run even when NODE_ENV=production (CI only — unsafe). */
+  allowSynchronizeInProduction: boolean;
+  /** Connection retry/timeout knobs passed through to TypeORM. */
+  retryAttempts: number;
+  retryDelay: number;
+  connectTimeoutMs: number;
 }
 
 function toBoolean(value: string | undefined, defaultValue: boolean) {
   if (value === undefined) return defaultValue;
   return value === 'true' || value === '1';
+}
+
+// Parse a non-negative integer env var, failing fast on a malformed value so a
+// NaN never silently reaches the driver (mirrors the DB_PORT validation below).
+function toInt(name: string, value: string | undefined, defaultValue: number) {
+  if (value === undefined) return defaultValue;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 0) {
+    throw new Error(`Invalid ${name} '${value}': must be a non-negative integer`);
+  }
+  return parsed;
 }
 
 export default registerAs(
@@ -64,6 +81,21 @@ export default registerAs(
       ),
       sslCa: process.env.DB_SSL_CA,
       synchronize: toBoolean(process.env.DB_SYNCHRONIZE, false),
+      allowSynchronizeInProduction: toBoolean(
+        process.env.DB_ALLOW_SYNCHRONIZE_IN_PRODUCTION,
+        false
+      ),
+      // Fail fast on an unreachable/misconfigured database instead of retrying
+      // the default 10 times (~30s) and leaving boot hanging. Raise via env when
+      // a slower startup race is expected (e.g. a DB container coming up
+      // alongside the app).
+      retryAttempts: toInt('DB_RETRY_ATTEMPTS', process.env.DB_RETRY_ATTEMPTS, 5),
+      retryDelay: toInt('DB_RETRY_DELAY_MS', process.env.DB_RETRY_DELAY_MS, 2000),
+      connectTimeoutMs: toInt(
+        'DB_CONNECT_TIMEOUT_MS',
+        process.env.DB_CONNECT_TIMEOUT_MS,
+        10000
+      ),
     };
   },
 );

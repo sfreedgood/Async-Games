@@ -11,7 +11,7 @@ import {
   ClassicCardController,
   ClassicCardService,
 } from './domains/classic-card';
-import { UserModule } from './domains/common/user/module';
+import { UserModule } from './domains/user/module';
 
 // Choose env file based on NODE_ENV: production uses .env, development uses
 // .env.development with .env fallback.

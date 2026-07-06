@@ -1,6 +1,6 @@
 // Factory mock prevents user.repository.ts from loading and triggering the
 // user.entity <-> heart.entity circular dep in Jest's module resolver.
-jest.mock('../../../database/repositories/user.repository', () => ({
+jest.mock('../../database/repositories/user.repository', () => ({
   UserRepository: jest.fn().mockImplementation(() => ({
     findAll: jest.fn(),
     findById: jest.fn(),
@@ -8,13 +8,13 @@ jest.mock('../../../database/repositories/user.repository', () => ({
     findByEmail: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
-    remove: jest.fn(),
+    disableUser: jest.fn(),
   })),
 }));
 
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { UserRepository } from '../../../database/repositories/user.repository';
+import { UserRepository } from '../../database/repositories/user.repository';
 import { UserService } from './service';
 import { User } from './user.entity';
 
@@ -45,7 +45,7 @@ const mockRepo = (): jest.Mocked<UserRepository> => {
     findByEmail: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
-    remove: jest.fn(),
+    disableUser: jest.fn(),
   };
   return repo as unknown as jest.Mocked<UserRepository>;
 };
@@ -133,6 +133,17 @@ describe('UserService', () => {
         service.createUser({ username: 'alice', email: 'alice@example.com', password: 'secret' })
       ).rejects.toThrow(ConflictException);
     });
+
+    it('maps a unique-constraint violation race to ConflictException', async () => {
+      // Pre-checks pass, but a concurrent insert wins the race and the DB
+      // rejects ours with a unique violation (SQLSTATE 23505).
+      repo.findByUsername.mockResolvedValue(null);
+      repo.findByEmail.mockResolvedValue(null);
+      repo.create.mockRejectedValue({ code: '23505' });
+      await expect(
+        service.createUser({ username: 'alice', email: 'alice@example.com', password: 'secret' })
+      ).rejects.toThrow(ConflictException);
+    });
   });
 
   describe('updateUser', () => {
@@ -189,10 +200,15 @@ describe('UserService', () => {
   });
 
   describe('deleteUser', () => {
-    it('calls repository remove with the given id', async () => {
-      repo.remove.mockResolvedValue({ affected: 1, raw: {} });
+    it('soft-deletes by disabling the user', async () => {
+      repo.disableUser.mockResolvedValue(makeEntity({ disabled: true }));
       await service.deleteUser('uuid-1');
-      expect(repo.remove).toHaveBeenCalledWith('uuid-1');
+      expect(repo.disableUser).toHaveBeenCalledWith('uuid-1');
+    });
+
+    it('throws NotFoundException when the user does not exist', async () => {
+      repo.disableUser.mockResolvedValue(null);
+      await expect(service.deleteUser('bad-id')).rejects.toThrow(NotFoundException);
     });
   });
 });
