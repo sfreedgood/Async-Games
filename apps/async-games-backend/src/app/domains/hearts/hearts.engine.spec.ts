@@ -200,6 +200,24 @@ describe('trickWinner & resolveTrick', () => {
     expect(game.tricksPlayed).toBe(1);
     expect(game.lastTrick?.winnerSeat).toBe(1);
   });
+
+  it('accumulates the running round score as tricks are taken', () => {
+    const game = newGame();
+    game.phase = 'playing';
+    game.currentTrick = {
+      leadSuit: 'heart',
+      plays: [
+        { seat: 0, card: c('3', 'heart') },
+        { seat: 1, card: c('Q', 'heart') },
+        { seat: 2, card: c('2', 'heart') },
+        { seat: 3, card: c('5', 'heart') },
+      ],
+    };
+    resolveTrick(game);
+    // Winner (seat 1) took four hearts this trick: 4 running points, mid-round.
+    expect(game.roundScores[1]).toBe(4);
+    expect(game.roundScores[0]).toBe(0);
+  });
 });
 
 describe('playCard', () => {

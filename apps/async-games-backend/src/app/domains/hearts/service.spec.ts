@@ -56,9 +56,11 @@ describe('HeartsService', () => {
   describe('full game', () => {
     it('plays to completion with a declared winner reaching 100', () => {
       let view = create(777);
-      for (let i = 0; i < 5000 && view.phase !== 'finished'; i++) {
+      for (let i = 0; i < 20000 && view.phase !== 'finished'; i++) {
         if (view.phase === 'passing') {
           view = service.passCards(view.gameId, 0, view.yourHand.slice(0, 3));
+        } else if (view.awaitingTrickAck) {
+          view = service.advanceTrick(view.gameId);
         } else {
           expect(view.legalMoves.length).toBeGreaterThan(0);
           view = service.playCard(view.gameId, 0, view.legalMoves[0]);
@@ -69,6 +71,31 @@ describe('HeartsService', () => {
       expect(
         view.players.some((p) => p.totalScore >= 100)
       ).toBe(true);
+    });
+  });
+
+  describe('trick acknowledgement', () => {
+    it('pauses on a completed trick and resolves it on advance', () => {
+      let view = create(777);
+      if (view.phase === 'passing') {
+        view = service.passCards(view.gameId, 0, view.yourHand.slice(0, 3));
+      }
+      // The first human play after passing always completes a trick (all four
+      // seats act), so the game pauses awaiting acknowledgement.
+      view = service.playCard(view.gameId, 0, view.legalMoves[0]);
+      expect(view.awaitingTrickAck).toBe(true);
+      expect(view.currentTrick.plays).toHaveLength(4);
+      expect(view.legalMoves).toHaveLength(0);
+      expect(view.pendingTrickWinner).not.toBeNull();
+
+      const resumed = service.advanceTrick(view.gameId);
+      expect(resumed.awaitingTrickAck).toBe(false);
+      expect(resumed.currentTrick.plays.length).toBeLessThan(4);
+    });
+
+    it('rejects advancing when no trick is complete', () => {
+      const view = create();
+      expect(() => service.advanceTrick(view.gameId)).toThrow();
     });
   });
 

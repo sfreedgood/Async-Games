@@ -208,6 +208,8 @@ export const getLegalMoves = (
   seat: SeatIndex
 ): CardRef[] => {
   if (game.phase !== 'playing' || game.currentTurn !== seat) return [];
+  // A completed trick must be resolved (acknowledged) before anyone plays on.
+  if (game.currentTrick.plays.length >= HEARTS_PLAYER_COUNT) return [];
 
   const hand = game.hands[seat];
   const isLead = game.currentTrick.plays.length === 0;
@@ -274,9 +276,12 @@ export const trickWinner = (plays: TrickPlay[], leadSuit: HeartsSuit): SeatIndex
 export const resolveTrick = (game: HeartsGame): SeatIndex => {
   const leadSuit = game.currentTrick.leadSuit as HeartsSuit;
   const winner = trickWinner(game.currentTrick.plays, leadSuit);
-  game.tricksTaken[winner] = game.tricksTaken[winner].concat(
-    game.currentTrick.plays.map((p) => p.card)
-  );
+  const takenCards = game.currentTrick.plays.map((p) => p.card);
+  game.tricksTaken[winner] = game.tricksTaken[winner].concat(takenCards);
+  // Track the running round score as tricks are taken so the UI can show live
+  // points; scoreRound later overwrites this with the shoot-the-moon-adjusted
+  // final tally.
+  game.roundScores[winner] += rawPointsTaken(takenCards);
   game.lastTrick = {
     winnerSeat: winner,
     plays: game.currentTrick.plays.map((p) => ({ ...p })),

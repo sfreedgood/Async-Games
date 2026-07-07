@@ -49,6 +49,10 @@ export interface HeartsGameView {
   legalMoves: CardRef[];
   pendingPassCount: number;
   currentTrick: TrickView;
+  /** True when the current trick is complete and awaiting "continue". */
+  awaitingTrickAck: boolean;
+  /** Seat that will take the completed trick, while awaiting acknowledgement. */
+  pendingTrickWinner: SeatIndex | null;
   lastTrick: CompletedTrickView | null;
   winnerSeat: SeatIndex | null;
 }

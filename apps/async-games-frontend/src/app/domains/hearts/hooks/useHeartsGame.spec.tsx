@@ -51,6 +51,26 @@ describe('useHeartsGame', () => {
     expect(result.current.view?.heartsBroken).toBe(true);
   });
 
+  it('advances the trick and replaces the view with the response', async () => {
+    const created = mockGameView({ awaitingTrickAck: true });
+    const afterAdvance = mockGameView({ currentTurn: 1, awaitingTrickAck: false });
+    postMock.mockResolvedValueOnce(created).mockResolvedValueOnce(afterAdvance);
+
+    const { result } = renderHook(() => useHeartsGame('You'));
+    await waitFor(() => expect(result.current.view).not.toBeNull());
+
+    await act(async () => {
+      await result.current.advanceTrick();
+    });
+
+    expect(postMock).toHaveBeenLastCalledWith(
+      '/hearts/games/mock-game/advance',
+      {}
+    );
+    expect(result.current.view?.awaitingTrickAck).toBe(false);
+    expect(result.current.view?.currentTurn).toBe(1);
+  });
+
   it('surfaces an error and refetches when a move is rejected', async () => {
     const created = mockGameView();
     postMock

@@ -25,8 +25,7 @@ export const Scoreboard = ({
       <thead>
         <tr className="text-emerald-100/60">
           <th className="text-left font-normal">Player</th>
-          <th className="px-2 text-right font-normal">Rnd</th>
-          <th className="text-right font-normal">Total</th>
+          <th className="pl-4 text-right font-normal">Total</th>
         </tr>
       </thead>
       <tbody>
@@ -39,8 +38,7 @@ export const Scoreboard = ({
               {p.seat === currentTurn ? '▶ ' : ''}
               {p.name}
             </td>
-            <td className="px-2 text-right tabular-nums">{p.roundScore}</td>
-            <td className="text-right tabular-nums">{p.totalScore}</td>
+            <td className="pl-4 text-right tabular-nums">{p.totalScore}</td>
           </tr>
         ))}
       </tbody>

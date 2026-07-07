@@ -46,6 +46,11 @@ export class HeartsController {
     return this.heartsService.playCard(id, body.seat, toCardRef(body.card));
   }
 
+  @Post('games/:id/advance')
+  advanceTrick(@Param('id') id: string) {
+    return this.heartsService.advanceTrick(id);
+  }
+
   @Delete('games/:id')
   @HttpCode(204)
   deleteGame(@Param('id') id: string) {

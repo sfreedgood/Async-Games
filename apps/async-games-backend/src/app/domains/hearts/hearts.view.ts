@@ -1,4 +1,4 @@
-import { getLegalMoves } from './hearts.engine';
+import { getLegalMoves, isTrickComplete, trickWinner } from './hearts.engine';
 import type { CompletedTrick, HeartsGame } from './hearts.entity';
 import type {
   CardRef,
@@ -47,6 +47,10 @@ export interface HeartsGameView {
   legalMoves: CardRef[];
   pendingPassCount: number;
   currentTrick: TrickView;
+  /** True when the current trick is complete and awaiting the human's "continue". */
+  awaitingTrickAck: boolean;
+  /** Seat that will take the completed trick, while awaiting acknowledgement. */
+  pendingTrickWinner: SeatIndex | null;
   lastTrick: CompletedTrick | null;
   winnerSeat: SeatIndex | null;
 }
@@ -54,7 +58,9 @@ export interface HeartsGameView {
 export const buildGameView = (
   game: HeartsGame,
   viewerSeat: SeatIndex
-): HeartsGameView => ({
+): HeartsGameView => {
+  const trickComplete = game.phase === 'playing' && isTrickComplete(game);
+  return {
   gameId: game.gameId,
   phase: game.phase,
   roundNumber: game.roundNumber,
@@ -78,6 +84,12 @@ export const buildGameView = (
     leadSuit: game.currentTrick.leadSuit,
     plays: game.currentTrick.plays.map((p) => ({ seat: p.seat, card: p.card })),
   },
+  awaitingTrickAck: trickComplete,
+  pendingTrickWinner:
+    trickComplete && game.currentTrick.leadSuit !== null
+      ? trickWinner(game.currentTrick.plays, game.currentTrick.leadSuit)
+      : null,
   lastTrick: game.lastTrick,
   winnerSeat: game.winnerSeat,
-});
+  };
+};

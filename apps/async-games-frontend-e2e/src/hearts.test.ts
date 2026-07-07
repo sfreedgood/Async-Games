@@ -23,6 +23,8 @@ const view = (overrides: Partial<Record<string, unknown>> = {}) => ({
   legalMoves: [] as Card[],
   pendingPassCount: 0,
   currentTrick: { leadSuit: null, plays: [] as { seat: number; card: Card }[] },
+  awaitingTrickAck: false,
+  pendingTrickWinner: null as number | null,
   lastTrick: null,
   winnerSeat: null,
   ...overrides,
@@ -76,6 +78,69 @@ test.describe('Hearts UI', () => {
       page.getByTestId('trick-area').getByLabel('2 of club')
     ).toBeVisible();
     await expect(page.getByTestId('turn-status')).toContainText('Waiting for West');
+  });
+
+  test('pauses on a completed trick and continues on confirmation', async ({
+    page,
+  }: {
+    page: Page;
+  }) => {
+    const initial = view({
+      yourHand: [{ name: '2', suit: 'club' }],
+      legalMoves: [{ name: '2', suit: 'club' }],
+    });
+    // After the human plays, the trick is complete and the game waits.
+    const awaiting = view({
+      yourHand: [],
+      legalMoves: [],
+      currentTurn: 1,
+      awaitingTrickAck: true,
+      pendingTrickWinner: 2,
+      currentTrick: {
+        leadSuit: 'club',
+        plays: [
+          { seat: 3, card: { name: '7', suit: 'club' } },
+          { seat: 0, card: { name: '2', suit: 'club' } },
+          { seat: 1, card: { name: 'K', suit: 'club' } },
+          { seat: 2, card: { name: 'A', suit: 'club' } },
+        ],
+      },
+    });
+    // After confirming, the next trick has begun.
+    const resumed = view({
+      yourHand: [],
+      legalMoves: [],
+      currentTurn: 2,
+      currentTrick: { leadSuit: null, plays: [] },
+    });
+
+    await page.route('**/api/hearts/games', (route) =>
+      route.request().method() === 'POST' ? fulfill(route, initial) : route.fallback()
+    );
+    await page.route('**/api/hearts/games/*/play', (route) =>
+      fulfill(route, awaiting)
+    );
+    await page.route('**/api/hearts/games/*/advance', (route) =>
+      fulfill(route, resumed)
+    );
+
+    await page.goto('/hearts');
+
+    await page.getByRole('button', { name: '2 of club' }).click();
+
+    // The completed trick is held with a Continue prompt naming the winner.
+    await expect(page.getByTestId('turn-status')).toContainText(
+      'North takes the trick'
+    );
+    const continueButton = page.getByTestId('continue-button');
+    await expect(continueButton).toBeVisible();
+    await continueButton.click();
+
+    // The trick has been swept and play moves on.
+    await expect(page.getByTestId('continue-button')).toBeHidden();
+    await expect(page.getByTestId('turn-status')).toContainText(
+      'Waiting for North'
+    );
   });
 
   test('passes three cards then finishes with a winner', async ({

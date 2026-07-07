@@ -28,6 +28,24 @@ export const Trick: StoryObj = {
   ),
 };
 
+export const TrickWithWinner: StoryObj = {
+  render: () => (
+    <TrickArea
+      trick={{
+        leadSuit: 'club',
+        plays: [
+          { seat: 0, card: { name: '5', suit: 'club' } },
+          { seat: 1, card: { name: 'K', suit: 'club' } },
+          { seat: 2, card: { name: '2', suit: 'club' } },
+          { seat: 3, card: { name: '7', suit: 'club' } },
+        ],
+      }}
+      players={view.players}
+      winnerSeat={1}
+    />
+  ),
+};
+
 export const Scores: StoryObj = {
   render: () => (
     <Scoreboard players={view.players} currentTurn={0} roundNumber={2} />

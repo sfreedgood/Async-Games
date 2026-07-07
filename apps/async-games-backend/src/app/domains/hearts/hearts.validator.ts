@@ -2,7 +2,7 @@ import {
   EntityValidationError,
   ValidationErrorMessage,
 } from '../../../utils/error.utils';
-import { getLegalMoves } from './hearts.engine';
+import { getLegalMoves, isTrickComplete } from './hearts.engine';
 import type { HeartsGame } from './hearts.entity';
 import {
   CARDS_TO_PASS,
@@ -43,6 +43,16 @@ export const validatePlay = (
     throw new EntityValidationError(
       ValidationErrorMessage.ILLEGAL_MOVE,
       `${cardKey(card)} is not a legal play right now`
+    );
+  }
+};
+
+/** Validates that there is a completed trick to advance past, else 422. */
+export const validateTrickAck = (game: HeartsGame): void => {
+  if (game.phase !== 'playing' || !isTrickComplete(game)) {
+    throw new EntityValidationError(
+      ValidationErrorMessage.WRONG_PHASE,
+      'there is no completed trick to advance'
     );
   }
 };

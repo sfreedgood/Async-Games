@@ -4,7 +4,7 @@ import { composeStories } from '@storybook/react-vite';
 import * as stories from './PlayerBadge.stories';
 
 // Reuse the Storybook stories as the source of truth for component props.
-const { PrimaryPlayer, OtherPlayer } = composeStories(stories);
+const { PrimaryPlayer, OtherPlayer, WithRoundScore } = composeStories(stories);
 
 describe('PlayerBadge snapshots', () => {
   it('renders the local (primary) player', () => {
@@ -14,6 +14,11 @@ describe('PlayerBadge snapshots', () => {
 
   it('renders another player', () => {
     const { asFragment } = render(<OtherPlayer />);
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it('renders the local round score', () => {
+    const { asFragment } = render(<WithRoundScore />);
     expect(asFragment()).toMatchSnapshot();
   });
 });

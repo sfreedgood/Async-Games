@@ -7,7 +7,14 @@ type GameView = {
   currentTurn: number;
   yourHand: CardRef[];
   legalMoves: CardRef[];
-  players: { seat: number; handCount: number; totalScore: number }[];
+  awaitingTrickAck: boolean;
+  pendingTrickWinner: number | null;
+  players: {
+    seat: number;
+    handCount: number;
+    totalScore: number;
+    roundScore: number;
+  }[];
   currentTrick: { plays: { seat: number; card: CardRef }[] };
 };
 
@@ -37,6 +44,17 @@ describe('Hearts API', () => {
       { seat: 0, card: passed.data.legalMoves[0] }
     );
     expect(played.data.players[0].handCount).toBe(handBefore - 1);
+
+    // The completed trick pauses for acknowledgement before it is swept.
+    expect(played.data.awaitingTrickAck).toBe(true);
+    expect(played.data.currentTrick.plays).toHaveLength(4);
+    expect(played.data.pendingTrickWinner).not.toBeNull();
+
+    const advanced = await axios.post<GameView>(
+      `/api/hearts/games/${gameId}/advance`
+    );
+    expect(advanced.data.awaitingTrickAck).toBe(false);
+    expect(advanced.data.currentTrick.plays.length).toBeLessThan(4);
 
     await axios.delete(`/api/hearts/games/${gameId}`);
   });

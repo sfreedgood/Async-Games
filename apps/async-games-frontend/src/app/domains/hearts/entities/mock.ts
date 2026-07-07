@@ -44,6 +44,8 @@ export const mockGameView = (
     leadSuit: 'club',
     plays: [{ seat: 3, card: card('7', 'club') }],
   },
+  awaitingTrickAck: false,
+  pendingTrickWinner: null,
   lastTrick: null,
   winnerSeat: null,
   ...overrides,

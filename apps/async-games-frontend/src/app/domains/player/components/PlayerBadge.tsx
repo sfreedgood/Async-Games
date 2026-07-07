@@ -5,7 +5,9 @@ export const PlayerBadge: React.FC<{
   name: string;
   settings?: PlayerSettings;
   isLocalPlayer?: boolean;
-}> = ({ name, settings, isLocalPlayer }) => {
+  /** Points taken so far in the current round; shown when provided. */
+  roundScore?: number;
+}> = ({ name, settings, isLocalPlayer, roundScore }) => {
   const activeSettings = useMemo(() => {
     if (!isLocalPlayer || !settings) return [];
     return [
@@ -36,6 +38,14 @@ export const PlayerBadge: React.FC<{
       </div>
       <div className="flex flex-col">
         <span className="text-sm font-semibold text-emerald-50">{name}</span>
+        {roundScore !== undefined && (
+          <span
+            data-testid="round-score"
+            className="text-xs font-medium text-amber-200"
+          >
+            {roundScore} pts this round
+          </span>
+        )}
         {isLocalPlayer ? (
           <div className="flex flex-wrap gap-1 text-xs text-emerald-100/80">
             {activeSettings.length ? (

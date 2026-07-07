@@ -19,6 +19,7 @@ export interface HeartsTableProps {
   view: HeartsGameView;
   onPlay: (card: CardRef) => void;
   onPass: (cards: CardRef[]) => void;
+  onContinue: () => void;
   error?: string | null;
   onNewGame?: () => void;
 }
@@ -40,8 +41,8 @@ const OpponentSeat = ({
   >
     <span className="text-xs font-semibold text-emerald-50">{player.name}</span>
     <OpponentHand count={player.handCount} orientation={orientation} />
-    <span className="text-[10px] text-emerald-100/60">
-      {player.totalScore} pts
+    <span className="text-[10px] text-amber-200">
+      {player.roundScore} pts this round
     </span>
   </div>
 );
@@ -51,6 +52,7 @@ export const HeartsTable = ({
   view,
   onPlay,
   onPass,
+  onContinue,
   error,
   onNewGame,
 }: HeartsTableProps) => {
@@ -62,7 +64,13 @@ export const HeartsTable = ({
   }, [view.phase, view.roundNumber]);
 
   const isPassing = view.phase === 'passing';
-  const isYourTurn = view.phase === 'playing' && view.currentTurn === 0;
+  const awaitingAck = view.awaitingTrickAck;
+  const isYourTurn =
+    view.phase === 'playing' && view.currentTurn === 0 && !awaitingAck;
+  const trickWinnerName =
+    view.pendingTrickWinner != null
+      ? view.players[view.pendingTrickWinner].name
+      : null;
 
   const legalKeys = useMemo(
     () => new Set(view.legalMoves.map(cardKey)),
@@ -100,6 +108,8 @@ export const HeartsTable = ({
       ? 'Game over'
       : isPassing
       ? 'Select cards to pass'
+      : awaitingAck
+      ? `${trickWinnerName} takes the trick`
       : isYourTurn
       ? 'Your turn — play a card'
       : `Waiting for ${view.players[view.currentTurn].name}`;
@@ -136,7 +146,21 @@ export const HeartsTable = ({
           >
             {status}
           </div>
-          <TrickArea trick={view.currentTrick} players={view.players} />
+          <TrickArea
+            trick={view.currentTrick}
+            players={view.players}
+            winnerSeat={view.pendingTrickWinner}
+          />
+          {awaitingAck && (
+            <button
+              type="button"
+              data-testid="continue-button"
+              onClick={onContinue}
+              className="rounded-full bg-amber-500 px-6 py-2 text-sm font-bold text-emerald-950 shadow-lg transition hover:bg-amber-400"
+            >
+              Continue ▶
+            </button>
+          )}
           {view.heartsBroken && (
             <span className="text-xs text-red-300">♥ hearts broken</span>
           )}
@@ -171,7 +195,11 @@ export const HeartsTable = ({
             onCardClick={handleCardClick}
           />
         </div>
-        <PlayerBadge name={view.players[0].name} isLocalPlayer />
+        <PlayerBadge
+          name={view.players[0].name}
+          isLocalPlayer
+          roundScore={view.players[0].roundScore}
+        />
       </div>
 
       {view.phase === 'finished' && view.winnerSeat !== null && (

@@ -15,7 +15,7 @@ import {
   startNextRound,
 } from './hearts.engine';
 import type { HeartsGame } from './hearts.entity';
-import { validatePass, validatePlay } from './hearts.validator';
+import { validatePass, validatePlay, validateTrickAck } from './hearts.validator';
 import { buildGameView, type HeartsGameView } from './hearts.view';
 import { SEATS, type CardRef, type SeatIndex } from './hearts.interface';
 import { HeartsStore } from './store';
@@ -58,7 +58,20 @@ export class HeartsService {
     const seatIndex = toSeat(seat);
     validatePlay(game, seatIndex, card);
     playCard(game, seatIndex, card);
-    this.settle(game);
+    this.autoPlayBots(game);
+    return this.view(game);
+  }
+
+  /**
+   * Resolves the completed trick the human has acknowledged, then plays bots on
+   * until the next human decision or the next completed trick. This is the pause
+   * point that lets the player see every trick before it is swept away.
+   */
+  advanceTrick(gameId: string): HeartsGameView {
+    const game = this.store.get(gameId);
+    validateTrickAck(game);
+    resolveTrick(game);
+    this.settleRound(game);
     this.autoPlayBots(game);
     return this.view(game);
   }
@@ -83,9 +96,8 @@ export class HeartsService {
     }
   }
 
-  /** Resolves trick/round/game transitions after a card has been played. */
-  private settle(game: HeartsGame): void {
-    if (isTrickComplete(game)) resolveTrick(game);
+  /** Scores/advances the round once its final trick has been resolved. */
+  private settleRound(game: HeartsGame): void {
     if (!isRoundComplete(game)) return;
 
     scoreRound(game);
@@ -97,15 +109,19 @@ export class HeartsService {
     this.beginRound(game);
   }
 
-  /** Plays out bot turns until it is the human's turn (or the game pauses). */
+  /**
+   * Plays out bot turns until it is the human's turn, a trick completes (so the
+   * human can acknowledge it), or the game otherwise pauses. Tricks are NOT
+   * resolved here — resolution waits for the human's advanceTrick.
+   */
   private autoPlayBots(game: HeartsGame): void {
     while (
       game.phase === 'playing' &&
+      !isTrickComplete(game) &&
       game.players[game.currentTurn].isBot
     ) {
       const seat = game.currentTurn;
       playCard(game, seat, chooseCardToPlay(game, seat));
-      this.settle(game);
     }
   }
 }

@@ -12,7 +12,8 @@ export const HeartsGamePage = () => {
 };
 
 const HeartsGameInstance = ({ onNewGame }: { onNewGame: () => void }) => {
-  const { view, loading, error, playCard, passCards } = useHeartsGame('You');
+  const { view, loading, error, playCard, passCards, advanceTrick } =
+    useHeartsGame('You');
 
   if (loading || !view) {
     return (
@@ -27,6 +28,7 @@ const HeartsGameInstance = ({ onNewGame }: { onNewGame: () => void }) => {
       view={view}
       onPlay={playCard}
       onPass={passCards}
+      onContinue={advanceTrick}
       error={error}
       onNewGame={onNewGame}
     />

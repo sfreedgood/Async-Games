@@ -10,6 +10,7 @@ interface UseHeartsGame {
   error: string | null;
   playCard: (card: CardRef) => Promise<void>;
   passCards: (cards: CardRef[]) => Promise<void>;
+  advanceTrick: () => Promise<void>;
 }
 
 /**
@@ -68,5 +69,7 @@ export const useHeartsGame = (humanName: string, seed?: number): UseHeartsGame =
     [mutate]
   );
 
-  return { view, loading, error, playCard, passCards };
+  const advanceTrick = useCallback(() => mutate('advance', {}), [mutate]);
+
+  return { view, loading, error, playCard, passCards, advanceTrick };
 };

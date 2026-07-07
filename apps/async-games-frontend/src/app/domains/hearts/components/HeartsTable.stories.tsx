@@ -9,6 +9,7 @@ export default {
   args: {
     onPlay: () => undefined,
     onPass: () => undefined,
+    onContinue: () => undefined,
   },
 } satisfies Meta<typeof HeartsTable>;
 
@@ -28,6 +29,26 @@ export const WaitingOnOpponent = {
         plays: [
           { seat: 0, card: { name: '5', suit: 'club' } },
           { seat: 1, card: { name: 'K', suit: 'club' } },
+        ],
+      },
+    }),
+  },
+} satisfies Story;
+
+export const AwaitingTrickAck = {
+  args: {
+    view: mockGameView({
+      currentTurn: 1,
+      legalMoves: [],
+      awaitingTrickAck: true,
+      pendingTrickWinner: 1,
+      currentTrick: {
+        leadSuit: 'club',
+        plays: [
+          { seat: 3, card: { name: '7', suit: 'club' } },
+          { seat: 0, card: { name: '5', suit: 'club' } },
+          { seat: 1, card: { name: 'K', suit: 'club' } },
+          { seat: 2, card: { name: '2', suit: 'club' } },
         ],
       },
     }),

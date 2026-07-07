@@ -2,7 +2,11 @@ import { HttpStatus } from '@nestjs/common';
 import { EntityValidationError } from '../../../utils/error.utils';
 import { createGame } from './hearts.engine';
 import type { HeartsGame } from './hearts.entity';
-import { validatePass, validatePlay } from './hearts.validator';
+import {
+  validatePass,
+  validatePlay,
+  validateTrickAck,
+} from './hearts.validator';
 import type { CardRef, HeartsCardName, HeartsSuit } from './hearts.interface';
 
 const c = (name: HeartsCardName, suit: HeartsSuit): CardRef => ({ name, suit });
@@ -60,6 +64,37 @@ describe('validatePlay', () => {
     };
     // Holds a club (5♣) so must follow; playing a spade is illegal.
     expect422(() => validatePlay(game, 0, c('K', 'spade')));
+  });
+});
+
+describe('validateTrickAck', () => {
+  it('accepts advancing once the trick is complete', () => {
+    const game = playingGame();
+    game.currentTrick = {
+      leadSuit: 'club',
+      plays: [
+        { seat: 0, card: c('5', 'club') },
+        { seat: 1, card: c('K', 'club') },
+        { seat: 2, card: c('2', 'club') },
+        { seat: 3, card: c('7', 'club') },
+      ],
+    };
+    expect(() => validateTrickAck(game)).not.toThrow();
+  });
+
+  it('rejects advancing when the trick is incomplete (422)', () => {
+    const game = playingGame();
+    game.currentTrick = {
+      leadSuit: 'club',
+      plays: [{ seat: 0, card: c('5', 'club') }],
+    };
+    expect422(() => validateTrickAck(game));
+  });
+
+  it('rejects advancing outside the playing phase (422)', () => {
+    const game = playingGame();
+    game.phase = 'passing';
+    expect422(() => validateTrickAck(game));
   });
 });
 
