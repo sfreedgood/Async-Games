@@ -1,0 +1,4 @@
+# Claude Code working dir, incl. nested git worktrees under .claude/worktrees/.
+# Without this, Nx discovers each apps/* project a second time inside every
+# worktree checkout and fails with "projects are defined in multiple locations".
+.claude/

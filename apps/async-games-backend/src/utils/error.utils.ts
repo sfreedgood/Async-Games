@@ -14,3 +14,16 @@ export class EntityValidationError extends HttpException {
     });
   }
 }
+
+// Postgres unique_violation. Surfaced by TypeORM as a QueryFailedError whose
+// underlying driver error carries this SQLSTATE code.
+const PG_UNIQUE_VIOLATION = '23505';
+
+// Detect a unique-constraint violation so a check-then-insert race (two requests
+// passing the pre-check before either commits) can be mapped to a 409 instead of
+// surfacing the raw driver error as a 500.
+export function isUniqueViolation(error: unknown): boolean {
+  const code = (error as { code?: string; driverError?: { code?: string } })
+    ?.driverError?.code ?? (error as { code?: string })?.code;
+  return code === PG_UNIQUE_VIOLATION;
+}

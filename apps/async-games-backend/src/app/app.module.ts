@@ -1,25 +1,46 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import {
-  ClassicCardModule,
-  ClassicCardController,
-  ClassicCardService,
-} from './domains/classic-card';
+import databaseConfig from './config/database.config';
+import { DatabaseModule } from './database/database.module';
+import { ClassicCardModule } from './domains/classic-card';
+import { UserModule } from './domains/user/module';
+
+// Choose env file based on NODE_ENV: production uses .env, development uses
+// .env.development with .env fallback.
+const isProduction = process.env.NODE_ENV === 'production';
+const envFilePath = isProduction ? '.env' : ['.env.development', '.env'];
+
+// DB_SKIP=true runs the app without Postgres (e.g. test setups that don't touch
+// persistence). When skipped, load neither the database config (which requires
+// DB_* env vars and would throw) nor any DB-backed module. DatabaseModule and
+// every module that depends on it (UserModule) are gated together below, so this
+// flag is the single source of truth for "DB enabled".
+const databaseEnabled = process.env.DB_SKIP !== 'true';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      envFilePath,
+      load: databaseEnabled ? [databaseConfig] : [],
+    }),
     // Global rate limiting: 60 requests per minute per client. Mitigates
     // brute-force and request-flood denial of service on unauthenticated routes.
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
     ClassicCardModule,
+    ...(databaseEnabled ? [DatabaseModule, UserModule] : []),
   ],
-  controllers: [AppController, ClassicCardController],
+  // ClassicCardController/Service and UserController/Service are registered by
+  // their own modules (imported above); re-declaring them here would create
+  // duplicate instances, so AppModule only owns its own controller/service.
+  controllers: [AppController],
   providers: [
     AppService,
-    ClassicCardService,
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })

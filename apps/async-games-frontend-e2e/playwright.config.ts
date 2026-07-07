@@ -16,6 +16,8 @@ const baseURL = process.env['BASE_URL'] || 'http://localhost:4300';
  */
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
+  // Only treat *.test.ts files as e2e specs so unit/spec files don't cross over.
+  testMatch: '**/*.test.ts',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL,
