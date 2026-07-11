@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { HeartsTable } from './HeartsTable';
+import type { HeartsTableProps } from './HeartsTable';
 import { mockGameView } from '../entities';
 import type { HeartsGameView } from '../entities';
 
@@ -7,11 +8,11 @@ const noop = () => undefined;
 
 const renderTable = (
   view: HeartsGameView,
-  handlers: Partial<{
-    onPlay: (card: never) => void;
-    onPass: (cards: never) => void;
-    onContinue: () => void;
-  }> = {}
+  // Reuse the component's own handler prop types so the test signatures can't
+  // drift from HeartsTable (the previous `never` params broke typecheck).
+  handlers: Partial<
+    Pick<HeartsTableProps, 'onPlay' | 'onPass' | 'onContinue'>
+  > = {}
 ) =>
   render(
     <HeartsTable
