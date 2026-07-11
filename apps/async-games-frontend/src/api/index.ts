@@ -53,3 +53,17 @@ export const getData = async <T>(
     console.error(error);
   }
 };
+
+export const postData = async <TResponse, TBody = unknown>(
+  endpoint: string,
+  body?: TBody
+): Promise<TResponse> => {
+  const url = buildUrl(endpoint);
+  const response = await axios.post(url, body);
+  return response.data as TResponse;
+};
+
+export const deleteData = async (endpoint: string): Promise<void> => {
+  const url = buildUrl(endpoint);
+  await axios.delete(url);
+};

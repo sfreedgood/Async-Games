@@ -1,0 +1,1783 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FannedHand snapshots > renders FullHand 1`] = `
+<DocumentFragment>
+  <div
+    class="flex items-end justify-center"
+    role="list"
+  >
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: 0px; transform: rotate(-30deg) translateY(36px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="2 of club"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            2
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            2
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-25deg) translateY(30px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="5 of club"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            5
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            5
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-20deg) translateY(24px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="9 of club"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            9
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 16%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 16%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 39%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 39%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 61%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 61%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 84%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 84%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            9
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-15deg) translateY(18px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="4 of diamond"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            4
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            4
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-10deg) translateY(12px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="10 of diamond"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            10
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 16%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 16%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 28%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 39%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 39%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 61%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 61%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 72%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 84%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 84%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            10
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-5deg) translateY(6px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="K of diamond"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            K
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center"
+        >
+          <span
+            class="rounded-md border-2 border-current px-3 py-1 text-3xl font-semibold"
+          >
+            K
+            <span
+              class="ml-0.5 text-2xl align-middle"
+            >
+              ♦
+            </span>
+          </span>
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            K
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(0deg) translateY(0px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="3 of spade"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            3
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♠
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♠
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♠
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            3
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(5deg) translateY(6px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="J of spade"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            J
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center"
+        >
+          <span
+            class="rounded-md border-2 border-current px-3 py-1 text-3xl font-semibold"
+          >
+            J
+            <span
+              class="ml-0.5 text-2xl align-middle"
+            >
+              ♠
+            </span>
+          </span>
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            J
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(10deg) translateY(12px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="Q of spade"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            Q
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center"
+        >
+          <span
+            class="rounded-md border-2 border-current px-3 py-1 text-3xl font-semibold"
+          >
+            Q
+            <span
+              class="ml-0.5 text-2xl align-middle"
+            >
+              ♠
+            </span>
+          </span>
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            Q
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(15deg) translateY(18px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="6 of heart"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            6
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            6
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(20deg) translateY(24px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="8 of heart"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            8
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 34%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 66%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            8
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(25deg) translateY(30px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="Q of heart"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            Q
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center"
+        >
+          <span
+            class="rounded-md border-2 border-current px-3 py-1 text-3xl font-semibold"
+          >
+            Q
+            <span
+              class="ml-0.5 text-2xl align-middle"
+            >
+              ♥
+            </span>
+          </span>
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            Q
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(30deg) translateY(36px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="A of heart"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            A
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center text-5xl"
+        >
+          ♥
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            A
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`FannedHand snapshots > renders WithLegalAndSelected 1`] = `
+<DocumentFragment>
+  <div
+    class="flex items-end justify-center"
+    role="list"
+  >
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: 0px; transform: rotate(-30deg) translateY(36px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="2 of club"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            2
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            2
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-25deg) translateY(30px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="5 of club"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            5
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            5
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-20deg) translateY(24px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="9 of club"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   "
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            9
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 16%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 16%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 39%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 39%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 61%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 61%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 84%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 84%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♣
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            9
+          </span>
+          <span
+            class="text-base"
+          >
+            ♣
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-15deg) translateY(18px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="4 of diamond"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            4
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            4
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-10deg) translateY(12px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="10 of diamond"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            10
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 16%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 16%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 28%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 39%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 39%; transform: translate(-50%, -50%);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 61%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 61%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 72%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 84%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 84%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♦
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            10
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(-5deg) translateY(6px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="K of diamond"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            K
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center"
+        >
+          <span
+            class="rounded-md border-2 border-current px-3 py-1 text-3xl font-semibold"
+          >
+            K
+            <span
+              class="ml-0.5 text-2xl align-middle"
+            >
+              ♦
+            </span>
+          </span>
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            K
+          </span>
+          <span
+            class="text-base"
+          >
+            ♦
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(0deg) translateY(0px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="3 of spade"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            3
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♠
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♠
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♠
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            3
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(5deg) translateY(6px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="J of spade"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150   cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            J
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center"
+        >
+          <span
+            class="rounded-md border-2 border-current px-3 py-1 text-3xl font-semibold"
+          >
+            J
+            <span
+              class="ml-0.5 text-2xl align-middle"
+            >
+              ♠
+            </span>
+          </span>
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            J
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(10deg) translateY(12px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="Q of spade"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-neutral-900 transition-transform duration-150 -translate-y-4 ring-2 ring-amber-400  cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            Q
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center"
+        >
+          <span
+            class="rounded-md border-2 border-current px-3 py-1 text-3xl font-semibold"
+          >
+            Q
+            <span
+              class="ml-0.5 text-2xl align-middle"
+            >
+              ♠
+            </span>
+          </span>
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            Q
+          </span>
+          <span
+            class="text-base"
+          >
+            ♠
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(15deg) translateY(18px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="6 of heart"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            6
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            6
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(20deg) translateY(24px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="8 of heart"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            8
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 18%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 34%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 50%; transform: translate(-50%, -50%);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 50%; top: 66%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 30%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <span
+          class="absolute -translate-x-1/2 -translate-y-1/2 text-xl"
+          style="left: 70%; top: 82%; transform: translate(-50%, -50%) rotate(180deg);"
+        >
+          ♥
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            8
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(25deg) translateY(30px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="Q of heart"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            Q
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center"
+        >
+          <span
+            class="rounded-md border-2 border-current px-3 py-1 text-3xl font-semibold"
+          >
+            Q
+            <span
+              class="ml-0.5 text-2xl align-middle"
+            >
+              ♥
+            </span>
+          </span>
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            Q
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+      </button>
+    </div>
+    <div
+      class="hover:z-10"
+      role="listitem"
+      style="margin-left: -56px; transform: rotate(30deg) translateY(36px); transform-origin: bottom center;"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="A of heart"
+        class="relative h-48 w-32 select-none rounded-lg border border-gray-300 bg-white shadow-lg text-red-600 transition-transform duration-150   cursor-not-allowed opacity-40"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="absolute flex flex-col items-center leading-none top-1 left-1.5"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            A
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+        <span
+          class="absolute inset-0 flex items-center justify-center text-5xl"
+        >
+          ♥
+        </span>
+        <div
+          class="absolute flex flex-col items-center leading-none bottom-1 right-1.5 rotate-180"
+        >
+          <span
+            class="text-base font-bold"
+          >
+            A
+          </span>
+          <span
+            class="text-base"
+          >
+            ♥
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

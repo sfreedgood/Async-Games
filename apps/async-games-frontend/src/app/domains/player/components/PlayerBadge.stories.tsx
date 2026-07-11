@@ -15,6 +15,13 @@ export default meta;
 type Story = StoryObj<typeof PlayerBadge>;
 
 export const PrimaryPlayer = {} satisfies Story;
+export const WithRoundScore = {
+  args: {
+    name: 'You',
+    isLocalPlayer: true,
+    roundScore: 7,
+  },
+} satisfies Story;
 export const OtherPlayer = {
   args: {
       name: 'Player 2',
